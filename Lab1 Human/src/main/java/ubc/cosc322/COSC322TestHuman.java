@@ -23,7 +23,10 @@ public class COSC322TestHuman<Rooms> extends GamePlayer{
 	
     private String userName = null;
     private String passwd = null;
- 
+    private ArrayList<Integer>  QUEEN_CURRENT=  new ArrayList<>();
+    private ArrayList<Integer>  ARROW_CURRENT=  new ArrayList<>();
+    private ArrayList<Integer>  QUEEN_NEXT=  new ArrayList<>();
+    private ArrayList<Integer>  ARROW_NEXT =  new ArrayList<>();
 	
     /**
      * The main method
