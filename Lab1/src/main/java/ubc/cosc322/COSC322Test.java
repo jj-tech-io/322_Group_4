@@ -29,7 +29,8 @@ import javax.swing.*;
 public class COSC322Test<Rooms> extends GamePlayer {
     public static  int[][] boardCurrent = new int[11][11];
     public static int[][] boardNext = new int[11][11];
-
+    int count = 0;
+    int count2=0;
     private GameClient gameClient = null;
     private BaseGameGUI gamegui = null;
 
@@ -189,26 +190,25 @@ public class COSC322Test<Rooms> extends GamePlayer {
         // TODO Auto-generated method stub
         gameClient = new GameClient(userName, passwd, this);
     }
-    public void updateBoard(char player, ArrayList<Integer> qC,ArrayList<Integer> qN,ArrayList<Integer> aR) {
+    public void updateBoards(char player, ArrayList<Integer> qC,ArrayList<Integer> qN,ArrayList<Integer> aR) {
 //        gB = new GameBoard(gameBoardCurrent1D);
         System.out.println(gameBoardCurrent1D);
-
-        gameBoardCurrent1D = gB.makeMove(player,qC,qN,aR, gameBoardCurrent1D);
+        MyBoard mb = new MyBoard();
+        gameBoardCurrent1D =mb.updateBoard(gameBoardCurrent1D,player,qC,qN,aR);
+        //gameBoardCurrent1D = gB.makeMove(player,qC,qN,aR, gameBoardCurrent1D);
         System.out.println(gameBoardCurrent1D);
     }
 //ArrayList<Integer> gameBoard,int queen, int x,int y
     public void makeMove(ArrayList<Integer> gameBoard) {
-//        gB.makeMove(ourAmazon,1,x,y);
 
-
-        System.out.println(gameBoard);
-
-//        gb.printBoard(this.player.);
-//        ArrayList<Integer> qC = gb.getQueenCurr(ourAmazon);
         ArrayList<Integer> qC = new ArrayList<>();
         qC.add(10);
-        qC.add(4);
-        ArrayList<Integer> qN = gB.makeMove(ourAmazon,1,1,1);
+        qC.add(4+count);
+        ArrayList<Integer> qN = new ArrayList<>();
+        qN.add(10);
+        qN.add(5+count);
+
+//        ArrayList<Integer> qN = gB.makeMove(ourAmazon,1,1,1);
         ArrayList<Integer> aR = new ArrayList<>(Arrays.asList(1, 2));
         System.out.println("qC: "+qC);
         System.out.println("qN: "+qN);
@@ -224,18 +224,14 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
 
         if (MYTURN) {
-            updateBoard(ourAmazon,qC,qN,aR);
+            updateBoards(ourAmazon,qC,qN,aR);
         }
         else {
-            updateBoard(otherAmazon,qC,qN,aR);
+            updateBoards(otherAmazon,qC,qN,aR);
         }
-//
+        count++;
 
 
-
-//        this.mn.gm.updateGameState(HumanPlayer.this.queenfrom, HumanPlayer.this.queennew, HumanPlayer.this.arrow);
-//        this.mn.getGameClient().sendMoveMessage(HumanPlayer.this.queenfrom, HumanPlayer.this.queennew, HumanPlayer.this.arrow);
-//        this.gamegui.send(qC, qN, aR);
 
     }
 
@@ -245,7 +241,6 @@ public class COSC322Test<Rooms> extends GamePlayer {
         int y = 0;
         if (direction.contains("up")) {
             y = 1;
-
         }
         this.QUEEN_NEXT.add(1);
         this.QUEEN_NEXT.add(1);
