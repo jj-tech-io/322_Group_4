@@ -1,6 +1,6 @@
 package ubc.cosc322;
 
-
+//same as game board just trying to simplify this class
 import java.util.*;
 
 import static java.lang.String.format;
