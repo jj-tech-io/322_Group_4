@@ -11,30 +11,28 @@ class GameBoardTest {
     public static void main(String [] args) {
         GameBoard gb = new GameBoard();
         gb.printBoard();
-        System.out.println(gb.ONE_DIM);
-        System.out.println(gb.white_xy.get(0));
-        System.out.println(gb.black_xy.get(1));
+        ArrayList<Integer> qN = new ArrayList<>();
+        ArrayList<Integer> aR = new ArrayList<>();
+        ArrayList<Integer> qC = new ArrayList<>();
+        qC.add(10);
+        qC.add(4);
+        qN.add(9);
+        qN.add(4);
+        aR.add(8);
+        aR.add(6);
+        gb.getXY(qC);
+        System.out.println(gb.getXY(qC));
 
-        System.out.println("Move" +gb.makeMove('b', 1, 1, 1));
-        gb.printBoard();
-        System.out.println(gb.black_xy.get(1));
-        System.out.println(gb.black_xy.get(2));
-        System.out.println("3" +gb.black_xy.get(4));
-        System.out.println("2d" +gb.TWO_DIM);
-        System.out.println(Arrays.toString(gb.oneDim));
-
+        gb.updateBoard('b',qC,qN,aR);
+        qC.clear();
+        qN.clear();
+        aR.clear();
+        qC.add(1);
+        qC.add(4);
+        qN.add(2);
+        qN.add(4);
+        aR.add(qC.get(0));
+        aR.add(qC.get(1));
+        gb.updateBoard('w',qC,qN,aR);
     }
-
-    public void exampleGetBoard_Move() {
-        /*
-        GameBoard gb = new GameBoard((ArrayList<Integer>) msgDetails.get("game-state"));
-        gb.printBoard();
-        gb.makeMove('b', 1, 1, 1); // move black 1 up one right
-         */
-        //
-        GameBoard gb = new GameBoard();
-
-
-    }
-
 }

@@ -2,10 +2,7 @@
 package ubc.cosc322;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import sfs2x.client.entities.Room;
 import ygraph.ai.smartfox.games.*;
@@ -38,15 +35,13 @@ public class COSC322Test<Rooms> extends GamePlayer {
     private String passwd = null;
     public static ArrayList<Integer> gameBoardCurrent1D = new ArrayList<>();
     public ArrayList<ArrayList<Integer>> gameBoardCurrent2D = new ArrayList<>();
-//    public Integer[][] gB = new Integer[10][10];
+
     public static GameBoard gB = new GameBoard();
     public String gameMsg;
-    //    private GameRules game = null;
-    private AmazonsBoard board = null;
+    public Map<String,Object> gameStateBoard = new HashMap<>();
+
     private boolean isWhite;
-    //    private List<Queen> queens = null;
-//
-//    private Queen currentQueen = null;
+
     private ArrayList<Integer> nextMove = null;
     private int score = 0;
 
@@ -60,7 +55,18 @@ public class COSC322Test<Rooms> extends GamePlayer {
     private ArrayList<Integer>  QUEEN_NEXT=  new ArrayList<>();
     private ArrayList<Integer>  ARROW_NEXT =  new ArrayList<>();
     public static COSC322Test player;
-
+    private int[][] twodim = new int[][] {
+            {0,0,0,2,0,0,2,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {2,0,0,0,0,0,0,0,0,2},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {1,0,0,0,0,0,0,0,0,1},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,1,0,0,1,0,0,0}
+    };
     /**
      * The main method
      *
@@ -128,26 +134,37 @@ public class COSC322Test<Rooms> extends GamePlayer {
         System.out.println("handleGameMsg_____");
         System.out.println(messageType);
 
-        System.out.println(msgDetails.get(AmazonsGameMessage.GAME_STATE));;
         switch (messageType) {
             case(GameMessage.GAME_STATE_BOARD):
+                System.out.println("updated gamestae");
                 gameBoardCurrent1D = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
+//                gB.printBoard(gameBoardCurrent1D);
                 this.gamegui.setGameState(gameBoardCurrent1D);
                 System.out.println(gameBoardCurrent1D);
-
                 break;
             case (GameMessage.GAME_ACTION_MOVE):
+                this.gamegui.updateGameState(msgDetails);
+
                 //this.gameBoardCurrent1D = (ArrayList<Integer>)msgDetails.get(AmazonsGameMessage.GAME_STATE);
                // System.out.println((ArrayList<Integer>)msgDetails.get(AmazonsGameMessage.GAME_STATE));
-                System.out.println(msgDetails.get(AmazonsGameMessage.GAME_STATE_BOARD));
-                this.gamegui.updateGameState(msgDetails);
-                MYTURN = true;
-                if(gameBoardCurrent1D != null) {
-
-                    makeMove(gameBoardCurrent1D);
-                    System.out.println("done move");
+                //System.out.println("msgDetails: game state board" +msgDetails.get(AmazonsGameMessage.GAME_STATE_BOARD));
+                this.QUEEN_CURRENT = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);
+                this.QUEEN_NEXT = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_NEXT);
+                this.ARROW_NEXT = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.ARROW_POS);
+                //System.out.println(this.QUEEN_CURRENT +" "+this.QUEEN_NEXT+" "+this.ARROW_NEXT);
+                //
+                if(this.ARROW_NEXT == null) {
+                    //gB.updateBoard(otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_CURRENT);
+                    makeMove();
                 }
-                System.out.println("null ");
+                else {
+
+                    gB.updateBoard(otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
+
+                }
+
+                System.out.println("done move");
+
 
                 break;
             case (GameMessage.GAME_ACTION_START):
@@ -190,46 +207,44 @@ public class COSC322Test<Rooms> extends GamePlayer {
         // TODO Auto-generated method stub
         gameClient = new GameClient(userName, passwd, this);
     }
-    public void updateBoards(char player, ArrayList<Integer> qC,ArrayList<Integer> qN,ArrayList<Integer> aR) {
-//        gB = new GameBoard(gameBoardCurrent1D);
-        System.out.println(gameBoardCurrent1D);
-        MyBoard mb = new MyBoard();
-        gameBoardCurrent1D =mb.updateBoard(gameBoardCurrent1D,player,qC,qN,aR);
-        //gameBoardCurrent1D = gB.makeMove(player,qC,qN,aR, gameBoardCurrent1D);
-        System.out.println(gameBoardCurrent1D);
-    }
+//    public void updateBoards(char player, ArrayList<Integer> qC,ArrayList<Integer> qN,ArrayList<Integer> aR) {
+////        gB = new GameBoard(gameBoardCurrent1D);
+//       // System.out.println(gameBoardCurrent1D);
+//        gB.updateBoard(player,qC,qN,aR);
+//        gB.printBoard();
+//        //gameBoardCurrent1D =mb.updateBoard(gameBoardCurrent1D,player,qC,qN,aR);
+//        //gameBoardCurrent1D = gB.makeMove(player,qC,qN,aR, gameBoardCurrent1D);
+//
+//
+//    }
 //ArrayList<Integer> gameBoard,int queen, int x,int y
-    public void makeMove(ArrayList<Integer> gameBoard) {
+    public int qCY = 1;
+
+
+    public void makeMove() {
 
         ArrayList<Integer> qC = new ArrayList<>();
-        qC.add(10);
-        qC.add(4+count);
         ArrayList<Integer> qN = new ArrayList<>();
-        qN.add(10);
-        qN.add(5+count);
-
-//        ArrayList<Integer> qN = gB.makeMove(ourAmazon,1,1,1);
-        ArrayList<Integer> aR = new ArrayList<>(Arrays.asList(1, 2));
-        System.out.println("qC: "+qC);
-        System.out.println("qN: "+qN);
-        System.out.println("aR: "+aR);
-
-        player.QUEEN_CURRENT = qC;
-        player.QUEEN_NEXT = qN;
-        player.ARROW_CURRENT = aR;
-        this.gamegui.updateGameState(qC,qN,aR);
-        this.gameClient.sendMoveMessage(qC, qN, aR);
-        System.out.println(gameBoardCurrent1D);
-        gB.printBoard(gameBoardCurrent1D);
+        ArrayList<Integer> aR = new ArrayList<>();
+        if(qCY==1) {
+            qC.add(9);
+            qC.add(4);
+            qN.add(8);
+            qN.add(3);
+            aR.add(7);
+            aR.add(2);
 
 
-        if (MYTURN) {
-            updateBoards(ourAmazon,qC,qN,aR);
+            this.gamegui.updateGameState(qC, qN, aR);
+            this.gameClient.sendMoveMessage(qC, qN, aR);
+            gB.updateBoard(ourAmazon, qC, qN, aR);
+
+
+            System.out.println("qC: " + qC);
+            System.out.println("qN: " + qN);
+            System.out.println("aR: " + aR);
         }
-        else {
-            updateBoards(otherAmazon,qC,qN,aR);
-        }
-        count++;
+
 
 
 
@@ -277,4 +292,5 @@ public class COSC322Test<Rooms> extends GamePlayer {
         }
         return newState;
     }
+
 }

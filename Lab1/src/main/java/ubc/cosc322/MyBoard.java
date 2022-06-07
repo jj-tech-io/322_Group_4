@@ -59,7 +59,10 @@ public  class MyBoard {
         int indexFrom =getIndex(qC);
         int indexTo =getIndex(qN);
         next.set(indexFrom,0);
+        if(c=='b')
         next.set(indexTo,2);
+        else
+        next.set(indexTo,1);
         System.out.println(indexFrom+" "+indexTo);
         printBoard(next);
         return current;
