@@ -155,12 +155,12 @@ public class COSC322Test<Rooms> extends GamePlayer {
                 //
                 if(this.ARROW_NEXT == null) {
                     //gB.updateBoard(otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_CURRENT);
-                    makeMove();
+
                 }
                 else {
 
                     gB.updateBoard(otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
-
+                    makeMove();
                 }
 
                 System.out.println("done move");
@@ -227,12 +227,12 @@ public class COSC322Test<Rooms> extends GamePlayer {
         ArrayList<Integer> qN = new ArrayList<>();
         ArrayList<Integer> aR = new ArrayList<>();
         if(qCY==1) {
-            qC.add(9);
+            qC.add(10);
             qC.add(4);
-            qN.add(8);
+            qN.add(9);
             qN.add(3);
-            aR.add(7);
-            aR.add(2);
+            aR.add(8);
+            aR.add(4);
 
 
             this.gamegui.updateGameState(qC, qN, aR);

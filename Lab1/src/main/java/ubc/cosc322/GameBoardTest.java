@@ -18,11 +18,23 @@ class GameBoardTest {
         qC.add(4);
         qN.add(9);
         qN.add(4);
-        aR.add(8);
-        aR.add(6);
-        gb.getXY(qC);
-        System.out.println(gb.getXY(qC));
+        aR.add(1);
+        aR.add(9);
+        System.out.println("====");
+        System.out.println(qC);
+        ArrayList<Integer> trans = gb.getXY(qC);
+        System.out.println(trans);
+        ArrayList<Integer> xy = gb.undoXY(trans);
+        System.out.println(xy);
+        System.out.println("====");
 
+        System.out.println("====");
+        System.out.println(aR);
+        trans = gb.getXY(aR);
+        System.out.println(trans);
+        xy = gb.undoXY(trans);
+        System.out.println(xy);
+        System.out.println("====");
         gb.updateBoard('b',qC,qN,aR);
         qC.clear();
         qN.clear();

@@ -175,6 +175,7 @@ public class GameBoard {
         System.out.println("index "+index+", row " +row+", col " +col);
         return index;
     }
+    //transform AMAZONGAME BOARD POSITION X,Y to GameBoard x,y
     public ArrayList<Integer> getXY(ArrayList<Integer> xy) {
         ArrayList<Integer> trans = new ArrayList<>();
         if(!xy.isEmpty())
@@ -183,8 +184,13 @@ public class GameBoard {
 
         return trans;
         }
-
-
+    //transform GameBoard x,y  to  AMAZONGAME BOARD POSITION X,Y
+    public ArrayList<Integer> undoXY(ArrayList<Integer> trans) {
+        ArrayList<Integer> XY = new ArrayList<>();
+        XY.add(10-trans.get(0));
+        XY.add(trans.get(1)+1);
+        return XY;
+    }
     public static int[][] convertTo2DArray(ArrayList<Integer> board){
         int[][] newBoard = new int[11][11];
 
@@ -197,6 +203,28 @@ public class GameBoard {
             newBoard[x][0] = Integer.valueOf(board.get(x));
 
         return newBoard;
+    }
+
+    public void searchForMove(int player) {
+        for(int row = 0; row<MyBOARD[0].length;row++) {
+            for(int col = 0; col < MyBOARD.length; col++) {
+                if(MyBOARD[row][col]==player) {
+                    boolean [] upDownRightLeft =checkNeighbour(row,col,MyBOARD);
+
+                }
+            }
+        }
+    }
+    public boolean[] checkNeighbour(int x, int y,int[][] board) {
+        boolean [] UDRL = new boolean[4];
+        try {
+            int i = board[x + 1][y + 1];
+        }
+        catch (IndexOutOfBoundsException e){
+            throw e;
+        }
+
+        return UDRL;
     }
 
 
