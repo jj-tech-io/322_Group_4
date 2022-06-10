@@ -403,15 +403,11 @@ public class GameBoard {
         boolean rightright = checkInBounds(col+2);
         boolean leftleft = checkInBounds(col-2);
         for(int i = 0; i < 8; i++) {
-
-
             switch (i) {
                 case 0: //up
                     if (up) {
                         if (b[row + 1][col] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
-                            ArrayList<Integer> from = new ArrayList<>();
-                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                             arrow.add(row - 1);
                             arrow.add(col);
                             arrows.add(arrow);
@@ -422,8 +418,6 @@ public class GameBoard {
                     if (up && right) {
                         if (b[row + 1][col + 1] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
-                            ArrayList<Integer> from = new ArrayList<>();
-                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                             arrow.add(row + 1);
                             arrow.add(col+1);
                             arrows.add(arrow);
@@ -434,8 +428,6 @@ public class GameBoard {
                     if (right) {
                         if (b[row][col + 1] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
-                            ArrayList<Integer> from = new ArrayList<>();
-                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                             arrow.add(row);
                             arrow.add(col+1);
                             arrows.add(arrow);
@@ -446,8 +438,6 @@ public class GameBoard {
                     if (right && down) {
                         if (b[row - 1][col + 1] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
-                            ArrayList<Integer> from = new ArrayList<>();
-                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                             arrow.add(row - 1);
                             arrow.add(col+1);
                             arrows.add(arrow);
@@ -458,8 +448,6 @@ public class GameBoard {
                     if (down) {
                         if (b[row - 1][col] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
-                            ArrayList<Integer> from = new ArrayList<>();
-                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                             arrow.add(row - 1);
                             arrow.add(col);
                             arrows.add(arrow);
@@ -469,8 +457,6 @@ public class GameBoard {
                     if (down && left) {
                         if (b[row - 1][col - 1] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
-                            ArrayList<Integer> from = new ArrayList<>();
-                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                             arrow.add(row - 1);
                             arrow.add(col - 1);
                             arrows.add(arrow);
@@ -481,8 +467,6 @@ public class GameBoard {
                     if (left) {
                         if (b[row][col - 1] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
-                            ArrayList<Integer> from = new ArrayList<>();
-                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                             arrow.add(row);
                             arrow.add(col - 1);
                             arrows.add(arrow);
@@ -492,8 +476,6 @@ public class GameBoard {
                     if (up && left) {
                         if (b[row + 1][col - 1] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
-                            ArrayList<Integer> from = new ArrayList<>();
-                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                             arrow.add(row + 1);
                             arrow.add(col - 1);
                             arrows.add(arrow);
@@ -502,7 +484,13 @@ public class GameBoard {
 
             }
         }
-    return arrows.get(0);
+    if(arrows.isEmpty()) {
+        return pos;
+    }
+    else {
+        return arrows.get(0);
+    }
+
     }
 
 
