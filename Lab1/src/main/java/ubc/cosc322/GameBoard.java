@@ -228,5 +228,285 @@ public class GameBoard {
     }
 
 
+    public ArrayList<ArrayList<Integer>> getMoves(int ours,Node node) {
+        int score = 0;
+        int[][] b = node.current.getMyBOARD();
+        int [][] copy = node.copy.getMyBOARD();
+        ArrayList<ArrayList<ArrayList<Integer>>> moves = new ArrayList<>();
+        for(int row = 0; row< 10; row++) {
+
+            for (int col = 0; col < 10; col++) {
+                if (b[row][col] == ours) {
+                    System.out.println("1 of ours: "+row+" "+col);
+                    boolean up = checkInBounds(row+1);
+                    boolean down = checkInBounds(row-1);
+                    boolean right = checkInBounds(col+1);
+                    boolean left = checkInBounds(col-1);
+                    boolean upup = checkInBounds(row+2);
+                    boolean downdown = checkInBounds(row-2);
+                    boolean rightright = checkInBounds(col+2);
+                    boolean leftleft = checkInBounds(col-2);
+                    for(int i = 0; i < 8; i++) {
+
+
+                        switch (i) {
+                            case 0: //up
+                                if (up) {
+                                    if (b[row + 1][col] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row + 1);
+                                        move.add(col);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+
+                                    }
+                                }
+                            case 1: //up/right
+                                if (up && right) {
+                                    if (b[row + 1][col + 1] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row + 1);
+                                        move.add(col+1);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+                            case 2: //right
+                                if (right) {
+                                    if (b[row][col + 1] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row);
+                                        move.add(col+1);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+                            case 3: //down/right
+                                if (right && down) {
+                                    if (b[row - 1][col + 1] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row - 1);
+                                        move.add(col + 1);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+
+                                    }
+                                }
+                            case 4: //down
+                                if (down) {
+                                    if (b[row - 1][col] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row - 1);
+                                        move.add(col);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+                            case 5: //down/left
+                                if (down && left) {
+                                    if (b[row - 1][col - 1] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row - 1);
+                                        move.add(col - 1);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+                            case 6: //left
+                                if (left) {
+                                    if (b[row][col - 1] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row);
+                                        move.add(col - 1);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+                            case 7: //left/up
+                                if (up && left) {
+                                    if (b[row + 1][col - 1] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row + 1);
+                                        move.add(col - 1);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+
+                        }
+                    }
+                }
+
+            }
+        }
+        System.out.println(moves);
+        return moves.get(0);
+    }
+    public boolean checkInBounds(int index) {
+        boolean inBounds = (index >= 0) && (index < 10);
+        return inBounds;
+    }
+
+    public ArrayList<Integer> getArrow(Node node,ArrayList<Integer> pos) {
+
+        int[][] b = node.current.getMyBOARD();
+        int [][] copy = node.copy.getMyBOARD();
+        ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
+        int row = pos.get(0);
+        int col = pos.get(1);
+        boolean up = checkInBounds(row+1);
+        boolean down = checkInBounds(row-1);
+        boolean right = checkInBounds(col+1);
+        boolean left = checkInBounds(col-1);
+        boolean upup = checkInBounds(row+2);
+        boolean downdown = checkInBounds(row-2);
+        boolean rightright = checkInBounds(col+2);
+        boolean leftleft = checkInBounds(col-2);
+        for(int i = 0; i < 8; i++) {
+
+
+            switch (i) {
+                case 0: //up
+                    if (up) {
+                        if (b[row + 1][col] == 0) {
+                            ArrayList<Integer> arrow = new ArrayList<>();
+                            ArrayList<Integer> from = new ArrayList<>();
+                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                            arrow.add(row - 1);
+                            arrow.add(col);
+                            arrows.add(arrow);
+
+                        }
+                    }
+                case 1: //up/right
+                    if (up && right) {
+                        if (b[row + 1][col + 1] == 0) {
+                            ArrayList<Integer> arrow = new ArrayList<>();
+                            ArrayList<Integer> from = new ArrayList<>();
+                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                            arrow.add(row + 1);
+                            arrow.add(col+1);
+                            arrows.add(arrow);
+
+                        }
+                    }
+                case 2: //right
+                    if (right) {
+                        if (b[row][col + 1] == 0) {
+                            ArrayList<Integer> arrow = new ArrayList<>();
+                            ArrayList<Integer> from = new ArrayList<>();
+                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                            arrow.add(row);
+                            arrow.add(col+1);
+                            arrows.add(arrow);
+
+                        }
+                    }
+                case 3: //down/right
+                    if (right && down) {
+                        if (b[row - 1][col + 1] == 0) {
+                            ArrayList<Integer> arrow = new ArrayList<>();
+                            ArrayList<Integer> from = new ArrayList<>();
+                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                            arrow.add(row - 1);
+                            arrow.add(col+1);
+                            arrows.add(arrow);
+
+                        }
+                    }
+                case 4: //down
+                    if (down) {
+                        if (b[row - 1][col] == 0) {
+                            ArrayList<Integer> arrow = new ArrayList<>();
+                            ArrayList<Integer> from = new ArrayList<>();
+                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                            arrow.add(row - 1);
+                            arrow.add(col);
+                            arrows.add(arrow);
+                        }
+                    }
+                case 5: //down/left
+                    if (down && left) {
+                        if (b[row - 1][col - 1] == 0) {
+                            ArrayList<Integer> arrow = new ArrayList<>();
+                            ArrayList<Integer> from = new ArrayList<>();
+                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                            arrow.add(row - 1);
+                            arrow.add(col - 1);
+                            arrows.add(arrow);
+
+                        }
+                    }
+                case 6: //left
+                    if (left) {
+                        if (b[row][col - 1] == 0) {
+                            ArrayList<Integer> arrow = new ArrayList<>();
+                            ArrayList<Integer> from = new ArrayList<>();
+                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                            arrow.add(row);
+                            arrow.add(col - 1);
+                            arrows.add(arrow);
+                        }
+                    }
+                case 7: //left/up
+                    if (up && left) {
+                        if (b[row + 1][col - 1] == 0) {
+                            ArrayList<Integer> arrow = new ArrayList<>();
+                            ArrayList<Integer> from = new ArrayList<>();
+                            ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                            arrow.add(row + 1);
+                            arrow.add(col - 1);
+                            arrows.add(arrow);
+                        }
+                    }
+
+            }
+        }
+    return arrows.get(0);
+    }
+
+
+
+
 
 }

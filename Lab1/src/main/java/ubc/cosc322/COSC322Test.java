@@ -46,7 +46,9 @@ public class COSC322Test<Rooms> extends GamePlayer {
     private int score = 0;
 
     char ourAmazon;
+    int ours;
     char otherAmazon;
+    int theirs;
     boolean MYTURN = false;
 
 
@@ -172,10 +174,15 @@ public class COSC322Test<Rooms> extends GamePlayer {
                 if(player.isWhite) {
                     ourAmazon = 'w';
                     otherAmazon = 'b';
+                    ours = 1;
+                    theirs = 2;
+                    makeMove();
                 }
                 else {
                     ourAmazon = 'b';
                     otherAmazon = 'w';
+                    ours = 2;
+                    theirs = 1;
                 }
                 System.out.println("Our Amazon is" + ourAmazon);
                 break;
@@ -222,28 +229,33 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
 
     public void makeMove() {
-
+        ArrayList<Integer> from = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> moves = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
+        ArrayList<Integer> queen = new ArrayList<>();
+        ArrayList<Integer> arrow = new ArrayList<>();
         ArrayList<Integer> qC = new ArrayList<>();
         ArrayList<Integer> qN = new ArrayList<>();
         ArrayList<Integer> aR = new ArrayList<>();
-        if(qCY==1) {
-            qC.add(10);
-            qC.add(4);
-            qN.add(9);
-            qN.add(3);
-            aR.add(8);
-            aR.add(4);
+        Node curNode = new Node(gB,ours,theirs);
+        moves = gB.getMoves(ours,curNode);
+        qN = moves.get(0);
+        qC = moves.get(1);
+        aR = gB.getArrow(curNode,qN);
+
+        qN = gB.undoXY(qN);
+        qC = gB.undoXY(qC);
+        aR = gB.undoXY(aR);
+        gB.updateBoard(ourAmazon, qC, qN, aR);
+        this.gamegui.updateGameState(qC, qN, aR);
+        this.gameClient.sendMoveMessage(qC, qN, aR);
 
 
-            this.gamegui.updateGameState(qC, qN, aR);
-            this.gameClient.sendMoveMessage(qC, qN, aR);
-            gB.updateBoard(ourAmazon, qC, qN, aR);
 
-
-            System.out.println("qC: " + qC);
-            System.out.println("qN: " + qN);
-            System.out.println("aR: " + aR);
-        }
+        System.out.println("qC: " + qC);
+        System.out.println("qN: " + qN);
+        System.out.println("aR: " + aR);
+//        }
 
 
 
