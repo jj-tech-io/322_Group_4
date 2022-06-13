@@ -24,10 +24,8 @@ import javax.swing.*;
  *
  */
 public class COSC322Test<Rooms> extends GamePlayer {
-    public static  int[][] boardCurrent = new int[11][11];
-    public static int[][] boardNext = new int[11][11];
-    int count = 0;
-    int count2=0;
+
+
     private GameClient gameClient = null;
     private BaseGameGUI gamegui = null;
 
@@ -49,7 +47,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
     int ours;
     char otherAmazon;
     int theirs;
-    boolean MYTURN = false;
+    int gameStage = 0;
 
 
     private ArrayList<Integer>  QUEEN_CURRENT=  new ArrayList<>();
@@ -163,6 +161,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
                     gB.updateBoard(otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
                     makeMove();
+                    gameStage++;
                 }
 
                 System.out.println("done move");
@@ -229,6 +228,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
 
     public void makeMove() {
+        System.out.println("number of steps: "+ gameStage);
         ArrayList<Integer> from = new ArrayList<>();
         ArrayList<ArrayList<Integer>> moves = new ArrayList<>();
         ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
@@ -247,6 +247,8 @@ public class COSC322Test<Rooms> extends GamePlayer {
         qC = gB.undoXY(qC);
         aR = gB.undoXY(aR);
         gB.updateBoard(ourAmazon, qC, qN, aR);
+        System.out.println(gB.getScore(1));
+        System.out.println(gB.getScore(2));
         this.gamegui.updateGameState(qC, qN, aR);
         this.gameClient.sendMoveMessage(qC, qN, aR);
 

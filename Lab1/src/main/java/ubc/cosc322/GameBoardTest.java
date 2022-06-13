@@ -12,7 +12,10 @@ class GameBoardTest {
         ArrayList<Integer> from = new ArrayList<>();
         ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
         GameBoard gb = new GameBoard();
-        Node newNode = new Node(gb, 1,2);
+        gb.printBoard();
+        System.out.println(gb.getScore(2));
+        System.out.println(gb.getScore(1));
+//        Node newNode = new Node(gb, 1,2);
 //        ArrayList<ArrayList<Integer>> moves = gb.getMoves(1,newNode);
 //
 //        System.out.println(moves.size());

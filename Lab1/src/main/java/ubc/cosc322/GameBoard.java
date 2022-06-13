@@ -7,7 +7,7 @@ import static java.lang.String.format;
 
 public class GameBoard {
 
-    public   int[] oneDim = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    public int[] oneDim = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -20,43 +20,44 @@ public class GameBoard {
     }
 
 
-    public int [][] setMyBOARD(int xF,int yF,int xT,int yT) {
+    public int[][] setMyBOARD(int xF, int yF, int xT, int yT) {
         MyBOARD[xF][yF] = 0;
         MyBOARD[xT][yT] = 0;
         return MyBOARD;
     }
-    private String board =
-            "10,0,0,0,2,0,0,2,0,0,0\n"+
-            "9,0,0,0,2,0,0,2,0,0,0\n"+
-            "8,0,0,0,2,0,0,2,0,0,0\n"+
-            "7,0,0,0,2,0,0,2,0,0,0\n"+
-            "6,0,0,0,2,0,0,2,0,0,0\n"+
-            "5,0,0,0,2,0,0,2,0,0,0\n"+
-            "4,0,0,0,2,0,0,2,0,0,0\n"+
-            "3,0,0,0,2,0,0,2,0,0,0\n"+
-            "2,0,0,0,2,0,0,2,0,0,0\n"+
-            "1,0,0,0,0,0,0,0,0,0,0\n"+
-            " ,0,0,0,1,0,0,1,0,0,0\n";
 
-    private int[][] MyBOARD = new int[][] {
-            {0,0,0,2,0,0,2,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0},
-            {2,0,0,0,0,0,0,0,0,2},
-            {0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0},
-            {1,0,0,0,0,0,0,0,0,1},
-            {0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,1,0,0,1,0,0,0},
+    private String board =
+            "10,0,0,0,2,0,0,2,0,0,0\n" +
+                    "9,0,0,0,2,0,0,2,0,0,0\n" +
+                    "8,0,0,0,2,0,0,2,0,0,0\n" +
+                    "7,0,0,0,2,0,0,2,0,0,0\n" +
+                    "6,0,0,0,2,0,0,2,0,0,0\n" +
+                    "5,0,0,0,2,0,0,2,0,0,0\n" +
+                    "4,0,0,0,2,0,0,2,0,0,0\n" +
+                    "3,0,0,0,2,0,0,2,0,0,0\n" +
+                    "2,0,0,0,2,0,0,2,0,0,0\n" +
+                    "1,0,0,0,0,0,0,0,0,0,0\n" +
+                    " ,0,0,0,1,0,0,1,0,0,0\n";
+
+    private int[][] MyBOARD = new int[][]{
+            {0, 0, 0, 2, 0, 0, 2, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {2, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 1, 0, 0, 1, 0, 0, 0},
 
     };
     private static char[] letters = new char[]{'\t', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
 
-    public  Map<Integer,ArrayList<Integer>> white_xy= new HashMap<>();
-    public  Map<Integer,ArrayList<Integer>> black_xy = new HashMap<>();
-    public  ArrayList<Integer> QUEEN_CURR = new ArrayList<>();
+    public Map<Integer, ArrayList<Integer>> white_xy = new HashMap<>();
+    public Map<Integer, ArrayList<Integer>> black_xy = new HashMap<>();
+    public ArrayList<Integer> QUEEN_CURR = new ArrayList<>();
 
 
 //    public GameBoard(ArrayList<Integer> b) {
@@ -100,27 +101,19 @@ public class GameBoard {
     }
 
 
-
-
     public void printBoard() {
         System.out.println("---------------------------------");
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                    if(j==0) {
-                        System.out.println(" ");
-                    }
-                    System.out.print(" " + MyBOARD[i][j] + " ");
+                if (j == 0) {
+                    System.out.println(" ");
                 }
-
+                System.out.print(" " + MyBOARD[i][j] + " ");
             }
 
-}
+        }
 
-
-
-
-
-
+    }
 
 
     public void checkSurround() {
@@ -129,18 +122,17 @@ public class GameBoard {
     }
 
 
-
-    public void updateBoard(char c, ArrayList<Integer> qC,ArrayList<Integer> qN,ArrayList<Integer> aR) {
+    public void updateBoard(char c, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
         ArrayList<Integer> qCT = new ArrayList<>();
         ArrayList<Integer> qNT = new ArrayList<>();
         ArrayList<Integer> aRT = new ArrayList<>();
 
         qCT = getXY(qC);
-        System.out.println(qC+" qC /tr" +qCT);
+        System.out.println(qC + " qC /tr" + qCT);
         qNT = getXY(qN);
-        System.out.println(qN+ " qN /tr" +qNT);
+        System.out.println(qN + " qN /tr" + qNT);
         aRT = getXY(aR);
-        System.out.println( aR+" aR/ tr" +aRT);
+        System.out.println(aR + " aR/ tr" + aRT);
         printBoard();
 
         int xFrom = qCT.get(0);
@@ -150,20 +142,18 @@ public class GameBoard {
         int arrowX = aRT.get(0);
         int arrowY = aRT.get(1);
 
-        if(c=='b'){
+        if (c == 'b') {
             MyBOARD[xFrom][yFrom] = 0;
             MyBOARD[xTo][yTo] = 2;
             MyBOARD[arrowX][arrowY] = -1;
-        }
-
-        else {
+        } else {
             MyBOARD[xFrom][yFrom] = 0;
             MyBOARD[xTo][yTo] = 1;
             MyBOARD[arrowX][arrowY] = -1;
 
         }
 
-        System.out.println("player"+c);
+        System.out.println("player" + c);
         printBoard();
 
     }
@@ -171,33 +161,36 @@ public class GameBoard {
     public int getIndex(ArrayList<Integer> XY) {
         int row = XY.get(0);
         int col = XY.get(1);
-        int index = (10 - row)*10 +col;
-        System.out.println("index "+index+", row " +row+", col " +col);
+        int index = (10 - row) * 10 + col;
+        System.out.println("index " + index + ", row " + row + ", col " + col);
         return index;
     }
+
     //transform AMAZONGAME BOARD POSITION X,Y to GameBoard x,y
     public ArrayList<Integer> getXY(ArrayList<Integer> xy) {
         ArrayList<Integer> trans = new ArrayList<>();
-        if(!xy.isEmpty())
+        if (!xy.isEmpty())
             trans.add(10 - xy.get(0));
-            trans.add(xy.get(1) - 1);
+        trans.add(xy.get(1) - 1);
 
         return trans;
-        }
+    }
+
     //transform GameBoard x,y  to  AMAZONGAME BOARD POSITION X,Y
     public ArrayList<Integer> undoXY(ArrayList<Integer> trans) {
         ArrayList<Integer> XY = new ArrayList<>();
-        XY.add(10-trans.get(0));
-        XY.add(trans.get(1)+1);
+        XY.add(10 - trans.get(0));
+        XY.add(trans.get(1) + 1);
         return XY;
     }
-    public static int[][] convertTo2DArray(ArrayList<Integer> board){
+
+    public static int[][] convertTo2DArray(ArrayList<Integer> board) {
         int[][] newBoard = new int[11][11];
 
         //Don't touch this hackjob (It converts the server's one-dimensional gamestate array into one that isn't upside down. Also moves the obsolete row back to the top of the 2D array after flipping.)
         for (int y = 1; y < 11; y++)
             for (int x = 0; x < 11; x++)
-                newBoard[x][11 - y] = Integer.valueOf(board.get(y*11 + x));
+                newBoard[x][11 - y] = Integer.valueOf(board.get(y * 11 + x));
         //moving obsolete row back to the top:
         for (int x = 0; x < 11; x++)
             newBoard[x][0] = Integer.valueOf(board.get(x));
@@ -206,21 +199,21 @@ public class GameBoard {
     }
 
     public void searchForMove(int player) {
-        for(int row = 0; row<MyBOARD[0].length;row++) {
-            for(int col = 0; col < MyBOARD.length; col++) {
-                if(MyBOARD[row][col]==player) {
-                    boolean [] upDownRightLeft =checkNeighbour(row,col,MyBOARD);
+        for (int row = 0; row < MyBOARD[0].length; row++) {
+            for (int col = 0; col < MyBOARD.length; col++) {
+                if (MyBOARD[row][col] == player) {
+                    boolean[] upDownRightLeft = checkNeighbour(row, col, MyBOARD);
 
                 }
             }
         }
     }
-    public boolean[] checkNeighbour(int x, int y,int[][] board) {
-        boolean [] UDRL = new boolean[4];
+
+    public boolean[] checkNeighbour(int x, int y, int[][] board) {
+        boolean[] UDRL = new boolean[4];
         try {
             int i = board[x + 1][y + 1];
-        }
-        catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             throw e;
         }
 
@@ -228,26 +221,91 @@ public class GameBoard {
     }
 
 
-    public ArrayList<ArrayList<Integer>> getMoves(int ours,Node node) {
+    public ArrayList<ArrayList<Integer>> getMoves(int ours, Node node) {
         int score = 0;
         int[][] b = node.current.getMyBOARD();
-        int [][] copy = node.copy.getMyBOARD();
+        int[][] copy = node.copy.getMyBOARD();
         ArrayList<ArrayList<ArrayList<Integer>>> moves = new ArrayList<>();
-        for(int row = 0; row< 10; row++) {
+        for (int row = 0; row < 10; row++) {
 
             for (int col = 0; col < 10; col++) {
                 if (b[row][col] == ours) {
-                    System.out.println("1 of ours: "+row+" "+col);
-                    boolean up = checkInBounds(row+1);
-                    boolean down = checkInBounds(row-1);
-                    boolean right = checkInBounds(col+1);
-                    boolean left = checkInBounds(col-1);
-                    boolean upup = checkInBounds(row+2);
-                    boolean downdown = checkInBounds(row-2);
-                    boolean rightright = checkInBounds(col+2);
-                    boolean leftleft = checkInBounds(col-2);
-                    for(int i = 0; i < 8; i++) {
-
+                    System.out.println("1 of ours: " + row + " " + col);
+                    boolean up = checkInBounds(row + 1);
+                    boolean down = checkInBounds(row - 1);
+                    boolean right = checkInBounds(col + 1);
+                    boolean left = checkInBounds(col - 1);
+                    boolean up2 = checkInBounds(row + 2);
+                    boolean down2 = checkInBounds(row - 2);
+                    boolean right2 = checkInBounds(col + 2);
+                    boolean left2 = checkInBounds(col - 2);
+                    boolean up3 = checkInBounds(row + 3);
+                    boolean down3 = checkInBounds(row - 3);
+                    boolean right3 = checkInBounds(col + 3);
+                    boolean left3 = checkInBounds(col - 3);
+                    for (int i = 0; i < 8; i++) {
+                        switch (i) {
+                            case 0: // right3down3
+                                if (right3 && down3) {
+                                    if (b[row - 3][col + 3] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row - 3);
+                                        move.add(col + 3);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+                            case 1: //left3down3
+                                if (left3 && down3) {
+                                    if (b[row - 3][col - 3] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row - 3);
+                                        move.add(col - 3);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+                            case 2: //right3 up3
+                                if (right3 && up3) {
+                                    if (b[row + 3][col + 3] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row + 3);
+                                        move.add(col + 3);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+                            case 3: //left3 up3
+                                if (left3 && up3) {
+                                    if (b[row + 3][col - 3] == 0) {
+                                        ArrayList<Integer> move = new ArrayList<>();
+                                        ArrayList<Integer> from = new ArrayList<>();
+                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+                                        move.add(row + 3);
+                                        move.add(col - 3);
+                                        from.add(row);
+                                        from.add(col);
+                                        toFrom.add(move);
+                                        toFrom.add(from);
+                                        moves.add(toFrom);
+                                    }
+                                }
+                        }
 
                         switch (i) {
                             case 0: //up
@@ -273,7 +331,7 @@ public class GameBoard {
                                         ArrayList<Integer> from = new ArrayList<>();
                                         ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                                         move.add(row + 1);
-                                        move.add(col+1);
+                                        move.add(col + 1);
                                         from.add(row);
                                         from.add(col);
                                         toFrom.add(move);
@@ -288,7 +346,7 @@ public class GameBoard {
                                         ArrayList<Integer> from = new ArrayList<>();
                                         ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
                                         move.add(row);
-                                        move.add(col+1);
+                                        move.add(col + 1);
                                         from.add(row);
                                         from.add(col);
                                         toFrom.add(move);
@@ -372,6 +430,7 @@ public class GameBoard {
                                         moves.add(toFrom);
                                     }
                                 }
+                            case (8): //downdownrightright
 
                         }
                     }
@@ -382,116 +441,429 @@ public class GameBoard {
         System.out.println(moves);
         return moves.get(0);
     }
+
     public boolean checkInBounds(int index) {
         boolean inBounds = (index >= 0) && (index < 10);
         return inBounds;
     }
 
-    public ArrayList<Integer> getArrow(Node node,ArrayList<Integer> pos) {
+    public ArrayList<Integer> getArrow(Node node, ArrayList<Integer> pos) {
 
         int[][] b = node.current.getMyBOARD();
-        int [][] copy = node.copy.getMyBOARD();
+        int[][] copy = node.copy.getMyBOARD();
         ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
         int row = pos.get(0);
         int col = pos.get(1);
-        boolean up = checkInBounds(row+1);
-        boolean down = checkInBounds(row-1);
-        boolean right = checkInBounds(col+1);
-        boolean left = checkInBounds(col-1);
-        boolean upup = checkInBounds(row+2);
-        boolean downdown = checkInBounds(row-2);
-        boolean rightright = checkInBounds(col+2);
-        boolean leftleft = checkInBounds(col-2);
-        for(int i = 0; i < 8; i++) {
+        boolean up = checkInBounds(row + 1);
+        boolean down = checkInBounds(row - 1);
+        boolean right = checkInBounds(col + 1);
+        boolean left = checkInBounds(col - 1);
+        boolean up2 = checkInBounds(row + 2);
+        boolean down2 = checkInBounds(row - 2);
+        boolean right2 = checkInBounds(col + 2);
+        boolean left2 = checkInBounds(col - 2);
+        boolean up3 = checkInBounds(row + 3);
+        boolean down3 = checkInBounds(row - 3);
+        boolean right3 = checkInBounds(col + 3);
+        boolean left3 = checkInBounds(col - 3);
+        for (int i = 0; i < 8; i++) {
             switch (i) {
-                case 0: //up
-                    if (up) {
-                        if (b[row + 1][col] == 0) {
-                            ArrayList<Integer> arrow = new ArrayList<>();
-                            arrow.add(row - 1);
-                            arrow.add(col);
-                            arrows.add(arrow);
-
-                        }
-                    }
-                case 1: //up/right
-                    if (up && right) {
-                        if (b[row + 1][col + 1] == 0) {
-                            ArrayList<Integer> arrow = new ArrayList<>();
-                            arrow.add(row + 1);
-                            arrow.add(col+1);
-                            arrows.add(arrow);
-
-                        }
-                    }
-                case 2: //right
-                    if (right) {
-                        if (b[row][col + 1] == 0) {
+                case 0: // right2
+                    if (right2) {
+                        if (b[row][col + 2] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
                             arrow.add(row);
-                            arrow.add(col+1);
+                            arrow.add(col + 2);
                             arrows.add(arrow);
+                            return arrows.get(0);
+                        }
+                    }
 
-                        }
-                    }
-                case 3: //down/right
-                    if (right && down) {
-                        if (b[row - 1][col + 1] == 0) {
-                            ArrayList<Integer> arrow = new ArrayList<>();
-                            arrow.add(row - 1);
-                            arrow.add(col+1);
-                            arrows.add(arrow);
-
-                        }
-                    }
-                case 4: //down
-                    if (down) {
-                        if (b[row - 1][col] == 0) {
-                            ArrayList<Integer> arrow = new ArrayList<>();
-                            arrow.add(row - 1);
-                            arrow.add(col);
-                            arrows.add(arrow);
-                        }
-                    }
-                case 5: //down/left
-                    if (down && left) {
-                        if (b[row - 1][col - 1] == 0) {
-                            ArrayList<Integer> arrow = new ArrayList<>();
-                            arrow.add(row - 1);
-                            arrow.add(col - 1);
-                            arrows.add(arrow);
-
-                        }
-                    }
-                case 6: //left
-                    if (left) {
-                        if (b[row][col - 1] == 0) {
+                case 1: //left2
+                    if (left2) {
+                        if (b[row][col - 2] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
                             arrow.add(row);
-                            arrow.add(col - 1);
+                            arrow.add(col - 2);
                             arrows.add(arrow);
-                        }
-                    }
-                case 7: //left/up
-                    if (up && left) {
-                        if (b[row + 1][col - 1] == 0) {
-                            ArrayList<Integer> arrow = new ArrayList<>();
-                            arrow.add(row + 1);
-                            arrow.add(col - 1);
-                            arrows.add(arrow);
+                            return arrows.get(0);
                         }
                     }
 
+
+                    switch (i) {
+                        case 0: // right3down3
+                            if (right3 && down3) {
+                                if (b[row - 3][col + 3] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row - 3);
+                                    arrow.add(col + 3);
+                                    arrows.add(arrow);
+                                }
+                            }
+                        case 1: //left3down3
+                            if (left3 && down3) {
+                                if (b[row - 3][col - 3] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row - 3);
+                                    arrow.add(col - 3);
+                                    arrows.add(arrow);
+                                }
+                            }
+                        case 2: //right3 up3
+                            if (right3 && up3) {
+                                if (b[row + 3][col + 3] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row + 3);
+                                    arrow.add(col + 3);
+                                    arrows.add(arrow);
+                                }
+                            }
+                        case 3: //left3 up3
+                            if (left3 && up3) {
+                                if (b[row + 3][col - 3] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row + 3);
+                                    arrow.add(col - 3);
+                                    arrows.add(arrow);
+                                }
+                            }
+                    }
+
+                    switch (i) {
+                        case 0: //up
+                            if (up) {
+                                if (b[row + 1][col] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row - 1);
+                                    arrow.add(col);
+                                    arrows.add(arrow);
+
+                                }
+                            }
+                        case 1: //up/right
+                            if (up && right) {
+                                if (b[row + 1][col + 1] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row + 1);
+                                    arrow.add(col + 1);
+                                    arrows.add(arrow);
+
+                                }
+                            }
+                        case 2: //right
+                            if (right) {
+                                if (b[row][col + 1] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row);
+                                    arrow.add(col + 1);
+                                    arrows.add(arrow);
+
+                                }
+                            }
+                        case 3: //down/right
+                            if (right && down) {
+                                if (b[row - 1][col + 1] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row - 1);
+                                    arrow.add(col + 1);
+                                    arrows.add(arrow);
+
+                                }
+                            }
+                        case 4: //down
+                            if (down) {
+                                if (b[row - 1][col] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row - 1);
+                                    arrow.add(col);
+                                    arrows.add(arrow);
+                                }
+                            }
+                        case 5: //down/left
+                            if (down && left) {
+                                if (b[row - 1][col - 1] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row - 1);
+                                    arrow.add(col - 1);
+                                    arrows.add(arrow);
+
+                                }
+                            }
+                        case 6: //left
+                            if (left) {
+                                if (b[row][col - 1] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row);
+                                    arrow.add(col - 1);
+                                    arrows.add(arrow);
+                                }
+                            }
+                        case 7: //left/up
+                            if (up && left) {
+                                if (b[row + 1][col - 1] == 0) {
+                                    ArrayList<Integer> arrow = new ArrayList<>();
+                                    arrow.add(row + 1);
+                                    arrow.add(col - 1);
+                                    arrows.add(arrow);
+                                }
+                            }
+
+                    }
             }
+
+
         }
-    if(arrows.isEmpty()) {
-        return pos;
-    }
-    else {
-        return arrows.get(0);
+        if (arrows.isEmpty()) {
+            return pos;
+        } else return arrows.get(0);
     }
 
-    }
+    public int getScore(int ours) {
+        int score = 0;
+        ArrayList<ArrayList<Integer>> positions = new ArrayList<>();
+
+        int queen = 0;
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                if (MyBOARD[row][col] == ours) {
+                    ArrayList<Integer> pos = new ArrayList<>();
+                    pos.add(row);
+                    pos.add(col);
+                    int up = 0;
+                    int down = 0;
+                    int left = 0;
+                    int right = 0;
+                    int rightup = 0;
+                    int rightdown = 0;
+                    int leftup = 0;
+                    int leftdown = 0;
+                    boolean upS = true;
+                    boolean downS = true;
+                    boolean rightS = true;
+                    boolean leftS = true;
+                    boolean rightUpS = true;
+                    boolean leftUpS = true;
+                    boolean rightDownS = true;
+                    boolean leftDownS = true;
+                    int queenScore = 0;
+                    int index = 1;
+                    while (index < 9 && upS||downS||rightS||leftS) {
+                        //up
+                        if (upS && checkInBounds(row - index) && MyBOARD[row - index][col] == 0) {
+                            //continue
+                            up++;
+                            queenScore++;
+                            score++;
+                        } else {
+                            upS = false;
+                        }
+                        if (downS && checkInBounds(row + index) && MyBOARD[row + index][col] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            down++;
+                        }
+                        else {
+                            downS = false;
+                        }
+                        //right
+                        if (rightS && checkInBounds(row) && checkInBounds(col + index) && MyBOARD[row][col+ index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            right++;
+                        }
+                        else {
+                            rightS = false;
+                        }
+                        //left
+                        if (leftS && checkInBounds(row) && checkInBounds(col - index) && MyBOARD[row][col - index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            left++;
+                        }
+                        else {
+                            leftS = false;
+                        }
+                        //up/right
+                        if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && MyBOARD[row - index][col+ index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            rightup++;
+                        }
+                        else {
+                            rightUpS = false;
+                        }
+                        //up/left
+                        if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && MyBOARD[row - index][col - index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            leftup++;
+                        }
+                        else {
+//                            System.out.println(rightup + " rightup");
+                            leftUpS = false;
+                        }
+                        //down/right
+                        if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && MyBOARD[row + index][col+ index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            rightdown++;
+                        }
+                        else {
+//                            System.out.println(rightup + " rightup");
+                            rightDownS = false;
+                        }
+                        //down/left
+                        if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && MyBOARD[row + index][col - index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            leftdown++;
+                        }
+                        else {
+//                            System.out.println(rightup + " rightup");
+                            leftDownS = false;
+                        }
+                        index++;
+                    }
+                    pos.add(up);
+                    pos.add(down);
+                    pos.add(left);
+                    pos.add(right);
+                    pos.add(rightup);
+                    pos.add(leftup);
+                    pos.add(rightdown);
+                    pos.add(leftdown);
+                    pos.add(queenScore);
+                    positions.add(pos);
+//                        //check down
+//                        for (int rowSearch = row; rowSearch < 10; rowSearch++) {
+//                            if (checkInBounds(rowSearch) && MyBOARD[rowSearch][col] == 0) {
+//                                System.out.println("down++");
+//                                //continue
+//                                down++;
+//                                queenScore++;
+//                                score++;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//
+//                        //check up
+//                        for (int rowSearch = row; rowSearch > 0; rowSearch--) {
+//                            if (checkInBounds(rowSearch) && MyBOARD[rowSearch][col] == 0) {
+//                                System.out.println("up++");
+//                                //continue
+//                                up++;
+//                                queenScore++;
+//                                score++;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                        //check right
+//                        for (int colSearch = col; colSearch < 10; colSearch++) {
+//                            if (checkInBounds(colSearch) && MyBOARD[row][colSearch] == 0) {
+//                                System.out.println("right++");
+//                                //continue
+//                                right++;
+//                                queenScore++;
+//                                score++;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                        //check left
+//                        for (int colSearch = col; colSearch > 0; colSearch--) {
+//                            if (checkInBounds(colSearch) && MyBOARD[row][colSearch] == 0) {
+//                                System.out.println("left++");
+//                                //continue
+//                                left++;
+//                                queenScore++;
+//                                score++;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                    //check right up
+//                    for (int rowSearch = row; rowSearch<10; rowSearch++) {
+//                        for (int colSearch = col; colSearch<10; colSearch++) {
+//                            if (checkInBounds(rowSearch) && checkInBounds(colSearch) && MyBOARD[rowSearch][colSearch] == 0) {
+//                                System.out.println("right up++");
+//                                //continue
+//                                rightup++;
+//                                queenScore++;
+//                                score++;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    //check left up
+//                    for (int rowSearch = row; rowSearch<10; rowSearch++) {
+//                        for (int colSearch = col; colSearch>0; colSearch--) {
+//                            if (checkInBounds(rowSearch) && checkInBounds(colSearch) && MyBOARD[rowSearch][colSearch] == 0) {
+//                                System.out.println("left up++");
+//                                //continue
+//                                leftup++;
+//                                queenScore++;
+//                                score++;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                        break;
+//                    }
+//
+//                    //check right down
+//                    for (int rowSearch = row; rowSearch>0; rowSearch--) {
+//                        for (int colSearch = col; colSearch<10; colSearch++) {
+//                            if (checkInBounds(rowSearch) && checkInBounds(colSearch) && MyBOARD[rowSearch][colSearch] == 0) {
+//                                //continue
+//                                rightdown++;
+//                                queenScore++;
+//                                score++;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    //check left down
+//                    for (int rowSearch = row; rowSearch>0; rowSearch--) {
+//                        for (int colSearch = col; colSearch>0; colSearch--) {
+//                            if (checkInBounds(rowSearch) && checkInBounds(colSearch) && MyBOARD[rowSearch][colSearch] == 0) {
+//                                //continue
+//                                leftdown++;
+//                                queenScore++;
+//                                score++;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                    }
+//                        pos.add(up);
+//                        pos.add(down);
+//                        pos.add(right);
+//                        pos.add(left);
+//                        pos.add(rightup);
+//                        pos.add(leftup);
+//                        pos.add(rightdown);
+//                        pos.add(leftdown);
+
+
+
+                    }
+                }
+            }
+        System.out.println(positions);
+        return score;
+        }
 
 
 
