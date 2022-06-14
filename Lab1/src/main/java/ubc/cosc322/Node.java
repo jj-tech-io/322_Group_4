@@ -17,7 +17,7 @@ public class Node {
     public Node(GameBoard current, int player) {
         this.current = current;
         this.copy = current;
-        this.score = (int) current.getScore(player).get(3);
+        this.score = (int) current.getScore(player).get(0);
     }
 
 

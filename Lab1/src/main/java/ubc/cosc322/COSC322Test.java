@@ -154,7 +154,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
                 }
                 else {
 
-                    gB.updateBoard(otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
+                    gB.updateBoard(true,theirs,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
                     makeMove();
                     gameStage++;
                 }
@@ -225,6 +225,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
     }
     public void makeMove() {
+
         System.out.println("number of steps: "+ gameStage);
         ArrayList<Integer> from = new ArrayList<>();
         HashMap<ArrayList<Integer>, int[][]> moves = new HashMap<>();
@@ -235,7 +236,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
         ArrayList<Integer> qN = new ArrayList<>();
         ArrayList<Integer> aR = new ArrayList<>();
         Node curNode = new Node(gB,ours);
-        ArrayList<ArrayList<Integer>> qc_qn_ar = MinMax.getOptimal(ours,theirs,true,curNode);
+        ArrayList<ArrayList<Integer>> qc_qn_ar = MinMax.getOptimal(ours,theirs,gB);
         System.out.println(qc_qn_ar);
         qC= qc_qn_ar.get(0);
         qN = qc_qn_ar.get(1);
@@ -247,11 +248,11 @@ public class COSC322Test<Rooms> extends GamePlayer {
 //        qC = moves.get(1);
 //        aR = gB.getArrow(curNode,qN);
 //
-
+//        gB.updateBoard(ourAmazon, qC, qN, aR);
         qN = gB.undoXY(qN);
         qC = gB.undoXY(qC);
         aR = gB.undoXY(aR);
-        gB.updateBoard(ourAmazon, qC, qN, aR);
+        gB.updateBoard(false,ourAmazon, qC, qN, aR);
         System.out.println(gB.getScore(1));
         System.out.println(gB.getScore(2));
         this.gamegui.updateGameState(qC, qN, aR);

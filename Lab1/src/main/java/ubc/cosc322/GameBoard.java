@@ -69,42 +69,64 @@ public class GameBoard {
 
 
 
-    public void updateBoard(char c, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
-        ArrayList<Integer> qCT = new ArrayList<>();
-        ArrayList<Integer> qNT = new ArrayList<>();
-        ArrayList<Integer> aRT = new ArrayList<>();
+    public void updateBoard(boolean opponent, int player, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
+        int xFrom;
+        int yFrom;
+        int xTo;
+        int yTo;
+        int arrowX;
+        int arrowY;
+        if(opponent) {
+            ArrayList<Integer> qCT = new ArrayList<>();
+            ArrayList<Integer> qNT = new ArrayList<>();
+            ArrayList<Integer> aRT = new ArrayList<>();
 
-        qCT = getXY(qC);
-        System.out.println(qC + " qC /tr" + qCT);
-        qNT = getXY(qN);
-        System.out.println(qN + " qN /tr" + qNT);
-        aRT = getXY(aR);
-        System.out.println(aR + " aR/ tr" + aRT);
-        printBoard();
+            qCT = getXY(qC);
+            System.out.println(qC + " qC /tr" + qCT);
+            qNT = getXY(qN);
+            System.out.println(qN + " qN /tr" + qNT);
+            aRT = getXY(aR);
+            System.out.println(aR + " aR/ tr" + aRT);
+            printBoard();
+            xFrom = qCT.get(0);
+            yFrom = qCT.get(1);
+            xTo = qNT.get(0);
+            yTo = qNT.get(1);
+            arrowX = aRT.get(0);
+            arrowY = aRT.get(1);
+        }
+        else {
 
-        int xFrom = qCT.get(0);
-        int yFrom = qCT.get(1);
-        int xTo = qNT.get(0);
-        int yTo = qNT.get(1);
-        int arrowX = aRT.get(0);
-        int arrowY = aRT.get(1);
 
-        if (c == 'b') {
-            MyBOARD[xFrom][yFrom] = 0;
-            MyBOARD[xTo][yTo] = 2;
-            MyBOARD[arrowX][arrowY] = -1;
-        } else {
-            MyBOARD[xFrom][yFrom] = 0;
-            MyBOARD[xTo][yTo] = 1;
-            MyBOARD[arrowX][arrowY] = -1;
+            xFrom = qC.get(0);
+            yFrom = qC.get(1);
+            xTo = qN.get(0);
+            yTo = qN.get(1);
+            arrowX = aR.get(0);
+            arrowY = aR.get(1);
+        }
+        if(checkInBounds(xTo)&&checkInBounds(yTo)&&checkInBounds(xFrom)&&checkInBounds(yFrom)) {
+            if (MyBOARD[xTo][yTo] == 0) {
 
+                    MyBOARD[xFrom][yFrom] = 0;
+                    MyBOARD[xTo][yTo] = player;
+                    MyBOARD[arrowX][arrowY] = -1;
+
+
+
+
+
+            }
         }
 
         //System.out.println("player" + c);
         printBoard();
 
     }
-    public void updateQueen(char c, ArrayList<Integer> qC, ArrayList<Integer> qN) {
+    public void updateQueen(int player, ArrayList<Integer> qC, ArrayList<Integer> qN) {
+
+
+
         ArrayList<Integer> qCT = new ArrayList<>();
         ArrayList<Integer> qNT = new ArrayList<>();
         ArrayList<Integer> aRT = new ArrayList<>();
@@ -117,32 +139,35 @@ public class GameBoard {
         int yFrom = qC.get(1);
         int xTo = qN.get(0);
         int yTo = qN.get(1);
+        System.out.println(xTo+" "+yTo);
+        if(checkInBounds(xTo)&&checkInBounds(yTo)) {
+            if(MyBOARD[xTo][yTo]==0) {
+
+                    MyBOARD[xFrom][yFrom] = 0;
+                    MyBOARD[xTo][yTo] = player;
 
 
-        if (c == 'b') {
-            MyBOARD[xFrom][yFrom] = 0;
-            MyBOARD[xTo][yTo] = 2;
-
-        } else {
-            MyBOARD[xFrom][yFrom] = 0;
-            MyBOARD[xTo][yTo] = 1;
-
-
+            }
         }
+
 
         //System.out.println("player" + c);
         printBoard();
 
     }
-    public void updateArrow(char c, ArrayList<Integer> aR) {
+    public void updateArrow(int player, ArrayList<Integer> aR) {
+
+
         printBoard();
         int arrowX = aR.get(0);
         int arrowY = aR.get(1);
-        if (c == 'b') {
-            MyBOARD[arrowX][arrowY] = -1;
-        } else {
-            MyBOARD[arrowX][arrowY] = -1;
+
+        if(checkInBounds(arrowX)&&checkInBounds(arrowY)) {
+            if (MyBOARD[arrowX][arrowY] == 0) {
+                MyBOARD[arrowX][arrowY] = -1;
+            }
         }
+
 
         printBoard();
 
@@ -429,10 +454,8 @@ public class GameBoard {
         return inBounds;
     }
 
-    public ArrayList<Integer> getArrow(Node node, ArrayList<Integer> pos) {
+    public ArrayList<Integer> getArrow(GameBoard gameBoard, ArrayList<Integer> pos) {
 
-        int[][] b = node.current.getMyBOARD();
-        int[][] copy = node.copy.getMyBOARD();
         ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
         int row = pos.get(0);
         int col = pos.get(1);
@@ -452,23 +475,23 @@ public class GameBoard {
             switch (i) {
                 case 0: // right2
                     if (right2) {
-                        if (b[row][col + 2] == 0) {
+                        if (gameBoard.MyBOARD[row][col + 2] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
                             arrow.add(row);
                             arrow.add(col + 2);
                             arrows.add(arrow);
-                            return arrows.get(0);
+                            break;
                         }
                     }
 
                 case 1: //left2
                     if (left2) {
-                        if (b[row][col - 2] == 0) {
+                        if (MyBOARD[row][col - 2] == 0) {
                             ArrayList<Integer> arrow = new ArrayList<>();
                             arrow.add(row);
                             arrow.add(col - 2);
                             arrows.add(arrow);
-                            return arrows.get(0);
+                            break;
                         }
                     }
 
@@ -476,38 +499,42 @@ public class GameBoard {
                     switch (i) {
                         case 0: // right3down3
                             if (right3 && down3) {
-                                if (b[row - 3][col + 3] == 0) {
+                                if (MyBOARD[row - 3][col + 3] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row - 3);
                                     arrow.add(col + 3);
                                     arrows.add(arrow);
+
                                 }
                             }
                         case 1: //left3down3
                             if (left3 && down3) {
-                                if (b[row - 3][col - 3] == 0) {
+                                if (gameBoard.MyBOARD[row - 3][col - 3] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row - 3);
                                     arrow.add(col - 3);
                                     arrows.add(arrow);
+
                                 }
                             }
                         case 2: //right3 up3
                             if (right3 && up3) {
-                                if (b[row + 3][col + 3] == 0) {
+                                if (gameBoard.MyBOARD[row + 3][col + 3] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row + 3);
                                     arrow.add(col + 3);
                                     arrows.add(arrow);
+
                                 }
                             }
                         case 3: //left3 up3
                             if (left3 && up3) {
-                                if (b[row + 3][col - 3] == 0) {
+                                if (gameBoard.MyBOARD[row + 3][col - 3] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row + 3);
                                     arrow.add(col - 3);
                                     arrows.add(arrow);
+
                                 }
                             }
                     }
@@ -515,27 +542,29 @@ public class GameBoard {
                     switch (i) {
                         case 0: //up
                             if (up) {
-                                if (b[row + 1][col] == 0) {
+                                if (gameBoard.MyBOARD[row + 1][col] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row - 1);
                                     arrow.add(col);
                                     arrows.add(arrow);
 
+
                                 }
                             }
                         case 1: //up/right
                             if (up && right) {
-                                if (b[row + 1][col + 1] == 0) {
+                                if (gameBoard.MyBOARD[row + 1][col + 1] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row + 1);
                                     arrow.add(col + 1);
                                     arrows.add(arrow);
 
+
                                 }
                             }
                         case 2: //right
                             if (right) {
-                                if (b[row][col + 1] == 0) {
+                                if (gameBoard.MyBOARD[row][col + 1] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row);
                                     arrow.add(col + 1);
@@ -545,7 +574,7 @@ public class GameBoard {
                             }
                         case 3: //down/right
                             if (right && down) {
-                                if (b[row - 1][col + 1] == 0) {
+                                if (MyBOARD[row - 1][col + 1] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row - 1);
                                     arrow.add(col + 1);
@@ -555,7 +584,7 @@ public class GameBoard {
                             }
                         case 4: //down
                             if (down) {
-                                if (b[row - 1][col] == 0) {
+                                if (MyBOARD[row - 1][col] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row - 1);
                                     arrow.add(col);
@@ -564,7 +593,7 @@ public class GameBoard {
                             }
                         case 5: //down/left
                             if (down && left) {
-                                if (b[row - 1][col - 1] == 0) {
+                                if (gameBoard.MyBOARD[row - 1][col - 1] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row - 1);
                                     arrow.add(col - 1);
@@ -574,7 +603,7 @@ public class GameBoard {
                             }
                         case 6: //left
                             if (left) {
-                                if (b[row][col - 1] == 0) {
+                                if (gameBoard.MyBOARD[row][col - 1] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row);
                                     arrow.add(col - 1);
@@ -583,7 +612,7 @@ public class GameBoard {
                             }
                         case 7: //left/up
                             if (up && left) {
-                                if (b[row + 1][col - 1] == 0) {
+                                if (gameBoard.MyBOARD[row + 1][col - 1] == 0) {
                                     ArrayList<Integer> arrow = new ArrayList<>();
                                     arrow.add(row + 1);
                                     arrow.add(col - 1);
@@ -596,20 +625,19 @@ public class GameBoard {
 
 
         }
-        if (arrows.isEmpty()) {
-            return pos;
-        } else return arrows.get(0);
+        return arrows.get(0);
     }
 
     public List<Object> getScore(int player) {
         int score = 0;
-        ArrayList<ArrayList<Integer>> positions = new ArrayList<>();
-        HashMap<String, ArrayList<Integer>> scoreTable = new HashMap<>();
+        ArrayList<List<Object>> positions = new ArrayList<>();
+
         int queen = 0;
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
                 if (MyBOARD[row][col] == player) {
-                    ArrayList<Integer> pos = new ArrayList<>();
+                    List<Object> pos = new ArrayList<>();
+                    List<Object> moves = new ArrayList<>();
                     pos.add(row);
                     pos.add(col);
                     int up = 0;
@@ -715,20 +743,26 @@ public class GameBoard {
                         }
                         index++;
                     }
-                    pos.add(up);
-                    pos.add(down);
-                    pos.add(left);
-                    pos.add(right);
-                    pos.add(rightup);
-                    pos.add(leftup);
-                    pos.add(rightdown);
-                    pos.add(leftdown);
+
+                    moves.add(up);
+                    moves.add(down);
+                    moves.add(left);
+                    moves.add(right);
+                    moves.add(rightup);
+                    moves.add(leftup);
+                    moves.add(rightdown);
+                    moves.add(leftdown);
+                    List<Object> data_row = new ArrayList<>();
                     pos.add(queenScore);
-                    positions.add(pos);
+                    data_row.add(pos);
+                    data_row.add(moves);
+
+
+                    positions.add(data_row);
                     }
                 }
             }
-
-        return Arrays.asList("player: ",player,"score: ",score,"row,col,up,down,left,right,rightUp,leftUp,rightDown,leftDown", positions);
+        System.out.println("\n{score,{{row,col,queenScore},{up,down,left,right,rightUp,leftUp,rightDown,leftDown}},{},{}}");
+        return Arrays.asList(score,positions);
         }
 }
