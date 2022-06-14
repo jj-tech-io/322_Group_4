@@ -1,7 +1,6 @@
 package ubc.cosc322;
 
 import java.util.*;
-import java.util.function.IntFunction;
 
 import static java.lang.String.format;
 
@@ -26,7 +25,7 @@ public class GameBoard {
         return MyBOARD;
     }
 
-    private int[][] MyBOARD = new int[][]{
+    public int[][] MyBOARD = new int[][]{
             {0, 0, 0, 2, 0, 0, 2, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -39,7 +38,7 @@ public class GameBoard {
             {0, 0, 0, 1, 0, 0, 1, 0, 0, 0},
 
     };
-    private static char[] letters = new char[]{'\t', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+
 
 
     public Map<Integer, ArrayList<Integer>> white_xy = new HashMap<>();
@@ -48,6 +47,9 @@ public class GameBoard {
 
     public GameBoard() {
 
+    }
+    public GameBoard(int[][] cur) {
+        this.MyBOARD = cur;
     }
 
 
@@ -102,7 +104,50 @@ public class GameBoard {
         printBoard();
 
     }
+    public void updateQueen(char c, ArrayList<Integer> qC, ArrayList<Integer> qN) {
+        ArrayList<Integer> qCT = new ArrayList<>();
+        ArrayList<Integer> qNT = new ArrayList<>();
+        ArrayList<Integer> aRT = new ArrayList<>();
 
+
+
+        printBoard();
+
+        int xFrom = qC.get(0);
+        int yFrom = qC.get(1);
+        int xTo = qN.get(0);
+        int yTo = qN.get(1);
+
+
+        if (c == 'b') {
+            MyBOARD[xFrom][yFrom] = 0;
+            MyBOARD[xTo][yTo] = 2;
+
+        } else {
+            MyBOARD[xFrom][yFrom] = 0;
+            MyBOARD[xTo][yTo] = 1;
+
+
+        }
+
+        //System.out.println("player" + c);
+        printBoard();
+
+    }
+    public void updateArrow(char c, ArrayList<Integer> aR) {
+        printBoard();
+        int arrowX = aR.get(0);
+        int arrowY = aR.get(1);
+        if (c == 'b') {
+            MyBOARD[arrowX][arrowY] = -1;
+        } else {
+            MyBOARD[arrowX][arrowY] = -1;
+        }
+
+        printBoard();
+
+
+    }
     public int getIndex(ArrayList<Integer> XY) {
         int row = XY.get(0);
         int col = XY.get(1);
@@ -129,30 +174,9 @@ public class GameBoard {
         return XY;
     }
 
-    public static int[][] convertTo2DArray(ArrayList<Integer> board) {
-        int[][] newBoard = new int[11][11];
 
-        //Don't touch this hackjob (It converts the server's one-dimensional gamestate array into one that isn't upside down. Also moves the obsolete row back to the top of the 2D array after flipping.)
-        for (int y = 1; y < 11; y++)
-            for (int x = 0; x < 11; x++)
-                newBoard[x][11 - y] = Integer.valueOf(board.get(y * 11 + x));
-        //moving obsolete row back to the top:
-        for (int x = 0; x < 11; x++)
-            newBoard[x][0] = Integer.valueOf(board.get(x));
 
-        return newBoard;
-    }
 
-    public void searchForMove(int player) {
-        for (int row = 0; row < MyBOARD[0].length; row++) {
-            for (int col = 0; col < MyBOARD.length; col++) {
-                if (MyBOARD[row][col] == player) {
-                    boolean[] upDownRightLeft = checkNeighbour(row, col, MyBOARD);
-
-                }
-            }
-        }
-    }
 
     public boolean[] checkNeighbour(int x, int y, int[][] board) {
         boolean[] UDRL = new boolean[4];
@@ -166,15 +190,27 @@ public class GameBoard {
     }
 
 
-    public ArrayList<ArrayList<Integer>> getMoves(int ours, Node node) {
+    public List<Object> getMoves(int ours, Node node) {
         int score = 0;
+        int theirs;
         int[][] b = node.current.getMyBOARD();
         int[][] copy = node.copy.getMyBOARD();
+        List<Object> moves_states = new ArrayList<>();
+
         ArrayList<ArrayList<ArrayList<Integer>>> moves = new ArrayList<>();
+        if(ours==1) {
+            theirs = 2;
+        }
+        else{
+            theirs = 1;
+        }
+        //int utility =(int)getScore(ours).get(1) - (int)getScore(theirs).get(1) ;
+
         for (int row = 0; row < 10; row++) {
 
             for (int col = 0; col < 10; col++) {
                 if (b[row][col] == ours) {
+                    moves_states.add(Arrays.asList(row,col));
                     boolean up = checkInBounds(row + 1);
                     boolean down = checkInBounds(row - 1);
                     boolean right = checkInBounds(col + 1);
@@ -377,13 +413,15 @@ public class GameBoard {
                             case (8): //downdownrightright
 
                         }
+
                     }
                 }
 
             }
         }
         //System.out.println(moves);
-        return moves.get(0);
+        moves_states.add(moves);
+        return moves_states;
     }
 
     public boolean checkInBounds(int index) {
@@ -563,14 +601,14 @@ public class GameBoard {
         } else return arrows.get(0);
     }
 
-    public int getScore(int ours) {
+    public List<Object> getScore(int player) {
         int score = 0;
         ArrayList<ArrayList<Integer>> positions = new ArrayList<>();
-
+        HashMap<String, ArrayList<Integer>> scoreTable = new HashMap<>();
         int queen = 0;
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
-                if (MyBOARD[row][col] == ours) {
+                if (MyBOARD[row][col] == player) {
                     ArrayList<Integer> pos = new ArrayList<>();
                     pos.add(row);
                     pos.add(col);
@@ -601,6 +639,7 @@ public class GameBoard {
                             score++;
                         } else {
                             upS = false;
+
                         }
                         if (downS && checkInBounds(row + index) && MyBOARD[row + index][col] == 0 ) {
                             //continue
@@ -686,131 +725,10 @@ public class GameBoard {
                     pos.add(leftdown);
                     pos.add(queenScore);
                     positions.add(pos);
-//                        //check down
-//                        for (int rowSearch = row; rowSearch < 10; rowSearch++) {
-//                            if (checkInBounds(rowSearch) && MyBOARD[rowSearch][col] == 0) {
-//                                System.out.println("down++");
-//                                //continue
-//                                down++;
-//                                queenScore++;
-//                                score++;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//
-//                        //check up
-//                        for (int rowSearch = row; rowSearch > 0; rowSearch--) {
-//                            if (checkInBounds(rowSearch) && MyBOARD[rowSearch][col] == 0) {
-//                                System.out.println("up++");
-//                                //continue
-//                                up++;
-//                                queenScore++;
-//                                score++;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//                        //check right
-//                        for (int colSearch = col; colSearch < 10; colSearch++) {
-//                            if (checkInBounds(colSearch) && MyBOARD[row][colSearch] == 0) {
-//                                System.out.println("right++");
-//                                //continue
-//                                right++;
-//                                queenScore++;
-//                                score++;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//                        //check left
-//                        for (int colSearch = col; colSearch > 0; colSearch--) {
-//                            if (checkInBounds(colSearch) && MyBOARD[row][colSearch] == 0) {
-//                                System.out.println("left++");
-//                                //continue
-//                                left++;
-//                                queenScore++;
-//                                score++;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//                    //check right up
-//                    for (int rowSearch = row; rowSearch<10; rowSearch++) {
-//                        for (int colSearch = col; colSearch<10; colSearch++) {
-//                            if (checkInBounds(rowSearch) && checkInBounds(colSearch) && MyBOARD[rowSearch][colSearch] == 0) {
-//                                System.out.println("right up++");
-//                                //continue
-//                                rightup++;
-//                                queenScore++;
-//                                score++;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//                    }
-//                    //check left up
-//                    for (int rowSearch = row; rowSearch<10; rowSearch++) {
-//                        for (int colSearch = col; colSearch>0; colSearch--) {
-//                            if (checkInBounds(rowSearch) && checkInBounds(colSearch) && MyBOARD[rowSearch][colSearch] == 0) {
-//                                System.out.println("left up++");
-//                                //continue
-//                                leftup++;
-//                                queenScore++;
-//                                score++;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//                        break;
-//                    }
-//
-//                    //check right down
-//                    for (int rowSearch = row; rowSearch>0; rowSearch--) {
-//                        for (int colSearch = col; colSearch<10; colSearch++) {
-//                            if (checkInBounds(rowSearch) && checkInBounds(colSearch) && MyBOARD[rowSearch][colSearch] == 0) {
-//                                //continue
-//                                rightdown++;
-//                                queenScore++;
-//                                score++;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//                    }
-//                    //check left down
-//                    for (int rowSearch = row; rowSearch>0; rowSearch--) {
-//                        for (int colSearch = col; colSearch>0; colSearch--) {
-//                            if (checkInBounds(rowSearch) && checkInBounds(colSearch) && MyBOARD[rowSearch][colSearch] == 0) {
-//                                //continue
-//                                leftdown++;
-//                                queenScore++;
-//                                score++;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//                    }
-//                        pos.add(up);
-//                        pos.add(down);
-//                        pos.add(right);
-//                        pos.add(left);
-//                        pos.add(rightup);
-//                        pos.add(leftup);
-//                        pos.add(rightdown);
-//                        pos.add(leftdown);
-
-
-
                     }
                 }
             }
-//        System.out.println(positions);
-        return score;
+
+        return Arrays.asList("player: ",player,"score: ",score,"row,col,up,down,left,right,rightUp,leftUp,rightDown,leftDown", positions);
         }
-
-
-
-
-
 }

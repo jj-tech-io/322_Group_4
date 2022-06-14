@@ -6,7 +6,7 @@ public class Node {
     public Node parentNode;
     public ArrayList<Node> children = new ArrayList<>();
     public GameBoard current;
-    public int [] scoreUsVThem;
+    public int score;
     public GameBoard copy;
     private int us;
     private int them;
@@ -14,37 +14,11 @@ public class Node {
     public TreeMap<Integer,int [][]> map= new TreeMap<>();
     public ArrayList<ArrayList<ArrayList<Integer>>> moves;
     public ArrayList<ArrayList<ArrayList<Integer>>> arrows;
-    public Node(GameBoard current, int us, int them) {
+    public Node(GameBoard current, int player) {
         this.current = current;
         this.copy = current;
-        this.us = us;
-        this.them = them;
+        this.score = (int) current.getScore(player).get(3);
     }
-    public ArrayList<ArrayList<Integer>> getChildren() {
-        ArrayList<ArrayList<Integer>> m = this.copy.getMoves(us,this);
-        //get moves
-        //for each move -> get arrows
-        //for each arrow get board state and score
-        //return best move
-        ArrayList<Integer> arrow = new ArrayList<>();
-        arrow = copy.getArrow(this,m.get(0));
-
-        System.out.println(m);
-        //ArrayList<int [][]> states
-//        GameBoard child = copy.updateBoard('b',m.get(0).get(1),m.get(0).get(0),arrow);
-        return m;
-    }
-//    public ArrayList<Integer> getMove() {
-//        moves =  current.getMoves(cu);
-//
-//    }
-    public int getUtilityScore() {
-        int x = 0;
-        return x;
-    }
-
-
-
 
 
 }

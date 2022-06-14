@@ -1,16 +1,11 @@
 
 package ubc.cosc322;
 
-import java.net.URL;
 import java.util.*;
 
 import sfs2x.client.entities.Room;
 import ygraph.ai.smartfox.games.*;
-import ygraph.ai.smartfox.games.amazons.AmazonsBoard;
 import ygraph.ai.smartfox.games.amazons.AmazonsGameMessage;
-import ygraph.ai.smartfox.games.amazons.HumanPlayer;
-
-import javax.swing.*;
 
 
 /**
@@ -226,22 +221,32 @@ public class COSC322Test<Rooms> extends GamePlayer {
 //ArrayList<Integer> gameBoard,int queen, int x,int y
     public int qCY = 1;
 
+    public void opponentMove() {
 
+    }
     public void makeMove() {
         System.out.println("number of steps: "+ gameStage);
         ArrayList<Integer> from = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> moves = new ArrayList<>();
+        HashMap<ArrayList<Integer>, int[][]> moves = new HashMap<>();
         ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
         ArrayList<Integer> queen = new ArrayList<>();
         ArrayList<Integer> arrow = new ArrayList<>();
         ArrayList<Integer> qC = new ArrayList<>();
         ArrayList<Integer> qN = new ArrayList<>();
         ArrayList<Integer> aR = new ArrayList<>();
-        Node curNode = new Node(gB,ours,theirs);
-        moves = gB.getMoves(ours,curNode);
-        qN = moves.get(0);
-        qC = moves.get(1);
-        aR = gB.getArrow(curNode,qN);
+        Node curNode = new Node(gB,ours);
+        ArrayList<ArrayList<Integer>> qc_qn_ar = MinMax.getOptimal(ours,theirs,true,curNode);
+        System.out.println(qc_qn_ar);
+        qC= qc_qn_ar.get(0);
+        qN = qc_qn_ar.get(1);
+        aR = qc_qn_ar.get(2);
+
+        //moves = gB.getMoves(ours,curNode);
+//        System.out.println(moves);
+//        qN = moves.get(0);
+//        qC = moves.get(1);
+//        aR = gB.getArrow(curNode,qN);
+//
 
         qN = gB.undoXY(qN);
         qC = gB.undoXY(qC);
@@ -264,47 +269,10 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
     }
 
-    public ArrayList<Integer> moveQueen(ArrayList<Integer> cur, String direction, int moves) {
-        this.QUEEN_NEXT.clear();
-        int x = 0;
-        int y = 0;
-        if (direction.contains("up")) {
-            y = 1;
-        }
-        this.QUEEN_NEXT.add(1);
-        this.QUEEN_NEXT.add(1);
-        return this.QUEEN_NEXT;
-    }
 
-    private ArrayList<Integer> moveArrow(ArrayList<Integer> arrow_current, String direction, int i) {
-        this.ARROW_NEXT.clear();
-        int x = 0;
-        int y = 0;
-        if (direction.contains("up")) {
-            y = 1;
 
-        }
-        this.ARROW_NEXT.add(this.QUEEN_CURRENT.get(0));
-        this.ARROW_NEXT.add(this.QUEEN_CURRENT.get(0) + 2);
-        return this.ARROW_NEXT;
-    }
 
-    public ArrayList<Integer> getNewState(ArrayList<Integer> gameState) {
-        ArrayList<Integer> newState = new ArrayList<>();
-        int index = 0;
-        boolean update = true;
-        for (int i : gameState) {
 
-            if (i == 1) {
-                newState.set(index, 0);
-                newState.set(index + 2, 1);
-                update = false;
-            } else {
-                newState.add(gameState.get(i));
-            }
-            index++;
-        }
-        return newState;
-    }
+
 
 }
