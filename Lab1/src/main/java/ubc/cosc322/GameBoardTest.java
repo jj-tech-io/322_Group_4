@@ -9,55 +9,19 @@ import java.util.Map;
 
 class GameBoardTest {
     public static void main(String [] args) {
-        ArrayList<Integer> from = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-        GameBoard gb = new GameBoard();
-        gb.printBoard();
-        System.out.println(gb.getScore(2));
-        System.out.println(gb.getScore(1));
-//        Node newNode = new Node(gb, 1,2);
-//        ArrayList<ArrayList<Integer>> moves = gb.getMoves(1,newNode);
-//
-//        System.out.println(moves.size());
+//        ArrayList<Integer> from = new ArrayList<>();
+//        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+//        GameBoard gb = new GameBoard();
 //        gb.printBoard();
-//        newNode = new Node(gb, 2,1);
-//        moves= gb.getMoves(1,newNode);
-//        System.out.println(moves);
+//        System.out.println(gb.getScore(2));
+//        System.out.println(gb.getScore(1));
+//        gb.setMyBOARD(1,6,0,7,1);
 //        gb.printBoard();
-//        ArrayList<Integer> qN = new ArrayList<>();
-//        ArrayList<Integer> aR = new ArrayList<>();
-//        ArrayList<Integer> qC = new ArrayList<>();
-//        qC.add(10);
-//        qC.add(4);
-//        qN.add(9);
-//        qN.add(4);
-//        aR.add(1);
-//        aR.add(9);
-//        System.out.println("====");
-//        System.out.println(qC);
-//        ArrayList<Integer> trans = gb.getXY(qC);
-//        System.out.println(trans);
-//        ArrayList<Integer> xy = gb.undoXY(trans);
-//        System.out.println(xy);
-//        System.out.println("====");
-//
-//        System.out.println("====");
-//        System.out.println(aR);
-//        trans = gb.getXY(aR);
-//        System.out.println(trans);
-//        xy = gb.undoXY(trans);
-//        System.out.println(xy);
-//        System.out.println("====");
-//        gb.updateBoard('b',qC,qN,aR);
-//        qC.clear();
-//        qN.clear();
-//        aR.clear();
-//        qC.add(1);
-//        qC.add(4);
-//        qN.add(2);
-//        qN.add(4);
-//        aR.add(qC.get(0));
-//        aR.add(qC.get(1));
-//        gb.updateBoard('w',qC,qN,aR);
+//        System.out.println(gb.getScore(2));
+//        System.out.println(gb.getScore(1));
+//        Node current = new Node(gb,1,2);
+//        current.getChildren().get(0);
+        //current.
+
     }
 }

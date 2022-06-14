@@ -20,24 +20,11 @@ public class GameBoard {
     }
 
 
-    public int[][] setMyBOARD(int xF, int yF, int xT, int yT) {
+    public int[][] setMyBOARD(int player, int xF, int yF, int xT, int yT) {
         MyBOARD[xF][yF] = 0;
-        MyBOARD[xT][yT] = 0;
+        MyBOARD[xT][yT] = player;
         return MyBOARD;
     }
-
-    private String board =
-            "10,0,0,0,2,0,0,2,0,0,0\n" +
-                    "9,0,0,0,2,0,0,2,0,0,0\n" +
-                    "8,0,0,0,2,0,0,2,0,0,0\n" +
-                    "7,0,0,0,2,0,0,2,0,0,0\n" +
-                    "6,0,0,0,2,0,0,2,0,0,0\n" +
-                    "5,0,0,0,2,0,0,2,0,0,0\n" +
-                    "4,0,0,0,2,0,0,2,0,0,0\n" +
-                    "3,0,0,0,2,0,0,2,0,0,0\n" +
-                    "2,0,0,0,2,0,0,2,0,0,0\n" +
-                    "1,0,0,0,0,0,0,0,0,0,0\n" +
-                    " ,0,0,0,1,0,0,1,0,0,0\n";
 
     private int[][] MyBOARD = new int[][]{
             {0, 0, 0, 2, 0, 0, 2, 0, 0, 0},
@@ -59,43 +46,6 @@ public class GameBoard {
     public Map<Integer, ArrayList<Integer>> black_xy = new HashMap<>();
     public ArrayList<Integer> QUEEN_CURR = new ArrayList<>();
 
-
-//    public GameBoard(ArrayList<Integer> b) {
-//
-//        int index = 0;
-//        int wI = 0;
-//        int bI = 0;
-//
-//        ArrayList<Integer> temp2 = new ArrayList<>();
-//        for (int i = 0; i < 11; i++) {
-//            temp2.clear();
-//            for (int j = 0; j < 11; j++) {
-//                boardCurrent[i][j] = b.get(index);
-//                ONE_DIM.add(b.get(index));
-//                temp2.add(b.get(index));
-//                if(b.get(index) == 1) {
-//                    ArrayList<Integer> t = new ArrayList<>();
-//                    t.add(i);
-//                    t.add(j);
-//                    white_xy.put(wI,t);
-//                    wI++;
-//                }
-//                else if(b.get(index) ==2) {
-//                    ArrayList<Integer> t = new ArrayList<>();
-//                    t.add(i);
-//                    t.add(j);
-//                    black_xy.put(bI,t);
-//                    bI++;
-//                }
-//                index++;
-//
-//            }
-//            TWO_DIM.add(temp2);
-//
-//        }
-//
-//    }
-
     public GameBoard() {
 
     }
@@ -115,11 +65,6 @@ public class GameBoard {
 
     }
 
-
-    public void checkSurround() {
-
-
-    }
 
 
     public void updateBoard(char c, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
@@ -153,7 +98,7 @@ public class GameBoard {
 
         }
 
-        System.out.println("player" + c);
+        //System.out.println("player" + c);
         printBoard();
 
     }
@@ -230,7 +175,6 @@ public class GameBoard {
 
             for (int col = 0; col < 10; col++) {
                 if (b[row][col] == ours) {
-                    System.out.println("1 of ours: " + row + " " + col);
                     boolean up = checkInBounds(row + 1);
                     boolean down = checkInBounds(row - 1);
                     boolean right = checkInBounds(col + 1);
@@ -438,7 +382,7 @@ public class GameBoard {
 
             }
         }
-        System.out.println(moves);
+        //System.out.println(moves);
         return moves.get(0);
     }
 
@@ -861,7 +805,7 @@ public class GameBoard {
                     }
                 }
             }
-        System.out.println(positions);
+//        System.out.println(positions);
         return score;
         }
 
