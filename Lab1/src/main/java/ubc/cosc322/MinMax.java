@@ -28,7 +28,7 @@ public class MinMax {
 
 
 
-        for(int i = 0; i < movesPlayer.size(); i++) {
+        for(int i = 0; i < movesPlayer.size()-1; i++) {
             if (movesPlayer.get(i).get(10) < MIN) {
                 queenMinIndex = i;
                 MIN = movesPlayer.get(i).get(10);
@@ -45,27 +45,27 @@ public class MinMax {
         qC.add(movesPlayer.get(queenMinIndex).get(1));
         switch (queenDir) {
             case 2: //up
-                System.out.println("up"+queenDir+" "+MAX);
+                //System.out.println("up"+queenDir+" "+MAX);
                 qN.add(qC.get(0)-1);
                 qN.add(qC.get(1));
                 break;
             case 3: //down
-                System.out.println("down: "+queenDir+" "+MAX+" "+qC);
+                //System.out.println("down: "+queenDir+" "+MAX+" "+qC);
                 qN.add(qC.get(0)+1);
                 qN.add(qC.get(1));
                 break;
             case 4: //left
-                System.out.println("left"+queenDir+" "+MAX);
+                //System.out.println("left"+queenDir+" "+MAX);
                 qN.add(qC.get(0));
                 qN.add(qC.get(1)-1);
                 break;
             case 5: //right
-                System.out.println("right"+queenDir+" "+MAX);
+                //System.out.println("right"+queenDir+" "+MAX);
                 qN.add(qC.get(0));
                 qN.add(qC.get(1)+1);
                 break;
             case 6: // rightUp
-                System.out.println("rightUp"+queenDir+" "+MAX);
+                //System.out.println("rightUp"+queenDir+" "+MAX);
                 qN.add(qC.get(0)-1);
                 qN.add(qC.get(1)+1);
                 break;
@@ -75,7 +75,7 @@ public class MinMax {
                 qN.add(qC.get(1)-1);
                 break;
             case 8:// rightDown
-                System.out.println("rightDown"+queenDir+" "+MAX);
+                //System.out.println("rightDown"+queenDir+" "+MAX);
                 qN.add(qC.get(0)+1);
                 qN.add(qC.get(1)+1);
                 break;
@@ -93,8 +93,14 @@ public class MinMax {
 
         if(player==1) {
             //next.updateQueen('w',qC,qN);
-
+            aR.clear();
             aR = next.getArrowN(next,qN);
+            if(aR.size()==2) {
+
+            }
+            else {
+                aR = COSC322Test.gB.getArrowN(next,qN);
+            }
             optimal_qC_qN.add(aR);
             next.updateArrow('w',aR);
             //GameBoard arrowMove = next.updateBoard('w',qC,qN,qN);
@@ -102,14 +108,19 @@ public class MinMax {
         }
         else{
             //next.updateQueen('b',qC,qN);
-
+            aR.clear();
             aR = next.getArrowN(next,qN);
-            optimal_qC_qN.add(aR);
-            next.updateArrow('b',aR);
-            //GameBoard arrowMove = next.updateBoard('w',qC,qN,qN);
-            System.out.println("current: "+current.getScore(2));
-        }
+            if(aR.size()==2) {
 
+            }
+            else {
+                aR = COSC322Test.gB.getArrowN(next,qN);
+            }
+            optimal_qC_qN.add(aR);
+//            next.updateArrow('b',aR);
+            //GameBoard arrowMove = next.updateBoard('w',qC,qN,qN);
+        }
+        System.out.println("optimal q,q,a " +optimal_qC_qN);
         return optimal_qC_qN;
     }
 
