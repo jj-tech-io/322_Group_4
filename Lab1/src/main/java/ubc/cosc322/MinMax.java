@@ -92,24 +92,24 @@ public class MinMax {
         optimal_qC_qN.add(qN);
 
         if(player==1) {
-            next.updateQueen('w',qC,qN);
+            //next.updateQueen('w',qC,qN);
 
-            aR = next.getArrow(node,qN);
+            aR = next.getArrowN(next,qN);
             optimal_qC_qN.add(aR);
             next.updateArrow('w',aR);
             //GameBoard arrowMove = next.updateBoard('w',qC,qN,qN);
-            System.out.println("next: "+current.getScore(1));
+
         }
         else{
-            next.updateQueen('b',qC,qN);
+            //next.updateQueen('b',qC,qN);
 
-            aR = next.getArrow(node,qN);
+            aR = next.getArrowN(next,qN);
             optimal_qC_qN.add(aR);
             next.updateArrow('b',aR);
             //GameBoard arrowMove = next.updateBoard('w',qC,qN,qN);
             System.out.println("current: "+current.getScore(2));
         }
-        System.out.println(qC+" "+qN+" "+aR);
+
         return optimal_qC_qN;
     }
 

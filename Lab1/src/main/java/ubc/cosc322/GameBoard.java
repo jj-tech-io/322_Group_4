@@ -73,22 +73,22 @@ public class GameBoard {
         ArrayList<Integer> qCT = new ArrayList<>();
         ArrayList<Integer> qNT = new ArrayList<>();
         ArrayList<Integer> aRT = new ArrayList<>();
+        int xFrom;
+        int yFrom;
+        int xTo;
+        int yTo;
+        int arrowX;
+        int arrowY;
 
-        int xFrom = qC.get(0);
-        int yFrom = qC.get(1);
-        int xTo = qN.get(0);
-        int yTo = qN.get(1);
-        int arrowX = aR.get(0);
-        int arrowY = aR.get(1);
 
-        qCT = getXY(qC);
-        System.out.println(qC + " qC /tr" + qCT);
-        qNT = getXY(qN);
-        System.out.println(qN + " qN /tr" + qNT);
-        aRT = getXY(aR);
-        System.out.println(aR + " aR/ tr" + aRT);
-        printBoard();
         if(opponent) {
+            qCT = getXY(qC);
+            System.out.println(qC + " qC /tr" + qCT);
+            qNT = getXY(qN);
+            System.out.println(qN + " qN /tr" + qNT);
+            aRT = getXY(aR);
+            System.out.println(aR + " aR/ tr" + aRT);
+
             xFrom = qCT.get(0);
             yFrom = qCT.get(1);
             xTo = qNT.get(0);
@@ -104,31 +104,16 @@ public class GameBoard {
             arrowX = aR.get(0);
             arrowY = aR.get(1);
         }
-
-
-        if (c == 'b' && checkInBounds(xFrom) && checkInBounds(yFrom) && MyBOARD[xTo][yTo]==0) {
-            System.out.println(xFrom);
-            System.out.println(yFrom);
-            System.out.println(xTo);
-            System.out.println(yTo);
+        if (c == 'b' ) {
             MyBOARD[xFrom][yFrom] = 0;
             MyBOARD[xTo][yTo] = 2;
+            MyBOARD[arrowX][arrowY] = -1;
 
-        } else if(checkInBounds(xFrom) && checkInBounds(yFrom) && checkInBounds(arrowX)&& checkInBounds(arrowY) && MyBOARD[arrowX][arrowY]==0) {
+        } else {
             MyBOARD[xFrom][yFrom] = 0;
             MyBOARD[xTo][yTo] = 1;
-
-
-        }
-        else {
-            System.out.println("INVALID MOVE :(");
-        }
-        if (checkInBounds(arrowX)&& checkInBounds(arrowY)) {
             MyBOARD[arrowX][arrowY] = -1;
         }
-
-        //System.out.println("player" + c);
-        //printBoard();
 
     }
     public void updateQueen(char c, ArrayList<Integer> qC, ArrayList<Integer> qN) {
@@ -145,22 +130,35 @@ public class GameBoard {
 
 
         if (c == 'b' && checkInBounds(xFrom) && checkInBounds(yFrom) && MyBOARD[xTo][yTo]==0) {
-            System.out.println(xFrom);
-            System.out.println(yFrom);
-            System.out.println(xTo);
-            System.out.println(yTo);
             MyBOARD[xFrom][yFrom] = 0;
             MyBOARD[xTo][yTo] = 2;
 
         } else if(checkInBounds(xFrom) && checkInBounds(yFrom) ) {
             MyBOARD[xFrom][yFrom] = 0;
             MyBOARD[xTo][yTo] = 1;
-
-
         }
 
         //System.out.println("player" + c);
 
+    }
+    public boolean validateMove(ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
+
+        boolean valid = false;
+        int xFrom = qC.get(0);
+        int yFrom = qC.get(1);
+        int xTo = qN.get(0);
+        int yTo = qN.get(1);
+        int arrowX = aR.get(0);
+        int arrowY = aR.get(1);
+        valid = checkInBounds(xFrom)&&checkInBounds(yFrom)&&checkInBounds(xTo)&&checkInBounds(yTo)&&checkInBounds(arrowX)&&checkInBounds(arrowY);
+        if(valid) {
+            if(MyBOARD[xTo][yTo]!=0 || MyBOARD[arrowX][arrowY]!=MyBOARD[arrowX][arrowY] ) {
+                valid = false;
+            }
+        }
+
+        System.out.println("valid move = "+ valid);
+        return valid;
     }
     public void updateArrow(char c, ArrayList<Integer> aR) {
         System.out.println("update arrow"+c);
@@ -172,9 +170,6 @@ public class GameBoard {
         } else {
             MyBOARD[arrowX][arrowY] = -1;
         }
-
-        printBoard();
-
 
     }
 //    public int getIndex(ArrayList<Integer> XY) {
@@ -456,6 +451,128 @@ public class GameBoard {
     public boolean checkInBounds(int index) {
         boolean inBounds = (index >= 0) && (index < 10);
         return inBounds;
+    }
+    public ArrayList<Integer> getArrowN(GameBoard g, ArrayList<Integer> queen) {
+        ArrayList<Integer> arrow = new ArrayList<>();
+        int index = 0;
+        int row = 0;
+        int col = 0;
+        int up = 0;
+        int down = 0;
+        int left = 0;
+        int right = 0;
+        int rightup = 0;
+        int rightdown = 0;
+        int leftup = 0;
+        int leftdown = 0;
+        boolean upS = true;
+        boolean downS = true;
+        boolean rightS = true;
+        boolean leftS = true;
+        boolean rightUpS = true;
+        boolean leftUpS = true;
+        boolean rightDownS = true;
+        boolean leftDownS = true;
+        int max = 0;
+        do {
+
+            //up
+            if (upS && checkInBounds(row - index) && MyBOARD[row - index][col] == 0) {
+                //continue
+                up++;
+                arrow.add(up);
+                arrow.add(col);
+
+            } else {
+                upS = false;
+            }
+            if (downS && checkInBounds(row + index) && MyBOARD[row + index][col] == 0 ) {
+                //continue
+                down++;
+                arrow.add(down);
+                arrow.add(col);
+            }
+            else {
+                downS = false;
+
+            }
+            //right
+            if (rightS && checkInBounds(row) && checkInBounds(col + index) && MyBOARD[row][col+ index] == 0 ) {
+                //continue
+                right++;
+                arrow.add(row);
+                arrow.add(right);
+            }
+            else {
+                rightS = false;
+
+            }
+            //left
+            if (leftS && checkInBounds(row) && checkInBounds(col - index) && MyBOARD[row][col - index] == 0 ) {
+                //continue
+                left++;
+                arrow.add(row);
+                arrow.add(left);
+            }
+            else {
+                leftS = false;
+
+            }
+            //up/right
+            if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && MyBOARD[row - index][col+ index] == 0 ) {
+                //continue
+                rightup++;
+                arrow.add(up);
+                arrow.add(right);
+            }
+            else {
+                rightUpS = false;
+            }
+            //up/left
+            if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && MyBOARD[row - index][col - index] == 0 ) {
+                //continue
+                leftup++;
+                arrow.add(up);
+                arrow.add(left);
+            }
+            else {
+                leftUpS = false;
+            }
+            //down/right
+            if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && MyBOARD[row + index][col+ index] == 0 ) {
+                //continue
+                rightdown++;
+                arrow.add(down);
+                arrow.add(right);
+            }
+            else {
+                rightDownS = false;
+            }
+            //down/left
+            if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && MyBOARD[row + index][col - index] == 0 ) {
+                //continue
+                leftdown++;
+                arrow.add(down);
+                arrow.add(left);
+            }
+            else {
+                leftDownS = false;
+            }
+
+
+            index++;
+            up ++;
+            down ++;
+            left ++;
+            right ++;
+            rightup ++;
+            rightdown ++;
+            leftup ++;
+            leftdown ++;
+            col++;
+        }while(index <5);
+
+        return  arrow;
     }
 
     public ArrayList<Integer> getArrow(Node node, ArrayList<Integer> pos) {

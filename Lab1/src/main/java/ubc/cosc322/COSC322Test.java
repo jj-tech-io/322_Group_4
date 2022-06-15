@@ -210,17 +210,28 @@ public class COSC322Test<Rooms> extends GamePlayer {
     }
 
     public void makeMove() {
-        System.out.println("number of steps: "+ gameStage);
+//        System.out.println("number of steps: "+ gameStage);
 
         ArrayList<Integer> qC = new ArrayList<>();
         ArrayList<Integer> qN = new ArrayList<>();
         ArrayList<Integer> aR = new ArrayList<>();
         Node curNode = new Node(gB,ours);
+
         ArrayList<ArrayList<Integer>> qc_qn_ar = MinMax.getOptimal(ours,theirs,true,curNode);
-        System.out.println(qc_qn_ar);
         qC= qc_qn_ar.get(0);
         qN = qc_qn_ar.get(1);
         aR = qc_qn_ar.get(2);
+        boolean valid = false;
+
+        valid = gB.validateMove(qC,qN,aR);
+        qc_qn_ar = MinMax.getOptimal(ours,theirs,true,curNode);
+        qC= qc_qn_ar.get(0);
+        qN = qc_qn_ar.get(1);
+        aR = qc_qn_ar.get(2);
+
+
+//        System.out.println(qc_qn_ar);
+
 
         //moves = gB.getMoves(ours,curNode);
 //        System.out.println(moves);
@@ -229,20 +240,42 @@ public class COSC322Test<Rooms> extends GamePlayer {
 //        aR = gB.getArrow(curNode,qN);
 
 
-        qN = gB.undoXY(qN);
-        qC = gB.undoXY(qC);
-        aR = gB.undoXY(aR);
-        gB.updateBoard(true,ourAmazon, qC, qN, aR);
-        System.out.println(gB.getScore(1));
-        System.out.println(gB.getScore(2));
+        System.out.println(qC+" "+qN+" "+aR);
+        if(gB.validateMove(qC,qN,aR)) {
+            gB.updateBoard(false,ourAmazon, qC, qN, aR);
+            qN = gB.undoXY(qN);
+            qC = gB.undoXY(qC);
+            aR = gB.undoXY(aR);
+        }
+        else {
+            gB.updateBoard(false,ourAmazon, qC, qN, aR);
+
+        }
+
+
+
+        System.out.println(qC+" "+qN+" "+aR);
+        gB.printBoard();
         this.gamegui.updateGameState(qC, qN, aR);
         this.gameClient.sendMoveMessage(qC, qN, aR);
 
 
+//        else  {
+//            System.out.println(qC+" "+qN+" "+aR);
+//            gB.updateBoard(true,ourAmazon, qC, qN, aR);
+//
+//            System.out.println(qC+" "+qN+" "+aR);
+//            gB.printBoard();
+//            this.gamegui.updateGameState(qC, qN, aR);
+//            this.gameClient.sendMoveMessage(qC, qN, aR);
+//
+//
+//        }
 
-        System.out.println("qC: " + qC);
-        System.out.println("qN: " + qN);
-        System.out.println("aR: " + aR);
+
+
+
+
 
 
 
