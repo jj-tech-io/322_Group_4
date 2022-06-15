@@ -154,7 +154,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
                 }
                 else {
 
-                    gB.updateBoard(otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
+                    gB.updateBoard(true,otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
                     makeMove();
                     gameStage++;
                 }
@@ -208,29 +208,10 @@ public class COSC322Test<Rooms> extends GamePlayer {
         // TODO Auto-generated method stub
         gameClient = new GameClient(userName, passwd, this);
     }
-//    public void updateBoards(char player, ArrayList<Integer> qC,ArrayList<Integer> qN,ArrayList<Integer> aR) {
-////        gB = new GameBoard(gameBoardCurrent1D);
-//       // System.out.println(gameBoardCurrent1D);
-//        gB.updateBoard(player,qC,qN,aR);
-//        gB.printBoard();
-//        //gameBoardCurrent1D =mb.updateBoard(gameBoardCurrent1D,player,qC,qN,aR);
-//        //gameBoardCurrent1D = gB.makeMove(player,qC,qN,aR, gameBoardCurrent1D);
-//
-//
-//    }
-//ArrayList<Integer> gameBoard,int queen, int x,int y
-    public int qCY = 1;
 
-    public void opponentMove() {
-
-    }
     public void makeMove() {
         System.out.println("number of steps: "+ gameStage);
-        ArrayList<Integer> from = new ArrayList<>();
-        HashMap<ArrayList<Integer>, int[][]> moves = new HashMap<>();
-        ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
-        ArrayList<Integer> queen = new ArrayList<>();
-        ArrayList<Integer> arrow = new ArrayList<>();
+
         ArrayList<Integer> qC = new ArrayList<>();
         ArrayList<Integer> qN = new ArrayList<>();
         ArrayList<Integer> aR = new ArrayList<>();
@@ -246,12 +227,12 @@ public class COSC322Test<Rooms> extends GamePlayer {
 //        qN = moves.get(0);
 //        qC = moves.get(1);
 //        aR = gB.getArrow(curNode,qN);
-//
+
 
         qN = gB.undoXY(qN);
         qC = gB.undoXY(qC);
         aR = gB.undoXY(aR);
-        gB.updateBoard(ourAmazon, qC, qN, aR);
+        gB.updateBoard(true,ourAmazon, qC, qN, aR);
         System.out.println(gB.getScore(1));
         System.out.println(gB.getScore(2));
         this.gamegui.updateGameState(qC, qN, aR);
@@ -262,7 +243,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
         System.out.println("qC: " + qC);
         System.out.println("qN: " + qN);
         System.out.println("aR: " + aR);
-//        }
+
 
 
 

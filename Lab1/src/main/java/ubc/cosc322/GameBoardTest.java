@@ -18,6 +18,8 @@ class GameBoardTest {
 
         MinMax.getOptimal(1,2,true,current);
 
+        gb.setMyBOARD(1,7,1,7,1);
+
 //        gb.printBoard();
 //        System.out.println(gb.getMoves(1,current));
 //        System.out.println(gb.getScore(2));
