@@ -17,7 +17,7 @@ public class GameBoard {
 
 
     public int[][] getMyBOARD() {
-        return MyBOARD;
+        return this.MyBOARD;
     }
 
 
@@ -95,6 +95,16 @@ public class GameBoard {
             arrowX = aRT.get(0);
             arrowY = aRT.get(1);
             valid = this.validateMove(qCT,qNT,aRT);
+            if (!valid.get(0) ) {
+                System.out.println("Opponent invalid qC");
+
+            }
+            if (!valid.get(1) || xTo !=0 || yTo != 0) {
+                System.out.println("Opponent invalid qN");
+            }
+            if (!valid.get(2)  || arrowX !=0 || arrowY != 0) {
+                System.out.println("Opponent invalid aR");
+            }
         }
         else {
             xFrom = qC.get(0);
@@ -112,8 +122,8 @@ public class GameBoard {
         }
 
         MyBOARD[xFrom][yFrom] = 0;
-            MyBOARD[xTo][yTo] = player;
-            MyBOARD[arrowX][arrowY] = -1;
+        MyBOARD[xTo][yTo] = player;
+        MyBOARD[arrowX][arrowY] = -1;
 
     }
     public void updateQueen(char c, ArrayList<Integer> qC, ArrayList<Integer> qN) {

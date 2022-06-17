@@ -66,7 +66,7 @@ public class MinMax {
                 aR = g.getArrowN(qN);
                 int arx = aR.get(0);
                 int ary = aR.get(1);
-                if(g.getMyBOARD()[arx][ary] != 0 || g.getMyBOARD()[arx][ary] == -1 || aR == qN) {
+                if(g.getMyBOARD()[arx][ary] != 0 || g.getMyBOARD()[arx][ary] == -1 || g.getMyBOARD()[arx][ary] == 2 || g.getMyBOARD()[arx][ary] == 1 ||aR == qN) {
                     System.out.println("bad arrow");
                     continue;
                 }
@@ -83,6 +83,7 @@ public class MinMax {
                     System.out.println(optimal_qC_qN);
                     System.out.println(oneTwoThree);
                     System.out.println(qC+" "+qN+" "+aR);
+
 
                 }
             }
@@ -120,22 +121,22 @@ public class MinMax {
 
 
 
-        Map.Entry<Integer, List<Object>>  entry = current.getMaxKey();
-        if(entry != null) {
-            System.out.println("entry valid");
-            List<Object> move = entry.getValue();
-            System.out.println(move.get(0));
-
-
-            optimal_qC_qN.add(qC);
-            optimal_qC_qN.add(qN);
-            optimal_qC_qN.add(aR);
-            System.out.println(optimal_qC_qN.get(0));
-            System.out.println(optimal_qC_qN.get(1));
-            System.out.println(optimal_qC_qN.get(2));
-
-
-        }
+//        Map.Entry<Integer, List<Object>>  entry = current.getMaxKey();
+//        if(entry != null) {
+//            System.out.println("entry valid");
+//            List<Object> move = entry.getValue();
+//            System.out.println(move.get(0));
+//
+//
+//            optimal_qC_qN.add(qC);
+//            optimal_qC_qN.add(qN);
+//            optimal_qC_qN.add(aR);
+//            System.out.println(optimal_qC_qN.get(0));
+//            System.out.println(optimal_qC_qN.get(1));
+//            System.out.println(optimal_qC_qN.get(2));
+//
+//
+//        }
 
 
 
@@ -250,7 +251,7 @@ public class MinMax {
 //        optimal_qC_qN.add(qN);
 //        optimal_qC_qN.add(aR);
 //        System.out.println("optimal q,q,a " +optimal_qC_qN);
-        System.out.println(g.boardString());
+        System.out.println(optimal_qC_qN.size());
         return optimal_qC_qN;
     }
 
