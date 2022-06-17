@@ -263,7 +263,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
         catch (IndexOutOfBoundsException e) {
             tries++;
             System.out.println(e);
-            if(tries < 2) {
+            if(tries < 4) {
                 makeMove();
             }
             else {

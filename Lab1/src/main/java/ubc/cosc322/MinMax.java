@@ -51,6 +51,7 @@ public class MinMax {
                 System.out.println("qN "+qN);
                 int xn = qN.get(0);
                 int yn = qN.get(1);
+
                 if(g.getMyBOARD()[xn][yn] != 0 ) {
                     continue;
                 }
@@ -70,7 +71,8 @@ public class MinMax {
                     System.out.println("bad arrow");
                     continue;
                 }
-                else {
+                List<Boolean> v = g.validateMove(qC,qN,aR);
+                if(v.get(0) & v.get(1) &v.get(2)) {
                     optimal_qC_qN.add(qC);
                     optimal_qC_qN.add(qN);
                     optimal_qC_qN.add(aR);
@@ -86,6 +88,7 @@ public class MinMax {
 
 
                 }
+
             }
             catch (IndexOutOfBoundsException e) {
                 System.out.println(aR);

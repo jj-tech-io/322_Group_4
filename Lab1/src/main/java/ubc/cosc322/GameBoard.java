@@ -67,7 +67,7 @@ public class GameBoard {
 
 
 
-    public void updateBoard(boolean op, int player, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
+    public boolean updateBoard(boolean op, int player, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
         System.out.println("update"+ player+" opponent = "+ op +" move = "+qC+qN+aR );
         ArrayList<Integer> qCT = new ArrayList<>();
         ArrayList<Integer> qNT = new ArrayList<>();
@@ -97,13 +97,16 @@ public class GameBoard {
             valid = this.validateMove(qCT,qNT,aRT);
             if (!valid.get(0) ) {
                 System.out.println("Opponent invalid qC");
+                return false;
 
             }
             if (!valid.get(1) || xTo !=0 || yTo != 0) {
                 System.out.println("Opponent invalid qN");
+                return false;
             }
             if (!valid.get(2)  || arrowX !=0 || arrowY != 0) {
                 System.out.println("Opponent invalid aR");
+                return false;
             }
         }
         else {
@@ -118,12 +121,13 @@ public class GameBoard {
 
         if(!valid.get(0) || !valid.get(1) || !valid.get(2)) {
             System.out.println("player: "+player+ " made and invalid move: \n" +valid);
-            return;
+            return false;
         }
 
         MyBOARD[xFrom][yFrom] = 0;
         MyBOARD[xTo][yTo] = player;
         MyBOARD[arrowX][arrowY] = -1;
+        return true;
 
     }
     public void updateQueen(char c, ArrayList<Integer> qC, ArrayList<Integer> qN) {
@@ -169,7 +173,7 @@ public class GameBoard {
             validQC = false;
         }
         if(qN.size()>1) {
-            if(checkInBounds(qN.get(0))&& checkInBounds(qN.get(1))) {
+            if(checkInBounds(qN.get(0))&& checkInBounds(qN.get(1)) ) {
 
                     validQN = true;
 
@@ -191,6 +195,19 @@ public class GameBoard {
         }
         else {
             validAR =  false;
+        }
+        try {
+            int av =  this.MyBOARD[aR.get(0)][aR.get(1)];
+            int qn =  this.MyBOARD[qN.get(0)][qN.get(1)];
+             if(av == 1 || av == 2 || av == -1) {
+                 validAR = false;
+             }
+            if(qn == 1 || qn == 2 || qn == -1) {
+                validQN = false;
+            }
+        }
+        catch(IndexOutOfBoundsException e) {
+            System.out.println(e + "\n" );
         }
 
 
@@ -533,7 +550,7 @@ public class GameBoard {
 
             index++;
 
-        }while(index <9 && qN.size()<1);
+        }while(index <9 );
 //        for(int i = 0 ; i < qnlist.size()-1; i+=1) {
 //            ArrayList<Integer> temp = qnlist.get(i);
 //            System.out.println(temp);
