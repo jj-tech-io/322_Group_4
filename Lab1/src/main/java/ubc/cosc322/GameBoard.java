@@ -69,7 +69,8 @@ public class GameBoard {
 
 
 
-    public void updateBoard(boolean opponent, char c, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
+    boolean updateBoard(boolean op, int player, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
+        System.out.println("update"+ player+" opponent = "+ op +" move = "+qC+qN+aR );
         ArrayList<Integer> qCT = new ArrayList<>();
         ArrayList<Integer> qNT = new ArrayList<>();
         ArrayList<Integer> aRT = new ArrayList<>();
@@ -79,9 +80,9 @@ public class GameBoard {
         int yTo;
         int arrowX;
         int arrowY;
+        List<Boolean> valid = new ArrayList<>();
 
-
-        if(opponent) {
+        if(op) {
             qCT = getXY(qC);
             System.out.println(qC + " qC /tr" + qCT);
             qNT = getXY(qN);
@@ -95,6 +96,7 @@ public class GameBoard {
             yTo = qNT.get(1);
             arrowX = aRT.get(0);
             arrowY = aRT.get(1);
+            valid = COSC322Test.gB.validateMove(qCT,qNT,aRT);
         }
         else {
             xFrom = qC.get(0);
@@ -103,17 +105,18 @@ public class GameBoard {
             yTo = qN.get(1);
             arrowX = aR.get(0);
             arrowY = aR.get(1);
+            valid = COSC322Test.gB.validateMove(qC,qN,aR);
         }
-        if (c == 'b' ) {
-            MyBOARD[xFrom][yFrom] = 0;
-            MyBOARD[xTo][yTo] = 2;
-            MyBOARD[arrowX][arrowY] = -1;
 
-        } else {
-            MyBOARD[xFrom][yFrom] = 0;
-            MyBOARD[xTo][yTo] = 1;
-            MyBOARD[arrowX][arrowY] = -1;
+        if(!valid.get(0) || !valid.get(1) || !valid.get(2)) {
+            System.out.println("player: "+player+ " made and invalid move: \n" +valid);
+            return false;
         }
+
+        MyBOARD[xFrom][yFrom] = 0;
+            MyBOARD[xTo][yTo] = player;
+            MyBOARD[arrowX][arrowY] = -1;
+            return true;
 
     }
     public void updateQueen(char c, ArrayList<Integer> qC, ArrayList<Integer> qN) {
@@ -631,7 +634,7 @@ public class GameBoard {
         do {
 
             //up
-            if (upS && checkInBounds(row - index) && MyBOARD[row - index][col] == 0) {
+            if (upS && checkInBounds(row - index) && g.MyBOARD[row - index][col] == 0) {
                 //continue
                 up++;
                 if(!(qCX==row+index && qCY==col-index)) {
@@ -643,7 +646,7 @@ public class GameBoard {
             } else {
                 upS = false;
             }
-            if (downS && checkInBounds(row + index) && MyBOARD[row + index][col] == 0 ) {
+            if (downS && checkInBounds(row + index) && g.MyBOARD[row + index][col] == 0 ) {
                 //continue
                 down++;
                 if(!(qCX==row+index&& qCY==col-index)) {
@@ -657,7 +660,7 @@ public class GameBoard {
 
             }
             //right
-            if (rightS && checkInBounds(row) && checkInBounds(col + index) && MyBOARD[row][col+ index] == 0 ) {
+            if (rightS && checkInBounds(row) && checkInBounds(col + index) && g.MyBOARD[row][col+ index] == 0 ) {
                 //continue
                 right++;
                 if(!(qCX==row && qCY==col + index)) {
@@ -671,7 +674,7 @@ public class GameBoard {
 
             }
             //left
-            if (leftS && checkInBounds(row) && checkInBounds(col - index) && MyBOARD[row][col - index] == 0 ) {
+            if (leftS && checkInBounds(row) && checkInBounds(col - index) && g.MyBOARD[row][col - index] == 0 ) {
                 //continue
                 left++;
                 if(!(qCX==row && qCY==col-index)) {
@@ -685,7 +688,7 @@ public class GameBoard {
 
             }
             //up/right
-            if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && MyBOARD[row - index][col+ index] == 0 ) {
+            if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && g.MyBOARD[row - index][col+ index] == 0 ) {
                 //continue
                 rightup++;
                 if(!(qCX==row-index&& qCY==col+index)) {
@@ -698,7 +701,7 @@ public class GameBoard {
                 rightUpS = false;
             }
             //up/left
-            if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && MyBOARD[row - index][col - index] == 0 ) {
+            if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && g.MyBOARD[row - index][col - index] == 0 ) {
                 //continue
                 leftup++;
                 if(!(qCX==row+index && qCY==col-index)) {
@@ -711,7 +714,7 @@ public class GameBoard {
                 leftUpS = false;
             }
             //down/right
-            if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && MyBOARD[row + index][col+ index] == 0 ) {
+            if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && g.MyBOARD[row + index][col+ index] == 0 ) {
                 //continue
                 rightdown++;
                 if(!(qCX==row+index&& qCY==col+index)) {
@@ -724,7 +727,7 @@ public class GameBoard {
                 rightDownS = false;
             }
             //down/left
-            if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && MyBOARD[row + index][col - index] == 0 ) {
+            if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && g.MyBOARD[row + index][col - index] == 0 ) {
                 //continue
                 leftdown++;
                 if(!(qCX==row+index&& qCY==col-index)) {
@@ -751,8 +754,8 @@ public class GameBoard {
         ArrayList<ArrayList<Integer>> positions = new ArrayList<>();
         HashMap<String, ArrayList<Integer>> scoreTable = new HashMap<>();
         int queen = 0;
-        for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
                 if (MyBOARD[row][col] == player) {
                     ArrayList<Integer> pos = new ArrayList<>();
                     pos.add(row);
@@ -873,7 +876,8 @@ public class GameBoard {
                 }
             }
         }
-        List<Object> temp = Arrays.asList("player: ",player,"score: ",score,"row,col,up,down,left,right,rightUp,leftUp,rightDown,leftDown", positions);
+        System.out.println("[player:score:[[row,col,up,down,left,right,rightUp,leftUp,rightDown,leftDown],[],[],[]]");
+        List<Object> temp = Arrays.asList(player,score, positions);
         System.out.println("MinMax.Optimal: "+ temp );
         return temp;
     }

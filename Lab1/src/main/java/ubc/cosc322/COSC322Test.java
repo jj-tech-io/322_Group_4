@@ -43,6 +43,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
     char otherAmazon;
     int theirs;
     int gameStage = 0;
+    int binPlayer;
 
 
     private ArrayList<Integer>  QUEEN_CURRENT=  new ArrayList<>();
@@ -154,8 +155,10 @@ public class COSC322Test<Rooms> extends GamePlayer {
                 }
                 else {
 
-                    gB.updateBoard(true,otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
+                    gB.updateBoard(true,theirs,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
+                    binPlayer = ours;
                     makeMove();
+                    binPlayer = theirs;
                     gameStage++;
                 }
 
@@ -164,25 +167,30 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
                 break;
             case (GameMessage.GAME_ACTION_START):
-                if(userName.equals(msgDetails.get(AmazonsGameMessage.PLAYER_BLACK))) {
+                gB = new GameBoard();
+                System.out.println(userName.equals(msgDetails.get(AmazonsGameMessage.PLAYER_BLACK)));
+                System.out.println(userName.equals(msgDetails.get(AmazonsGameMessage.PLAYER_WHITE)));
+                if(userName.equals(msgDetails.get(AmazonsGameMessage.PLAYER_WHITE))) {
                     player.isWhite = true;
-                }
-                else {
-                player.isWhite = false;
-                }
-                if(player.isWhite) {
                     ourAmazon = 'w';
                     otherAmazon = 'b';
                     ours = 1;
                     theirs = 2;
+                    binPlayer = ours;
                     makeMove();
+                    binPlayer = theirs;
+
                 }
                 else {
+                    player.isWhite = false;
                     ourAmazon = 'b';
                     otherAmazon = 'w';
                     ours = 2;
                     theirs = 1;
+
                 }
+
+
                 System.out.println("Our Amazon is " + ourAmazon+ " "+ ours);
                 break;
             default:
@@ -220,7 +228,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
         ArrayList<Integer> qC = new ArrayList<>();
         ArrayList<Integer> qN = new ArrayList<>();
         ArrayList<Integer> aR = new ArrayList<>();
-        Node curNode = new Node(gB,ours);
+//        Node curNode = new Node(gB,ours);
 
         ArrayList<ArrayList<Integer>> qc_qn_ar;
 
@@ -244,27 +252,32 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
 
         System.out.println(qC+" "+qN+" "+aR);
-        System.out.println(gB.validateMove(qC,qN,aR));
-        if(gB.validateMove(qC,qN,aR).get(0)&&gB.validateMove(qC,qN,aR).get(1)&&gB.validateMove(qC,qN,aR).get(2)) {
 
-            gB.updateBoard(false,ourAmazon, qC, qN, aR);
+        List<Boolean> valid = gB.validateMove(qC,qN,aR);
+        System.out.println(valid);
+        if(valid.get(0)&&valid.get(1)&&valid.get(2)) {
+
+            gB.updateBoard(false, ours, qC, qN, aR);
             qN = gB.undoXY(qN);
             qC = gB.undoXY(qC);
             aR = gB.undoXY(aR);
+            System.out.println(qC+" "+qN+" "+aR);
+            gB.printBoard();
+            this.gamegui.updateGameState(qC, qN, aR);
+            this.gameClient.sendMoveMessage(qC, qN, aR);
 
 
         }
         else {
-            qN = gB.getXY(qN);
-            qC = gB.getXY(qC);
-            aR = gB.getXY(aR);
-            gB.updateBoard(false,ourAmazon, qC, qN, aR);
+            System.out.println("invalid");
+            System.out.println("qC " + qC +"qN "+ qN+ " aR "+ aR);
+//            qN = gB.undoXY(qN);
+//            qC = gB.undoXY(qC);
+//            aR = gB.undoXY(aR);
+
 
         }
-        System.out.println(qC+" "+qN+" "+aR);
-        gB.printBoard();
-        this.gamegui.updateGameState(qC, qN, aR);
-        this.gameClient.sendMoveMessage(qC, qN, aR);
+
 
 
 
