@@ -10,15 +10,15 @@ import java.util.Map;
 
 class GameBoardTest {
     public static void main(String [] args) {
-        ArrayList<Integer> from = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-        GameBoard gb = new GameBoard();
-        gb.setMyBOARD(1,6,0,7,1);
-        Node current = new Node(gb,1);
-
-        MinMax.getOptimal(1,2,true,current);
-
-        gb.setMyBOARD(1,7,1,7,1);
+//        ArrayList<Integer> from = new ArrayList<>();
+//        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
+//        GameBoard gb = new GameBoard();
+//        gb.setMyBOARD(1,6,0,7,1);
+//        Node current = new Node(gb,1);
+//
+//        MinMax.getOptimal(1,2,true,current);
+//
+//        gb.setMyBOARD(1,7,1,7,1);
 
 //        gb.printBoard();
 //        System.out.println(gb.getMoves(1,current));

@@ -1,20 +1,20 @@
 package ubc.cosc322;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 
 public class MinMax {
     public List<Object> searchTree = new ArrayList<>();
-    public static ArrayList<ArrayList<Integer>> getOptimal(int player,int opponent, boolean max, Node node) {
+    public static ArrayList<ArrayList<Integer>> getOptimal(int player, int theirs, GameBoard g) {
 
 
-        GameBoard next = node.copy;
-        GameBoard current = node.current;
-        List<Object> playerScoreMoves = node.current.getScore(player);
-        List<Object> opponentScoreMoves = node.current.getScore(opponent);
+
+        List<Object> playerScoreMoves = g.getScore(player);
+        List<Object> opScoreMoves = g.getScore(theirs);
         ArrayList<ArrayList<Integer>> movesPlayer = (ArrayList<ArrayList<Integer>>) playerScoreMoves.get(5);
-        ArrayList<ArrayList<Integer>> movesOpponent = (ArrayList<ArrayList<Integer>>) opponentScoreMoves.get(5);
+
+        ArrayList<ArrayList<Integer>> movesOpponent = (ArrayList<ArrayList<Integer>>) opScoreMoves.get(5);
         ArrayList<Integer> qC = new ArrayList<>();
         ArrayList<Integer> qN = new ArrayList<>();
         ArrayList<Integer> aR = new ArrayList<>();
@@ -43,83 +43,88 @@ public class MinMax {
         }
         qC.add(movesPlayer.get(queenMinIndex).get(0));
         qC.add(movesPlayer.get(queenMinIndex).get(1));
-        switch (queenDir) {
-            case 2: //up
-                //System.out.println("up"+queenDir+" "+MAX);
-                qN.add(qC.get(0)-1);
-                qN.add(qC.get(1));
-                break;
-            case 3: //down
-                //System.out.println("down: "+queenDir+" "+MAX+" "+qC);
-                qN.add(qC.get(0)+1);
-                qN.add(qC.get(1));
-                break;
-            case 4: //left
-                //System.out.println("left"+queenDir+" "+MAX);
-                qN.add(qC.get(0));
-                qN.add(qC.get(1)-1);
-                break;
-            case 5: //right
-                //System.out.println("right"+queenDir+" "+MAX);
-                qN.add(qC.get(0));
-                qN.add(qC.get(1)+1);
-                break;
-            case 6: // rightUp
-                //System.out.println("rightUp"+queenDir+" "+MAX);
-                qN.add(qC.get(0)-1);
-                qN.add(qC.get(1)+1);
-                break;
-            case 7: // leftUp
-                System.out.println("leftUp"+queenDir+" "+MAX);
-                qN.add(qC.get(0)-1);
-                qN.add(qC.get(1)-1);
-                break;
-            case 8:// rightDown
-                //System.out.println("rightDown"+queenDir+" "+MAX);
-                qN.add(qC.get(0)+1);
-                qN.add(qC.get(1)+1);
-                break;
-            case 9:// leftDown
-                System.out.println("leftDown");
-                qN.add(qC.get(0)+1);
-                qN.add(qC.get(1)-1);
-                break;
 
-        }
+        System.out.println("queen current:"+qC);
+//        switch (queenDir) {
+//            case 2: //up
+//                //System.out.println("up"+queenDir+" "+MAX);
+//                qN.add(qC.get(0)-1);
+//                qN.add(qC.get(1));
+//                break;
+//            case 3: //down
+//                //System.out.println("down: "+queenDir+" "+MAX+" "+qC);
+//                qN.add(qC.get(0)+1);
+//                qN.add(qC.get(1));
+//                break;
+//            case 4: //left
+//                //System.out.println("left"+queenDir+" "+MAX);
+//                qN.add(qC.get(0));
+//                qN.add(qC.get(1)-1);
+//                break;
+//            case 5: //right
+//                //System.out.println("right"+queenDir+" "+MAX);
+//                qN.add(qC.get(0));
+//                qN.add(qC.get(1)+1);
+//                break;
+//            case 6: // rightUp
+//                //System.out.println("rightUp"+queenDir+" "+MAX);
+//                qN.add(qC.get(0)-1);
+//                qN.add(qC.get(1)+1);
+//                break;
+//            case 7: // leftUp
+//                System.out.println("leftUp"+queenDir+" "+MAX);
+//                qN.add(qC.get(0)-1);
+//                qN.add(qC.get(1)-1);
+//                break;
+//            case 8:// rightDown
+//                //System.out.println("rightDown"+queenDir+" "+MAX);
+//                qN.add(qC.get(0)+1);
+//                qN.add(qC.get(1)+1);
+//                break;
+//            case 9:// leftDown
+//                System.out.println("leftDown");
+//                qN.add(qC.get(0)+1);
+//                qN.add(qC.get(1)-1);
+//                break;
+//
+//        }
         ArrayList<ArrayList<Integer>> optimal_qC_qN = new ArrayList<>();
+        optimal_qC_qN.add((ArrayList<Integer>) Arrays.asList(qC.get(0), qC.get(1)));
 
-        optimal_qC_qN.add(qC);
+        qN = COSC322Test.gB.getQueenN(g,qC);
+        aR = g.getArrowN(g,qN);
+
         optimal_qC_qN.add(qN);
-
-        if(player==1) {
-            //next.updateQueen('w',qC,qN);
-            aR.clear();
-            aR = next.getArrowN(next,qN);
-            if(aR.size()==2) {
-
-            }
-            else {
-                aR = COSC322Test.gB.getArrowN(next,qN);
-            }
-            optimal_qC_qN.add(aR);
-            next.updateArrow('w',aR);
-            //GameBoard arrowMove = next.updateBoard('w',qC,qN,qN);
-
-        }
-        else{
-            //next.updateQueen('b',qC,qN);
-            aR.clear();
-            aR = next.getArrowN(next,qN);
-            if(aR.size()==2) {
-
-            }
-            else {
-                aR = COSC322Test.gB.getArrowN(next,qN);
-            }
-            optimal_qC_qN.add(aR);
-//            next.updateArrow('b',aR);
-            //GameBoard arrowMove = next.updateBoard('w',qC,qN,qN);
-        }
+        optimal_qC_qN.add(aR);
+//        if(player==1) {
+//            //next.updateQueen('w',qC,qN);
+//            aR.clear();
+//            aR = next.getArrowN(next,qN);
+//            if(aR.size()==2) {
+//
+//            }
+//            else {
+//                aR = COSC322Test.gB.getArrowN(next,qN);
+//            }
+//            optimal_qC_qN.add(aR);
+//            next.updateArrow('w',aR);
+//            //GameBoard arrowMove = next.updateBoard('w',qC,qN,qN);
+//
+//        }
+//        else{
+//            //next.updateQueen('b',qC,qN);
+//            aR.clear();
+//            aR = next.getArrowN(next,qN);
+//            if(aR.size()==2) {
+//
+//            }
+//            else {
+//                aR = COSC322Test.gB.getArrowN(next,qN);
+//            }
+//            optimal_qC_qN.add(aR);
+////            next.updateArrow('b',aR);
+//            //GameBoard arrowMove = next.updateBoard('w',qC,qN,qN);
+//        }
         System.out.println("optimal q,q,a " +optimal_qC_qN);
         return optimal_qC_qN;
     }

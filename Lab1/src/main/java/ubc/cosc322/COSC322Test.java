@@ -217,9 +217,9 @@ public class COSC322Test<Rooms> extends GamePlayer {
         ArrayList<Integer> aR = new ArrayList<>();
         Node curNode = new Node(gB,ours);
 
-        ArrayList<ArrayList<Integer>> qc_qn_ar = MinMax.getOptimal(ours,theirs,true,curNode);
+        ArrayList<ArrayList<Integer>> qc_qn_ar;
 
-        qc_qn_ar = MinMax.getOptimal(ours,theirs,true,curNode);
+        qc_qn_ar = MinMax.getOptimal(ours,theirs,gB);
         System.out.println(qc_qn_ar.get(0));
         System.out.println(qc_qn_ar.get(1));
         System.out.println(qc_qn_ar.get(2));
