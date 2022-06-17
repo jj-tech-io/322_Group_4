@@ -404,7 +404,7 @@ public class GameBoard {
 
 
             //up
-            if (upS && row+index <9 && MyBOARD[row - index][col] == 0) {
+            if ( upS && checkInBounds(row-index) && row+index <9 && MyBOARD[row - index][col] == 0) {
                 System.out.println("up index: \n" + index);
                 //continue
                 up++;
@@ -418,7 +418,7 @@ public class GameBoard {
             }
 
 
-            if (downS && row+index > 0 && MyBOARD[row - index][col] == 0) {
+            if (downS && checkInBounds(row + index) && row+index < 9 && MyBOARD[row + index][col] == 0) {
                     System.out.println("down index: \n" +index);
                     //continue
                     down++;
@@ -524,13 +524,16 @@ public class GameBoard {
             index++;
 
         }while(index <9 && qN.size()<1);
-        for(int i = 0 ; i < qnlist.size()-1; i+=1) {
-            ArrayList<Integer> temp = qnlist.get(i);
-            System.out.println(temp);
+//        for(int i = 0 ; i < qnlist.size()-1; i+=1) {
+//            ArrayList<Integer> temp = qnlist.get(i);
+//            System.out.println(temp);
+//            if(validateMove(qN) && qN ) {
+//                qN = temp;
+//            }
 //            if(validateMove(qnlist.get(i))) {
 //                qN = qnlist.get(i);
 //            }
-            }
+
 
 
 
