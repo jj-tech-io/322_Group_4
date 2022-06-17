@@ -14,6 +14,8 @@ public class GameBoard {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0};
 
 
+
+
     public int[][] getMyBOARD() {
         return MyBOARD;
     }
@@ -25,7 +27,7 @@ public class GameBoard {
         return MyBOARD;
     }
 
-    public int[][] MyBOARD = new int[][]{
+    private int[][] MyBOARD = new int[][]{
             {0, 0, 0, 2, 0, 0, 2, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -40,11 +42,6 @@ public class GameBoard {
     };
 
 
-
-    public Map<Integer, ArrayList<Integer>> white_xy = new HashMap<>();
-    public Map<Integer, ArrayList<Integer>> black_xy = new HashMap<>();
-    public ArrayList<Integer> QUEEN_CURR = new ArrayList<>();
-
     public GameBoard() {
 
     }
@@ -53,23 +50,24 @@ public class GameBoard {
     }
 
 
-    public void printBoard() {
-        System.out.println("---------------------------------");
+    public String boardString() {
+        String b = "---------------------------------";
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (j == 0) {
-                    System.out.println(" ");
+                    b+="\n ";
                 }
-                System.out.print(" " + MyBOARD[i][j] + " ");
+                b+=" " + MyBOARD[i][j] + " ";
             }
 
         }
+        return b;
 
     }
 
 
 
-    boolean updateBoard(boolean op, int player, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
+    public void updateBoard(boolean op, int player, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
         System.out.println("update"+ player+" opponent = "+ op +" move = "+qC+qN+aR );
         ArrayList<Integer> qCT = new ArrayList<>();
         ArrayList<Integer> qNT = new ArrayList<>();
@@ -96,7 +94,7 @@ public class GameBoard {
             yTo = qNT.get(1);
             arrowX = aRT.get(0);
             arrowY = aRT.get(1);
-            valid = COSC322Test.gB.validateMove(qCT,qNT,aRT);
+            valid = this.validateMove(qCT,qNT,aRT);
         }
         else {
             xFrom = qC.get(0);
@@ -105,18 +103,17 @@ public class GameBoard {
             yTo = qN.get(1);
             arrowX = aR.get(0);
             arrowY = aR.get(1);
-            valid = COSC322Test.gB.validateMove(qC,qN,aR);
+            valid = this.validateMove(qC,qN,aR);
         }
 
         if(!valid.get(0) || !valid.get(1) || !valid.get(2)) {
             System.out.println("player: "+player+ " made and invalid move: \n" +valid);
-            return false;
+            return;
         }
 
         MyBOARD[xFrom][yFrom] = 0;
             MyBOARD[xTo][yTo] = player;
             MyBOARD[arrowX][arrowY] = -1;
-            return true;
 
     }
     public void updateQueen(char c, ArrayList<Integer> qC, ArrayList<Integer> qN) {
@@ -149,7 +146,7 @@ public class GameBoard {
         boolean validQC = true;
         boolean validQN = true;
         boolean validAR = true;
-        if(qC.size() == 2 ) {
+        if(qC.size() >1) {
             if(checkInBounds(qC.get(0))&& checkInBounds(qC.get(1))) {
                 validQC = true;
             }
@@ -161,12 +158,11 @@ public class GameBoard {
         else {
             validQC = false;
         }
-        if(qN.size() == 2) {
+        if(qN.size()>1) {
             if(checkInBounds(qN.get(0))&& checkInBounds(qN.get(1))) {
-                if(MyBOARD[qN.get(0)][qN.get(1)] == 0)
+
                     validQN = true;
-                else
-                    validQN = false;
+
             }
             else {
                 validQN = false;
@@ -175,7 +171,7 @@ public class GameBoard {
         else {
             validQN = false;
         }
-        if(aR.size() == 2) {
+        if(aR.size() > 1) {
             if(checkInBounds(aR.get(0))&& checkInBounds(aR.get(1))) {
                 validAR = true;
             }
@@ -192,7 +188,7 @@ public class GameBoard {
     }
     public void updateArrow(char c, ArrayList<Integer> aR) {
         System.out.println("update arrow"+c);
-        printBoard();
+
         int arrowX = aR.get(0);
         int arrowY = aR.get(1);
         if (c == 'b') {
@@ -202,13 +198,6 @@ public class GameBoard {
         }
 
     }
-//    public int getIndex(ArrayList<Integer> XY) {
-//        int row = XY.get(0);
-//        int col = XY.get(1);
-//        int index = (10 - row) * 10 + col;
-//        System.out.println("index " + index + ", row " + row + ", col " + col);
-//        return index;
-//    }
 
     //transform AMAZONGAME BOARD POSITION X,Y to GameBoard x,y
     public ArrayList<Integer> getXY(ArrayList<Integer> xy) {
@@ -229,264 +218,17 @@ public class GameBoard {
     }
 
 
-
-
-
-//    public boolean[] checkNeighbour(int x, int y, int[][] board) {
-//        boolean[] UDRL = new boolean[4];
-//        try {
-//            int i = board[x + 1][y + 1];
-//        } catch (IndexOutOfBoundsException e) {
-//            throw e;
-//        }
-//
-//        return UDRL;
-//    }
-
-
-//    public List<Object> getMoves(int ours, Node node) {
-//        int score = 0;
-//        int theirs;
-//        int[][] b = node.current.getMyBOARD();
-//        int[][] copy = node.copy.getMyBOARD();
-//        List<Object> moves_states = new ArrayList<>();
-//
-//        ArrayList<ArrayList<ArrayList<Integer>>> moves = new ArrayList<>();
-//        if(ours==1) {
-//            theirs = 2;
-//        }
-//        else{
-//            theirs = 1;
-//        }
-//        //int utility =(int)getScore(ours).get(1) - (int)getScore(theirs).get(1) ;
-//
-//        for (int row = 0; row < 10; row++) {
-//
-//            for (int col = 0; col < 10; col++) {
-//                if (b[row][col] == ours) {
-//                    moves_states.add(Arrays.asList(row,col));
-//                    boolean up = checkInBounds(row + 1);
-//                    boolean down = checkInBounds(row - 1);
-//                    boolean right = checkInBounds(col + 1);
-//                    boolean left = checkInBounds(col - 1);
-//                    boolean up2 = checkInBounds(row + 2);
-//                    boolean down2 = checkInBounds(row - 2);
-//                    boolean right2 = checkInBounds(col + 2);
-//                    boolean left2 = checkInBounds(col - 2);
-//                    boolean up3 = checkInBounds(row + 3);
-//                    boolean down3 = checkInBounds(row - 3);
-//                    boolean right3 = checkInBounds(col + 3);
-//                    boolean left3 = checkInBounds(col - 3);
-//                    for (int i = 0; i < 8; i++) {
-//                        switch (i) {
-//                            case 0: // right3down3
-//                                if (right3 && down3) {
-//                                    if (b[row - 3][col + 3] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row - 3);
-//                                        move.add(col + 3);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                            case 1: //left3down3
-//                                if (left3 && down3) {
-//                                    if (b[row - 3][col - 3] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row - 3);
-//                                        move.add(col - 3);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                            case 2: //right3 up3
-//                                if (right3 && up3) {
-//                                    if (b[row + 3][col + 3] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row + 3);
-//                                        move.add(col + 3);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                            case 3: //left3 up3
-//                                if (left3 && up3) {
-//                                    if (b[row + 3][col - 3] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row + 3);
-//                                        move.add(col - 3);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                        }
-//
-//                        switch (i) {
-//                            case 0: //up
-//                                if (up) {
-//                                    if (b[row + 1][col] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row + 1);
-//                                        move.add(col);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//
-//                                    }
-//                                }
-//                            case 1: //up/right
-//                                if (up && right) {
-//                                    if (b[row + 1][col + 1] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row + 1);
-//                                        move.add(col + 1);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                            case 2: //right
-//                                if (right) {
-//                                    if (b[row][col + 1] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row);
-//                                        move.add(col + 1);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                            case 3: //down/right
-//                                if (right && down) {
-//                                    if (b[row - 1][col + 1] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row - 1);
-//                                        move.add(col + 1);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//
-//                                    }
-//                                }
-//                            case 4: //down
-//                                if (down) {
-//                                    if (b[row - 1][col] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row - 1);
-//                                        move.add(col);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                            case 5: //down/left
-//                                if (down && left) {
-//                                    if (b[row - 1][col - 1] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row - 1);
-//                                        move.add(col - 1);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                            case 6: //left
-//                                if (left) {
-//                                    if (b[row][col - 1] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row);
-//                                        move.add(col - 1);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                            case 7: //left/up
-//                                if (up && left) {
-//                                    if (b[row + 1][col - 1] == 0) {
-//                                        ArrayList<Integer> move = new ArrayList<>();
-//                                        ArrayList<Integer> from = new ArrayList<>();
-//                                        ArrayList<ArrayList<Integer>> toFrom = new ArrayList<>();
-//                                        move.add(row + 1);
-//                                        move.add(col - 1);
-//                                        from.add(row);
-//                                        from.add(col);
-//                                        toFrom.add(move);
-//                                        toFrom.add(from);
-//                                        moves.add(toFrom);
-//                                    }
-//                                }
-//                            case (8): //downdownrightright
-//
-//                        }
-//
-//                    }
-//                }
-//
-//            }
-//        }
-//        //System.out.println(moves);
-//        moves_states.add(moves);
-//        return moves_states;
-//    }
-
     public boolean checkInBounds(int index) {
         boolean inBounds = (index >= 0) && (index < 10);
         return inBounds;
     }
-    public ArrayList<Integer> getArrowN(GameBoard g, ArrayList<Integer> queen) {
+
+    public ArrayList<Integer> getArrowN(ArrayList<Integer> qn) {
+
         ArrayList<Integer> arrow = new ArrayList<>();
         int index = 0;
-        int row = 0;
-        int col = 0;
+        int row = qn.get(0);
+        int col = qn.get(1);
         int up = 0;
         int down = 0;
         int left = 0;
@@ -504,6 +246,7 @@ public class GameBoard {
         boolean rightDownS = true;
         boolean leftDownS = true;
         int max = 0;
+        int possible = 8;
         do {
 
             //up
@@ -511,21 +254,24 @@ public class GameBoard {
                 //continue
                 up++;
                 arrow.clear();
-                arrow.add(row-1);
+                arrow.add(row-index);
                 arrow.add(col);
 
             } else {
                 upS = false;
+                possible--;
             }
+            //down
             if (downS && checkInBounds(row + index) && MyBOARD[row + index][col] == 0 ) {
                 //continue
                 down++;
                 arrow.clear();
-                arrow.add(row+1);
+                arrow.add(row+index);
                 arrow.add(col);
             }
             else {
                 downS = false;
+                possible--;
 
             }
             //right
@@ -534,10 +280,11 @@ public class GameBoard {
                 right++;
                 arrow.clear();
                 arrow.add(row);
-                arrow.add(col+1);
+                arrow.add(col+index);
             }
             else {
                 rightS = false;
+                possible--;
 
             }
             //left
@@ -546,10 +293,12 @@ public class GameBoard {
                 left++;
                 arrow.clear();
                 arrow.add(row);
-                arrow.add(col-1);
+                arrow.add(col-index);
+
             }
             else {
                 leftS = false;
+                possible--;
 
             }
             //up/right
@@ -557,22 +306,24 @@ public class GameBoard {
                 //continue
                 rightup++;
                 arrow.clear();
-                arrow.add(row-1);
-                arrow.add(col+1);
+                arrow.add(row-index);
+                arrow.add(col+index);
             }
             else {
                 rightUpS = false;
+                possible--;
             }
             //up/left
             if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && MyBOARD[row - index][col - index] == 0 ) {
                 //continue
                 leftup++;
                 arrow.clear();
-                arrow.add(row-1);
-                arrow.add(col-1);
+                arrow.add(row-index);
+                arrow.add(col-index);
             }
             else {
                 leftUpS = false;
+                possible--;
             }
             //down/right
             if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && MyBOARD[row + index][col+ index] == 0 ) {
@@ -584,6 +335,7 @@ public class GameBoard {
             }
             else {
                 rightDownS = false;
+                possible--;
             }
             //down/left
             if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && MyBOARD[row + index][col - index] == 0 ) {
@@ -595,21 +347,25 @@ public class GameBoard {
             }
             else {
                 leftDownS = false;
+                possible--;
             }
 
 
             index++;
-
-        }while(index <5);
-
+            if(possible < 2 && arrow.size() > 1)  {
+                break;
+            }
+        }while(index <8);
+        System.out.println("arrow: "+arrow);
         return  arrow;
     }
 
-    public ArrayList<Integer> getQueenN(GameBoard g, ArrayList<Integer> qC) {
+    public ArrayList<Integer> getQueenN(ArrayList<Integer> qC) {
+
         ArrayList<Integer> qN = new ArrayList<>();
         int index = 0;
-        int row = 0;
-        int col = 0;
+        int row = qC.get(0);
+        int col = qC.get(1);
         int up = 0;
         int down = 0;
         int left = 0;
@@ -632,109 +388,116 @@ public class GameBoard {
         int qNX = qCX;
         int qnY = qCY;
         do {
+            System.out.println("do while qn method");
+            System.out.println(row + " " + col + " " + index );
+            upS = checkInBounds(row - index);
 
             //up
-            if (upS && checkInBounds(row - index) && g.MyBOARD[row - index][col] == 0) {
-                //continue
-                up++;
-                if(!(qCX==row+index && qCY==col-index)) {
-                    qN.clear();
+            if (upS && checkInBounds(row - index)) {
+                if(MyBOARD[row - index][col] == 0) {
+                    System.out.println("up index: \n" + index);
+                    //continue
+                    up++;
+                    //                qN.clear();
                     qN.add(row - index);
                     qN.add(col);
                 }
+                else {
+                    upS = false;
+                }
 
-            } else {
-                upS = false;
             }
-            if (downS && checkInBounds(row + index) && g.MyBOARD[row + index][col] == 0 ) {
+            if (downS && checkInBounds(row + index) && MyBOARD[row + index][col] == 0 ) {
+                System.out.println("down index: \n" +index);
                 //continue
                 down++;
-                if(!(qCX==row+index&& qCY==col-index)) {
-                    qN.clear();
-                    qN.add(row + index);
-                    qN.add(col);
-                }
+//                qN.clear();
+                qN.add(row + index);
+                qN.add(col);
+
             }
             else {
                 downS = false;
 
             }
             //right
-            if (rightS && checkInBounds(row) && checkInBounds(col + index) && g.MyBOARD[row][col+ index] == 0 ) {
+            if (rightS && checkInBounds(row) && checkInBounds(col + index) && MyBOARD[row][col+ index] == 0 ) {
+                System.out.println("right index: \n" +index);
                 //continue
                 right++;
-                if(!(qCX==row && qCY==col + index)) {
-                    qN.clear();
-                    qN.add(row);
-                    qN.add(col + 1);
-                }
+                qN.clear();
+                qN.add(row);
+                qN.add(col + 1);
+
             }
             else {
                 rightS = false;
 
             }
             //left
-            if (leftS && checkInBounds(row) && checkInBounds(col - index) && g.MyBOARD[row][col - index] == 0 ) {
+            if (leftS && checkInBounds(row) && checkInBounds(col - index) && MyBOARD[row][col - index] == 0 ) {
+                System.out.println("right index: \n" +index);
                 //continue
                 left++;
-                if(!(qCX==row && qCY==col-index)) {
-                    qN.clear();
-                    qN.add(row);
-                    qN.add(col - index);
-                }
+//                qN.clear();
+                qN.add(row);
+                qN.add(col - index);
+
             }
             else {
                 leftS = false;
 
             }
             //up/right
-            if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && g.MyBOARD[row - index][col+ index] == 0 ) {
+            if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && MyBOARD[row - index][col+ index] == 0 ) {
+                System.out.println("right index: \n" +index);
                 //continue
                 rightup++;
-                if(!(qCX==row-index&& qCY==col+index)) {
-                    qN.clear();
-                    qN.add(row - index);
-                    qN.add(col + index);
-                }
+//                qN.clear();
+                qN.add(row - index);
+                qN.add(col + index);
+
             }
             else {
                 rightUpS = false;
             }
             //up/left
-            if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && g.MyBOARD[row - index][col - index] == 0 ) {
+            if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && MyBOARD[row - index][col - index] == 0 ) {
+                System.out.println("right index: \n" +index);
                 //continue
                 leftup++;
-                if(!(qCX==row+index && qCY==col-index)) {
-                    qN.clear();
-                    qN.add(row + 1);
-                    qN.add(col - 1);
-                }
+//                qN.clear();
+                qN.add(row + index);
+                qN.add(col - index);
+
             }
             else {
                 leftUpS = false;
             }
             //down/right
-            if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && g.MyBOARD[row + index][col+ index] == 0 ) {
+            if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && MyBOARD[row + index][col+ index] == 0 ) {
+                System.out.println("right index: \n" +index);
+
                 //continue
                 rightdown++;
-                if(!(qCX==row+index&& qCY==col+index)) {
-                    qN.clear();
-                    qN.add(row + index);
-                    qN.add(col + index);
-                }
+//                qN.clear();
+                qN.add(row + index);
+                qN.add(col + index);
+
             }
             else {
                 rightDownS = false;
             }
             //down/left
-            if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && g.MyBOARD[row + index][col - index] == 0 ) {
+            if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && MyBOARD[row + index][col - index] == 0 ) {
+                System.out.println("right index: \n" +index);
+
                 //continue
                 leftdown++;
-                if(!(qCX==row+index&& qCY==col-index)) {
-                    qN.clear();
-                    qN.add(row + index);
-                    qN.add(col - index);
-                }
+//                qN.clear();
+                qN.add(row + index);
+                qN.add(col - index);
+
             }
             else {
                 leftDownS = false;
@@ -743,20 +506,240 @@ public class GameBoard {
 
             index++;
 
-        }while(index <8 && qN == qC);
-
+        }while(index <9 );
+        System.out.println("queenN: "+ qN +" "+ up+" "+ down+" "+ left+" "+ right+" ");
         return  qN;
     }
 
+    public ArrayList<ArrayList<Integer>> queenList(int p) {
+        ArrayList<ArrayList<Integer>> queenList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (this.MyBOARD[i][j] == p) {
+                    ArrayList<Integer> q = new ArrayList<>();
+                    q.add(i);
+                    q.add(j);
+                    queenList.add(q);
+                    System.out.println(q);
+                }
+
+            }
+
+        }
+        System.out.println(queenList);
+        return queenList;
+    }
+
+    public ArrayList<ArrayList<Integer>> getQueen(int p, int  xBad, int yBad) {
+        ArrayList<ArrayList<Integer>> qq = new ArrayList<>();
+        List<Object> playerScoreMoves = this.getScore(p);
+
+        ArrayList<ArrayList<Integer>> movesPlayer = (ArrayList<ArrayList<Integer>>) playerScoreMoves.get(2);
+
+        ArrayList<Integer> c = new ArrayList<>();
+        ArrayList<Integer> c2 = new ArrayList<>();
+        ArrayList<Integer> n = new ArrayList<>();
+        ArrayList<Integer> n2 = new ArrayList<>();
+
+        int MIN = 30;
+        int MAX = 0;
+        int queenDir = 2;
+
+        int MIN2 = 28;
+        int MAX2 = 0;
+        int queenDir2 = 2;
+
+        for(int i = 0; i < movesPlayer.size()-1; i++) {
+            ArrayList<Integer> thisQueen = movesPlayer.get(i);
+//            if(thisQueen.get(0) == xBad && thisQueen.get(1)==yBad) {
+//                continue;
+//            }
+//            System.out.println("min max this queen");
+//            System.out.println(thisQueen);
+//            System.out.println(thisQueen.get(thisQueen.size()-1)+ " this q s");
+
+//            if(thisQueen.get(thisQueen.size()-1) < MIN) {
+              if(thisQueen.get(thisQueen.size()-1) < MIN) {
+                //System.out.println("size" +thisQueen.get(thisQueen.size()-1));
+                MIN = thisQueen.get(thisQueen.size()-1);
+                MAX = 0;
+                for (int j = 2; j < thisQueen.size()-1; j++) {
+
+                    if (j>1 && thisQueen.get(j) > MAX ) {
+                        MAX2 = MAX;
+                        queenDir2 = queenDir;
+                        c2 = movesPlayer.get(j-1);
+                        c.add(thisQueen.get(0));
+                        c.add(thisQueen.get(1));
+                        MAX = thisQueen.get(j);
+                        queenDir = j;
+                        System.out.println("---- c c2 dir");
+                        System.out.println(c);
+                        System.out.println(c2);
+                        System.out.println(queenDir);
+                        System.out.println(queenDir2);
+
+//                        System.out.println(" j = "+ j + " MAX = " + MAX);
+//                        if(MAX > 4) {
+//                            if(MAX % 2 == 1) {
+//                                MAX = (MAX +1) /2;
+//
+//                            }
+//                            else {
+//                                MAX = MAX / 2;
+//                            }
+//
+//                        }
+                    }
+                }
+            }
+
+        }
+//        System.out.println("MIN MAX"+ MIN + MAX);
+//
+//
+//
+//
+//        System.out.println("queen current:"+qC);
+        qq.add(c);
+        switch (queenDir) {
+
+            case 2: //up
+                //System.out.println("up"+queenDir+" "+MAX);
+                n.add(c.get(0)-MAX);
+                n.add(c.get(1));
+
+                if (n.size() <1) {
+                    n2.add(c2.get(0)-MAX2);
+                    n2.add(c2.get(1));
+                    qq.add(c2);
+                    qq.add(n2);
+                }
+                else {
+                    qq.add(c);
+                    qq.add(n);
+                }
+            case 3: //down
+                //System.out.println("down: "+queenDir+" "+MAX+" "+qC);
+                n.add(c.get(0)+MAX);
+                n.add(c.get(1));
+                if (n.size() <1) {
+                    n.add(c2.get(0)+MAX2);
+                    n.add(c2.get(1));
+                    qq.add(c2);
+                    qq.add(n2);
+                }
+                else {
+                    qq.add(c);
+                    qq.add(n);
+                }
+            case 4: //left
+                //System.out.println("left"+queenDir+" "+MAX);
+                n.add(c.get(0));
+                n.add(c.get(1)-MAX);
+                if (n.size() <1) {
+                    n.add(c2.get(0));
+                    n.add(c2.get(1)-MAX2);
+                    qq.add(c2);
+                    qq.add(n2);
+                }
+                else {
+                    qq.add(c);
+                    qq.add(n);
+                }
+            case 5: //right
+                //System.out.println("right"+queenDir+" "+MAX);
+                n.add(c.get(0));
+                n.add(c.get(1)+MAX);
+                if (n.size() <1) {
+                    n.add(c2.get(0));
+                    n.add(c2.get(1)+MAX2);
+                    qq.add(c2);
+                    qq.add(n2);
+                }
+                else {
+                    qq.add(c);
+                    qq.add(n);
+                }
+            case 6: // rightUp
+                //System.out.println("rightUp"+queenDir+" "+MAX);
+                n.add(c.get(0)-MAX);
+                n.add(c.get(1)+MAX);
+                if (n.size() <1) {
+                    n.add(c2.get(0)-MAX2);
+                    n.add(c2.get(1)+MAX2);
+                    qq.add(c2);
+                    qq.add(n2);
+                }
+                else {
+                    qq.add(c);
+                    qq.add(n);
+                }
+            case 7: // leftUp
+//                System.out.println("leftUp"+queenDir+" "+MAX);
+                n.add(c.get(0)-MAX);
+                n.add(c.get(1)-MAX);
+                if (n.size() <1) {
+                    n.add(c2.get(0)-MAX2);
+                    n.add(c2.get(1)-MAX2);
+                    qq.add(c2);
+                    qq.add(n2);
+                }
+                else {
+                    qq.add(c);
+                    qq.add(n);
+                }
+
+            case 8:// rightDown
+                //System.out.println("rightDown"+queenDir+" "+MAX);
+                n.add(c.get(0)+MAX);
+                n.add(c.get(1)+MAX);
+                if (n.size() <1) {
+                    n.add(c2.get(0)+MAX2);
+                    n.add(c2.get(1)+MAX2);
+                    qq.add(c2);
+                    qq.add(n2);
+                }
+                else {
+                    qq.add(c);
+                    qq.add(n);
+                }
+
+            case 9:// leftDown
+//                System.out.println("leftDown");
+                n.add(c.get(0)+MAX);
+                n.add(c.get(1)-MAX);
+                if (n.size() <1) {
+                    n.add(c2.get(0)+MAX2);
+                    n.add(c2.get(1)-MAX2);
+                    qq.add(c2);
+                    qq.add(n2);
+                }
+                else {
+                    qq.add(c);
+                    qq.add(n);
+                }
+            default:
+                System.out.println("----------------\n"+queenDir);
+
+
+
+
+        }
+        System.out.println(qq.size());
+        System.out.println(qq);
+        return qq;
+    }
 
     public List<Object> getScore(int player) {
+
         int score = 0;
         ArrayList<ArrayList<Integer>> positions = new ArrayList<>();
         HashMap<String, ArrayList<Integer>> scoreTable = new HashMap<>();
         int queen = 0;
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
-                if (MyBOARD[row][col] == player) {
+                if (this.MyBOARD[row][col] == player) {
                     ArrayList<Integer> pos = new ArrayList<>();
                     pos.add(row);
                     pos.add(col);
@@ -780,7 +763,7 @@ public class GameBoard {
                     int index = 1;
                     while (index < 9 && upS||downS||rightS||leftS) {
                         //up
-                        if (upS && checkInBounds(row - index) && MyBOARD[row - index][col] == 0) {
+                        if (upS && checkInBounds(row - index) && this.MyBOARD[row - index][col] == 0) {
                             //continue
                             up++;
                             queenScore++;
@@ -789,7 +772,7 @@ public class GameBoard {
                             upS = false;
 
                         }
-                        if (downS && checkInBounds(row + index) && MyBOARD[row + index][col] == 0 ) {
+                        if (downS && checkInBounds(row + index) && this.MyBOARD[row + index][col] == 0 ) {
                             //continue
                             queenScore++;
                             score++;
@@ -799,7 +782,7 @@ public class GameBoard {
                             downS = false;
                         }
                         //right
-                        if (rightS && checkInBounds(row) && checkInBounds(col + index) && MyBOARD[row][col+ index] == 0 ) {
+                        if (rightS && checkInBounds(row) && checkInBounds(col + index) && this.MyBOARD[row][col+ index] == 0 ) {
                             //continue
                             queenScore++;
                             score++;
@@ -809,7 +792,7 @@ public class GameBoard {
                             rightS = false;
                         }
                         //left
-                        if (leftS && checkInBounds(row) && checkInBounds(col - index) && MyBOARD[row][col - index] == 0 ) {
+                        if (leftS && checkInBounds(row) && checkInBounds(col - index) && this.MyBOARD[row][col - index] == 0 ) {
                             //continue
                             queenScore++;
                             score++;
@@ -819,7 +802,7 @@ public class GameBoard {
                             leftS = false;
                         }
                         //up/right
-                        if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && MyBOARD[row - index][col+ index] == 0 ) {
+                        if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && this.MyBOARD[row - index][col+ index] == 0 ) {
                             //continue
                             queenScore++;
                             score++;
@@ -829,7 +812,7 @@ public class GameBoard {
                             rightUpS = false;
                         }
                         //up/left
-                        if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && MyBOARD[row - index][col - index] == 0 ) {
+                        if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && this.MyBOARD[row - index][col - index] == 0 ) {
                             //continue
                             queenScore++;
                             score++;
@@ -840,7 +823,7 @@ public class GameBoard {
                             leftUpS = false;
                         }
                         //down/right
-                        if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && MyBOARD[row + index][col+ index] == 0 ) {
+                        if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && this.MyBOARD[row + index][col+ index] == 0 ) {
                             //continue
                             queenScore++;
                             score++;
@@ -851,7 +834,7 @@ public class GameBoard {
                             rightDownS = false;
                         }
                         //down/left
-                        if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && MyBOARD[row + index][col - index] == 0 ) {
+                        if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && this.MyBOARD[row + index][col - index] == 0 ) {
                             //continue
                             queenScore++;
                             score++;
@@ -876,9 +859,9 @@ public class GameBoard {
                 }
             }
         }
-        System.out.println("[player:score:[[row,col,up,down,left,right,rightUp,leftUp,rightDown,leftDown],[],[],[]]");
+        //System.out.println("[player:score:[[row,col,up,down,left,right,rightUp,leftUp,rightDown,leftDown],[],[],[]]");
         List<Object> temp = Arrays.asList(player,score, positions);
-        System.out.println("MinMax.Optimal: "+ temp );
+        //System.out.println("MinMax.Optimal: "+ temp );
         return temp;
     }
 }

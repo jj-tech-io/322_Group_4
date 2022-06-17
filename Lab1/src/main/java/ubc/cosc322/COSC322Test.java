@@ -7,6 +7,8 @@ import sfs2x.client.entities.Room;
 import ygraph.ai.smartfox.games.*;
 import ygraph.ai.smartfox.games.amazons.AmazonsGameMessage;
 
+import static ubc.cosc322.MinMax.*;
+
 
 /**
  *
@@ -33,10 +35,9 @@ public class COSC322Test<Rooms> extends GamePlayer {
     public String gameMsg;
     public Map<String,Object> gameStateBoard = new HashMap<>();
 
-    private boolean isWhite;
+    public boolean isWhite;
 
-    private ArrayList<Integer> nextMove = null;
-    private int score = 0;
+
 
     char ourAmazon;
     int ours;
@@ -63,6 +64,8 @@ public class COSC322Test<Rooms> extends GamePlayer {
             {0,0,0,0,0,0,0,0,0,0},
             {0,0,0,1,0,0,1,0,0,0}
     };
+    public Node currentNode;
+
     /**
      * The main method
      *
@@ -156,6 +159,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
                 else {
 
                     gB.updateBoard(true,theirs,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
+                    currentNode = new Node(ours,gB);
                     binPlayer = ours;
                     makeMove();
                     binPlayer = theirs;
@@ -177,6 +181,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
                     ours = 1;
                     theirs = 2;
                     binPlayer = ours;
+                    currentNode = new Node(ours,gB);
                     makeMove();
                     binPlayer = theirs;
 
@@ -223,22 +228,31 @@ public class COSC322Test<Rooms> extends GamePlayer {
     }
 
     public void makeMove() {
-//        System.out.println("number of steps: "+ gameStage);
+        System.out.println("makeMove(): ");
 
-        ArrayList<Integer> qC = new ArrayList<>();
-        ArrayList<Integer> qN = new ArrayList<>();
-        ArrayList<Integer> aR = new ArrayList<>();
-//        Node curNode = new Node(gB,ours);
+        ArrayList<Integer> qC;
+        ArrayList<Integer> qN;
+        ArrayList<Integer> aR;
+
 
         ArrayList<ArrayList<Integer>> qc_qn_ar;
 
-        qc_qn_ar = MinMax.getOptimal(ours,theirs,gB);
+        qc_qn_ar = getOptimal(ours, currentNode, gB);
         System.out.println(qc_qn_ar.get(0));
         System.out.println(qc_qn_ar.get(1));
         System.out.println(qc_qn_ar.get(2));
         qC= qc_qn_ar.get(0);
         qN = qc_qn_ar.get(1);
         aR = qc_qn_ar.get(2);
+
+        gB.updateBoard(false, ours, qC, qN, aR);
+        System.out.println(gB.boardString());
+        qN = gB.undoXY(qN);
+        qC = gB.undoXY(qC);
+        aR = gB.undoXY(aR);
+        System.out.println(qC+" "+qN+" "+aR + " \n"+ gB.boardString());
+        this.gamegui.updateGameState(qC, qN, aR);
+        this.gameClient.sendMoveMessage(qC, qN, aR);
 
 
 //        System.out.println(qc_qn_ar);
@@ -251,32 +265,31 @@ public class COSC322Test<Rooms> extends GamePlayer {
 //        aR = gB.getArrow(curNode,qN);
 
 
-        System.out.println(qC+" "+qN+" "+aR);
-
-        List<Boolean> valid = gB.validateMove(qC,qN,aR);
-        System.out.println(valid);
-        if(valid.get(0)&&valid.get(1)&&valid.get(2)) {
-
-            gB.updateBoard(false, ours, qC, qN, aR);
-            qN = gB.undoXY(qN);
-            qC = gB.undoXY(qC);
-            aR = gB.undoXY(aR);
-            System.out.println(qC+" "+qN+" "+aR);
-            gB.printBoard();
-            this.gamegui.updateGameState(qC, qN, aR);
-            this.gameClient.sendMoveMessage(qC, qN, aR);
-
-
-        }
-        else {
-            System.out.println("invalid");
-            System.out.println("qC " + qC +"qN "+ qN+ " aR "+ aR);
+//        System.out.println(qC+" "+qN+" "+aR);
+//
+//        List<Boolean> valid = gB.validateMove(qC,qN,aR);
+//        System.out.println(valid);
+//        if(valid.get(0)&&valid.get(1)&&valid.get(2)) {
+//
+//            gB.updateBoard(false, ours, qC, qN, aR);
 //            qN = gB.undoXY(qN);
 //            qC = gB.undoXY(qC);
 //            aR = gB.undoXY(aR);
-
-
-        }
+//            System.out.println(qC+" "+qN+" "+aR + " \n"+ gB.boardString());
+//            this.gamegui.updateGameState(qC, qN, aR);
+//            this.gameClient.sendMoveMessage(qC, qN, aR);
+//
+//
+//        }
+//        else {
+//            System.out.println("invalid");
+//            System.out.println("qC " + qC +"qN "+ qN+ " aR "+ aR);
+////            qN = gB.undoXY(qN);
+////            qC = gB.undoXY(qC);
+////            aR = gB.undoXY(aR);
+//
+//
+//        }
 
 
 
