@@ -227,6 +227,7 @@ public class GameBoard {
 
         ArrayList<Integer> arrow = new ArrayList<>();
         int index = 0;
+
         int row = qn.get(0);
         int col = qn.get(1);
         int up = 0;
@@ -363,6 +364,7 @@ public class GameBoard {
     public ArrayList<Integer> getQueenN(ArrayList<Integer> qC) {
 
         ArrayList<Integer> qN = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> qnlist = new ArrayList<>();
         int index = 0;
         int row = qC.get(0);
         int col = qC.get(1);
@@ -390,31 +392,40 @@ public class GameBoard {
         do {
             System.out.println("do while qn method");
             System.out.println(row + " " + col + " " + index );
-            upS = checkInBounds(row - index);
+            upS = checkInBounds(row-index);
+            downS = checkInBounds(row + index);
+            rightS = checkInBounds(col + index);
+            leftS = checkInBounds(col - index);
+            rightUpS = upS && rightS;
+           leftUpS = upS && leftS;
+           rightDownS = downS && rightS;
+           leftDownS = downS && leftS;
+            try {
+
 
             //up
-            if (upS && checkInBounds(row - index)) {
-                if(MyBOARD[row - index][col] == 0) {
-                    System.out.println("up index: \n" + index);
-                    //continue
-                    up++;
-                    //                qN.clear();
-                    qN.add(row - index);
-                    qN.add(col);
-                }
-                else {
-                    upS = false;
-                }
-
-            }
-            if (downS && checkInBounds(row + index) && MyBOARD[row + index][col] == 0 ) {
-                System.out.println("down index: \n" +index);
+            if (upS && row+index <9 && MyBOARD[row - index][col] == 0) {
+                System.out.println("up index: \n" + index);
                 //continue
-                down++;
-//                qN.clear();
-                qN.add(row + index);
+                up++;
+                qN.clear();
+                qN.add(row - index);
                 qN.add(col);
+                qnlist.add(qN);
+            }
+            else {
+                upS = false;
+            }
 
+
+            if (downS && row+index > 0 && MyBOARD[row - index][col] == 0) {
+                    System.out.println("down index: \n" +index);
+                    //continue
+                    down++;
+                    qN.clear();
+                    qN.add(row + index);
+                    qN.add(col);
+                    qnlist.add(qN);
             }
             else {
                 downS = false;
@@ -426,8 +437,10 @@ public class GameBoard {
                 //continue
                 right++;
                 qN.clear();
+                qN.clear();
                 qN.add(row);
                 qN.add(col + 1);
+                qnlist.add(qN);
 
             }
             else {
@@ -439,10 +452,10 @@ public class GameBoard {
                 System.out.println("right index: \n" +index);
                 //continue
                 left++;
-//                qN.clear();
+                qN.clear();
                 qN.add(row);
                 qN.add(col - index);
-
+                qnlist.add(qN);
             }
             else {
                 leftS = false;
@@ -453,10 +466,10 @@ public class GameBoard {
                 System.out.println("right index: \n" +index);
                 //continue
                 rightup++;
-//                qN.clear();
+                qN.clear();
                 qN.add(row - index);
                 qN.add(col + index);
-
+                qnlist.add(qN);
             }
             else {
                 rightUpS = false;
@@ -466,10 +479,10 @@ public class GameBoard {
                 System.out.println("right index: \n" +index);
                 //continue
                 leftup++;
-//                qN.clear();
+                qN.clear();
                 qN.add(row + index);
                 qN.add(col - index);
-
+                qnlist.add(qN);
             }
             else {
                 leftUpS = false;
@@ -480,10 +493,10 @@ public class GameBoard {
 
                 //continue
                 rightdown++;
-//                qN.clear();
+                qN.clear();
                 qN.add(row + index);
                 qN.add(col + index);
-
+                qnlist.add(qN);
             }
             else {
                 rightDownS = false;
@@ -494,19 +507,33 @@ public class GameBoard {
 
                 //continue
                 leftdown++;
-//                qN.clear();
+                qN.clear();
                 qN.add(row + index);
                 qN.add(col - index);
+                qnlist.add(qN);
 
             }
             else {
                 leftDownS = false;
             }
-
+            }
+            catch (IndexOutOfBoundsException e) {
+                System.out.println(e);
+            }
 
             index++;
 
-        }while(index <9 );
+        }while(index <9 && qN.size()<1);
+        for(int i = 0 ; i < qnlist.size()-1; i+=1) {
+            ArrayList<Integer> temp = qnlist.get(i);
+            System.out.println(temp);
+//            if(validateMove(qnlist.get(i))) {
+//                qN = qnlist.get(i);
+//            }
+            }
+
+
+
         System.out.println("queenN: "+ qN +" "+ up+" "+ down+" "+ left+" "+ right+" ");
         return  qN;
     }
@@ -551,6 +578,7 @@ public class GameBoard {
 
         for(int i = 0; i < movesPlayer.size()-1; i++) {
             ArrayList<Integer> thisQueen = movesPlayer.get(i);
+            System.out.println((thisQueen));
 //            if(thisQueen.get(0) == xBad && thisQueen.get(1)==yBad) {
 //                continue;
 //            }
@@ -559,6 +587,7 @@ public class GameBoard {
 //            System.out.println(thisQueen.get(thisQueen.size()-1)+ " this q s");
 
 //            if(thisQueen.get(thisQueen.size()-1) < MIN) {
+//            if(validateMove(thisQueen))
               if(thisQueen.get(thisQueen.size()-1) < MIN) {
                 //System.out.println("size" +thisQueen.get(thisQueen.size()-1));
                 MIN = thisQueen.get(thisQueen.size()-1);
@@ -566,18 +595,21 @@ public class GameBoard {
                 for (int j = 2; j < thisQueen.size()-1; j++) {
 
                     if (j>1 && thisQueen.get(j) > MAX ) {
+
                         MAX2 = MAX;
                         queenDir2 = queenDir;
-                        c2 = movesPlayer.get(j-1);
+                        c2.clear();
+                        c2 = c;
+                        c.clear();
                         c.add(thisQueen.get(0));
                         c.add(thisQueen.get(1));
                         MAX = thisQueen.get(j);
                         queenDir = j;
-                        System.out.println("---- c c2 dir");
-                        System.out.println(c);
-                        System.out.println(c2);
-                        System.out.println(queenDir);
-                        System.out.println(queenDir2);
+//                        System.out.println("---- c c2 dir");
+//                        System.out.println(c);
+//                        System.out.println(c2);
+//                        System.out.println(queenDir);
+//                        System.out.println(queenDir2);
 
 //                        System.out.println(" j = "+ j + " MAX = " + MAX);
 //                        if(MAX > 4) {
@@ -624,8 +656,8 @@ public class GameBoard {
                 n.add(c.get(0)+MAX);
                 n.add(c.get(1));
                 if (n.size() <1) {
-                    n.add(c2.get(0)+MAX2);
-                    n.add(c2.get(1));
+                    n2.add(c2.get(0)+MAX2);
+                    n2.add(c2.get(1));
                     qq.add(c2);
                     qq.add(n2);
                 }
@@ -638,8 +670,8 @@ public class GameBoard {
                 n.add(c.get(0));
                 n.add(c.get(1)-MAX);
                 if (n.size() <1) {
-                    n.add(c2.get(0));
-                    n.add(c2.get(1)-MAX2);
+                    n2.add(c2.get(0));
+                    n2.add(c2.get(1)-MAX2);
                     qq.add(c2);
                     qq.add(n2);
                 }
@@ -652,8 +684,8 @@ public class GameBoard {
                 n.add(c.get(0));
                 n.add(c.get(1)+MAX);
                 if (n.size() <1) {
-                    n.add(c2.get(0));
-                    n.add(c2.get(1)+MAX2);
+                    n2.add(c2.get(0));
+                    n2.add(c2.get(1)+MAX2);
                     qq.add(c2);
                     qq.add(n2);
                 }
@@ -663,8 +695,8 @@ public class GameBoard {
                 }
             case 6: // rightUp
                 //System.out.println("rightUp"+queenDir+" "+MAX);
-                n.add(c.get(0)-MAX);
-                n.add(c.get(1)+MAX);
+                n2.add(c.get(0)-MAX);
+                n2.add(c.get(1)+MAX);
                 if (n.size() <1) {
                     n.add(c2.get(0)-MAX2);
                     n.add(c2.get(1)+MAX2);
@@ -680,8 +712,8 @@ public class GameBoard {
                 n.add(c.get(0)-MAX);
                 n.add(c.get(1)-MAX);
                 if (n.size() <1) {
-                    n.add(c2.get(0)-MAX2);
-                    n.add(c2.get(1)-MAX2);
+                    n2.add(c2.get(0)-MAX2);
+                    n2.add(c2.get(1)-MAX2);
                     qq.add(c2);
                     qq.add(n2);
                 }
@@ -695,8 +727,8 @@ public class GameBoard {
                 n.add(c.get(0)+MAX);
                 n.add(c.get(1)+MAX);
                 if (n.size() <1) {
-                    n.add(c2.get(0)+MAX2);
-                    n.add(c2.get(1)+MAX2);
+                    n2.add(c2.get(0)+MAX2);
+                    n2.add(c2.get(1)+MAX2);
                     qq.add(c2);
                     qq.add(n2);
                 }
@@ -710,8 +742,8 @@ public class GameBoard {
                 n.add(c.get(0)+MAX);
                 n.add(c.get(1)-MAX);
                 if (n.size() <1) {
-                    n.add(c2.get(0)+MAX2);
-                    n.add(c2.get(1)-MAX2);
+                    n2.add(c2.get(0)+MAX2);
+                    n2.add(c2.get(1)-MAX2);
                     qq.add(c2);
                     qq.add(n2);
                 }
@@ -726,6 +758,7 @@ public class GameBoard {
 
 
         }
+        System.out.println("-----qq size, qq-----");
         System.out.println(qq.size());
         System.out.println(qq);
         return qq;

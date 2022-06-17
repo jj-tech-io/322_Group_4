@@ -226,9 +226,10 @@ public class COSC322Test<Rooms> extends GamePlayer {
         // TODO Auto-generated method stub
         gameClient = new GameClient(userName, passwd, this);
     }
-
+    int tries = 0;
     public void makeMove() {
         System.out.println("makeMove(): ");
+        System.out.println(gB.boardString());
 
         ArrayList<Integer> qC;
         ArrayList<Integer> qN;
@@ -238,21 +239,40 @@ public class COSC322Test<Rooms> extends GamePlayer {
         ArrayList<ArrayList<Integer>> qc_qn_ar;
 
         qc_qn_ar = getOptimal(ours, currentNode, gB);
-        System.out.println(qc_qn_ar.get(0));
-        System.out.println(qc_qn_ar.get(1));
-        System.out.println(qc_qn_ar.get(2));
-        qC= qc_qn_ar.get(0);
-        qN = qc_qn_ar.get(1);
-        aR = qc_qn_ar.get(2);
+//        try {
+            List<Boolean> valid = gB.validateMove(qc_qn_ar.get(0),qc_qn_ar.get(1),qc_qn_ar.get(2));
+            System.out.println(valid);
+            if(valid.get(0)&&valid.get(1)&&valid.get(2)) {
+                System.out.println(qc_qn_ar.get(0));
+                System.out.println(qc_qn_ar.get(1));
+                System.out.println(qc_qn_ar.get(2));
+                qC = qc_qn_ar.get(0);
+                qN = qc_qn_ar.get(1);
+                aR = qc_qn_ar.get(2);
 
-        gB.updateBoard(false, ours, qC, qN, aR);
-        System.out.println(gB.boardString());
-        qN = gB.undoXY(qN);
-        qC = gB.undoXY(qC);
-        aR = gB.undoXY(aR);
-        System.out.println(qC+" "+qN+" "+aR + " \n"+ gB.boardString());
-        this.gamegui.updateGameState(qC, qN, aR);
-        this.gameClient.sendMoveMessage(qC, qN, aR);
+                gB.updateBoard(false, ours, qC, qN, aR);
+                System.out.println(gB.boardString());
+                qN = gB.undoXY(qN);
+                qC = gB.undoXY(qC);
+                aR = gB.undoXY(aR);
+                System.out.println(qC + " " + qN + " " + aR + " \n" + gB.boardString());
+                this.gamegui.updateGameState(qC, qN, aR);
+                this.gameClient.sendMoveMessage(qC, qN, aR);
+            }
+//        }
+//        catch (IndexOutOfBoundsException e) {
+//            tries++;
+//            System.out.println(e);
+//            if(tries < 2) {
+//                makeMove();
+//            }
+//            else {
+//                tries = 0;
+//                return;
+//            }
+//
+//        }
+
 
 
 //        System.out.println(qc_qn_ar);

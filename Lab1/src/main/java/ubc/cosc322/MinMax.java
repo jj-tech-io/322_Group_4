@@ -8,15 +8,17 @@ import java.util.Map;
 public class MinMax {
     public List<Object> searchTree = new ArrayList<>();
     public static ArrayList<ArrayList<Integer>> getOptimal(int p, Node current, GameBoard g) {
+        System.out.println(g.boardString());
         ArrayList<ArrayList<Integer>> optimal_qC_qN = new ArrayList<>();
 
-        GameBoard c = current.getCopy();
+        GameBoard childBoard = g;
+
 //        List<Object> playerScoreMoves = g.getScore(p);
 //
 //        ArrayList<ArrayList<Integer>> movesPlayer = (ArrayList<ArrayList<Integer>>) playerScoreMoves.get(2);
 
         ArrayList<Integer> qL = new ArrayList<>();
-//        ArrayList<Integer> qC = new ArrayList<>();
+        ArrayList<Integer> qC = new ArrayList<>();
         ArrayList<Integer> qN = new ArrayList<>();
         ArrayList<Integer> aR = new ArrayList<>();
         List<List<Object>>  children = new ArrayList<>();
@@ -28,40 +30,93 @@ public class MinMax {
         List<Boolean> oneTwoThree = new ArrayList<>();
 
         for (ArrayList<Integer> queen : queenList) {
-            System.out.println("-----queen-"+queen);
+            System.out.println("qC "+queen);
+            try {
 
-            //qC = queen;
-            GameBoard childBoard = c;
-            c = g;
-            System.out.println();
-            ArrayList<ArrayList<Integer>> qq =childBoard.getQueen(p, qL.get(0), qL.get(1));
-            //System.out.println(childBoard.boardString());
-            queen = qq.get(0);
-            qN = childBoard.getQueen(p, qL.get(0), qL.get(1)).get(1);
-//                qN = childBoard.getQueen(p, qL.get(0), qL.get(1)).get(1);
-//                qN = childBoard.getQueen(p, qL.get(0), qL.get(1)).get(1);
-            System.out.println(qN);
-            //qN = childBoard.getQueenN(queen);
-            aR = childBoard.getArrowN(qN);
-            //System.out.println(qC+" "+qN+" "+aR);
-            oneTwoThree = childBoard.validateMove(queen, qN, aR);
+                int x = queen.get(0);
+                int y = queen.get(1);
+                if(g.getMyBOARD()[x][y] != p ) {
+                    continue;
+                }
+                qC = queen;
 
-            if (oneTwoThree.get(0) && oneTwoThree.get(1) && oneTwoThree.get(2)) {
-                System.out.println("valid node generated");
-                //System.out.println("child board:" );
-                //System.out.println(childBoard.boardString());
-                childBoard.updateBoard(false, p, queen, qN, aR);
-                Node child = new Node(p, childBoard);
-                current.addChild(child, queen, qN, aR);
-                System.out.println(oneTwoThree);
-
-            } else {
-                //System.out.println(":(node failed");
-                //System.out.println(oneTwoThree);
             }
+            catch (IndexOutOfBoundsException e) {
+                System.out.println("qC out of bounds");
+                System.out.println(e );
+            }
+
+            try {
+                qN = g.getQueenN(qC);
+                System.out.println("qN "+qN);
+                int xn = qN.get(0);
+                int yn = qN.get(1);
+                if(g.getMyBOARD()[xn][yn] != 0 ) {
+                    continue;
+                }
+
+            }
+            catch (IndexOutOfBoundsException e) {
+                System.out.println("qN out of bounds");
+                System.out.println(e);
+                continue;
+            }
+
+            try {
+                aR = g.getArrowN(qN);
+                int arx = aR.get(0);
+                int ary = aR.get(1);
+                if(g.getMyBOARD()[arx][ary] != 0 || g.getMyBOARD()[arx][ary] == -1 || aR == qN) {
+                    System.out.println("bad arrow");
+                    continue;
+                }
+                else {
+                    optimal_qC_qN.add(qC);
+                    optimal_qC_qN.add(qN);
+                    optimal_qC_qN.add(aR);
+                    System.out.println("valid node generated");
+                    //System.out.println("child board:" );
+                    //System.out.println(childBoard.boardString());
+                    childBoard.updateBoard(false, p, queen, qN, aR);
+                    Node child = new Node(p, g);
+                    current.addChild(child, qC, qN, aR);
+                    System.out.println(optimal_qC_qN);
+                    System.out.println(oneTwoThree);
+                    System.out.println(qC+" "+qN+" "+aR);
+
+                }
+            }
+            catch (IndexOutOfBoundsException e) {
+                System.out.println(aR);
+                System.out.println("aR out of bounds");
+                System.out.println(e);
+                continue;
+            }
+
+
+
+//            oneTwoThree = g.validateMove(qC, qN, aR);
+//            System.out.println(oneTwoThree);
+//            if (oneTwoThree.get(0) && oneTwoThree.get(1) && oneTwoThree.get(2)) {
+//                System.out.println("valid node generated");
+//                //System.out.println("child board:" );
+//                //System.out.println(childBoard.boardString());
+//                childBoard.updateBoard(false, p, queen, qN, aR);
+//                Node child = new Node(p, g);
+//                current.addChild(child, qC, qN, aR);
+//                System.out.println(oneTwoThree);
+//
+//            } else {
+//                //System.out.println(":(node failed");
+//                //System.out.println(oneTwoThree);
+//            }
+        }
+
+
+
 //                qL.add(qN.get(0));
 //                qL.add(qN.get(1));
-        }
+
 
 
 
@@ -72,9 +127,9 @@ public class MinMax {
             System.out.println(move.get(0));
 
 
-            optimal_qC_qN.add((ArrayList<Integer>) move.get(0));
-            optimal_qC_qN.add((ArrayList<Integer>) move.get(1));
-            optimal_qC_qN.add((ArrayList<Integer>) move.get(2));
+            optimal_qC_qN.add(qC);
+            optimal_qC_qN.add(qN);
+            optimal_qC_qN.add(aR);
             System.out.println(optimal_qC_qN.get(0));
             System.out.println(optimal_qC_qN.get(1));
             System.out.println(optimal_qC_qN.get(2));
@@ -195,6 +250,7 @@ public class MinMax {
 //        optimal_qC_qN.add(qN);
 //        optimal_qC_qN.add(aR);
 //        System.out.println("optimal q,q,a " +optimal_qC_qN);
+        System.out.println(g.boardString());
         return optimal_qC_qN;
     }
 
