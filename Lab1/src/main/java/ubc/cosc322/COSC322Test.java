@@ -164,7 +164,12 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
                 break;
             case (GameMessage.GAME_ACTION_START):
-
+                if(userName.equals(msgDetails.get(AmazonsGameMessage.PLAYER_BLACK))) {
+                    player.isWhite = true;
+                }
+                else {
+                player.isWhite = false;
+                }
                 if(player.isWhite) {
                     ourAmazon = 'w';
                     otherAmazon = 'b';

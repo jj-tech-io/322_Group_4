@@ -89,7 +89,10 @@ public class MinMax {
 //
 //        }
         ArrayList<ArrayList<Integer>> optimal_qC_qN = new ArrayList<>();
-        optimal_qC_qN.add((ArrayList<Integer>) Arrays.asList(qC.get(0), qC.get(1)));
+        ArrayList<Integer> temp = new ArrayList<>();
+        temp.add(qC.get(0));
+        temp.add(qC.get(1));
+        optimal_qC_qN.add(temp);
 
         qN = COSC322Test.gB.getQueenN(g,qC);
         aR = g.getArrowN(g,qN);
