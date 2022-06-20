@@ -1,104 +1,314 @@
 package ubc.cosc322;
 
+
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class MinMax {
     public List<Object> searchTree = new ArrayList<>();
-    public static ArrayList<ArrayList<Integer>> getOptimal(int p, Node current, GameBoard g) {
+
+    public static List<ArrayList<Integer>> getOptimal(int p, Node current, GameBoard g) {
         System.out.println(g.boardString());
         ArrayList<ArrayList<Integer>> optimal_qC_qN = new ArrayList<>();
+//        GameBoard childBoard = g;
+        List<Object> myMoves = g.getQueenMoves(p);
+        System.out.println(myMoves);
+        // using for-each loop for iteration over Map.entrySet()
+        int index = 0;
+        List<List<ArrayList<Integer>>> qCqN = new ArrayList<>();
+        List<ArrayList<Integer>> qCqNPair = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
 
-        GameBoard childBoard = g;
+        for (int q = 0; q < myMoves.size(); q++) {
+            Map<String, Object> qMap = (Map<String, Object>) myMoves.get(q);//get queen 0;
+            int last = 0;
+            int max = 0;
+            ArrayList<Integer> qc = new ArrayList<>();
+            for (Map.Entry<String, Object> entry : qMap.entrySet()) {
+
+                ArrayList<Integer> qn = new ArrayList<>();
+                ArrayList<Integer> ar = new ArrayList<>();
+
+                String key = entry.getKey();
+
+                if (key == "qC") {
+                    qc = (ArrayList<Integer>) entry.getValue();
+                    System.out.println("qc ----" + qc + "------------------------------------------");
+                    System.out.println(entry);
+                } else {
+                    Integer o = (Integer) entry.getValue();
+                    ArrayList<Integer> move = new ArrayList<>();
+                    qCqNPair.clear();
+                    switch (entry.getKey()) {
+                        case "up":
+                            qn.add(qc.get(0) - o);
+                            qn.add(qc.get(1));
+                            arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                            for (ArrayList<Integer> a : arrows) {
+                                if (qn != qc && ar != qn && ar.size() == 2) {
+                                    qCqNPair.add(qc);
+                                    qCqNPair.add(qn);
+                                    qCqNPair.add(ar);
+                                    qCqN.add(qCqNPair);
+                                    System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
+                                    return qCqNPair;
+
+                                }
+                            }
+                            break;
+                        case "down":
+                            qn.add(qc.get(0) + o);
+                            qn.add(qc.get(1));
+                            arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+//                                ar = (ArrayList<Integer>) g.getArrowMoves(p,qn).get(0);
+                            for (ArrayList<Integer> a : arrows) {
+                                if (qn != qc && ar != qn && ar.size() == 2) {
+                                    qCqNPair.add(qc);
+                                    qCqNPair.add(qn);
+                                    qCqNPair.add(ar);
+                                    qCqN.add(qCqNPair);
+                                    System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
+                                    return qCqNPair;
+                                }
+                            }
+                            break;
+                        case "left":
+                            qn.add(qc.get(0));
+                            qn.add(qc.get(1) - o);
+                            arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+//                                ar = (ArrayList<Integer>) g.getArrowMoves(p,qn).get(0);
+                            for (ArrayList<Integer> a : arrows) {
+                                ar = a;
+                                if (qn != qc && ar != qn && ar.size() == 2) {
+                                    qCqNPair.add(qc);
+                                    qCqNPair.add(qn);
+                                    qCqNPair.add(ar);
+                                    qCqN.add(qCqNPair);
+                                    System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
+                                    return qCqNPair;
+                                }
+                            }
+                            break;
+                        case "right":
+                            qn.add(qc.get(0));
+                            qn.add(qc.get(1) + o);
+                            arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+//                                ar = (ArrayList<Integer>) g.getArrowMoves(p,qn).get(0);
+                            for (ArrayList<Integer> a : arrows) {
+                                ar = a;
+                                if (qn != qc && ar != qn && ar.size() == 2) {
+                                    qCqNPair.add(qc);
+                                    qCqNPair.add(qn);
+                                    qCqNPair.add(ar);
+                                    qCqN.add(qCqNPair);
+                                    System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
+                                    return qCqNPair;
+                                }
+                            }
+                            break;
+                        case "up/right": //right
+                            qn.add(qc.get(0) - o);
+                            qn.add(qc.get(1) + o);
+
+                            arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                            for (ArrayList<Integer> a : arrows) {
+                                ar = a;
+                                if (qn != qc && ar != qn && !ar.isEmpty()) {
+                                    qCqNPair.add(qc);
+                                    qCqNPair.add(qn);
+                                    qCqNPair.add(ar);
+                                    qCqN.add(qCqNPair);
+                                    System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
+                                    return qCqNPair;
+                                }
+                            }
+                            break;
+                        case "down/right": // rightUp
+                            qn.add(qc.get(0) + o);
+                            qn.add(qc.get(1) + o);
+                            arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                            for (ArrayList<Integer> a : arrows) {
+                                ar = a;
+                                if (qn != qc && ar != qn && !ar.isEmpty()) {
+                                    qCqNPair.add(qc);
+                                    qCqNPair.add(qn);
+                                    qCqNPair.add(ar);
+                                    qCqN.add(qCqNPair);
+                                    System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
+                                    return qCqNPair;
+                                }
+                            }
+                            break;
+                        case "up/left": //
+                            qn.add(qc.get(0) - 1);
+                            qn.add(qc.get(1) - 1);
+                            //ar = g.getArrowN(qn);
+                            arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                            for (ArrayList<Integer> a : arrows) {
+                                ar = a;
+                                if (qn != qc && ar != qn && !ar.isEmpty()) {
+                                    qCqNPair.add(qc);
+                                    qCqNPair.add(qn);
+                                    qCqNPair.add(ar);
+                                    qCqN.add(qCqNPair);
+                                    System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
+                                    return qCqNPair;
+
+                                } else {
+                                    continue;
+                                }
+                            }
+                            break;
+                        case "down/left":
+                            qn.add(qc.get(0) + o);
+                            qn.add(qc.get(1) - o);
+                            //ar = g.getArrowN(qn);
+                            arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                            for (ArrayList<Integer> a : arrows) {
+                                ar = a;
+                                if (qn != qc && ar != qn && ar.size() == 2) {
+                                    qCqNPair.add(qc);
+                                    qCqNPair.add(qn);
+                                    qCqNPair.add(ar);
+
+                                    qCqN.add(qCqNPair);
+
+                                    System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
+                                    return qCqNPair;
+
+                                }
+
+
+                            }
+
+
+                    }
+                }
+
+
+            }
+        }
+            List<ArrayList<Integer>> r = new ArrayList<>();
+            List<Boolean> v;
+            boolean val = false;
+            index = 0;
+            while (!val) {
+                r = qCqN.get(index);
+                System.out.println(r.get(0) + " " + r.get(1) + " " + r.get(2));
+                v = g.validateMove(r.get(0), r.get(1), r.get(2));
+                if (v.get(0) && v.get(1) && v.get(2)) {
+                    val = true;
+                }
+                index++;
+            }
+            System.out.println(r + "----r");
+            return r;
+
+
+        }
+
+
+    }
+
+
+
 
 //        List<Object> playerScoreMoves = g.getScore(p);
 //
 //        ArrayList<ArrayList<Integer>> movesPlayer = (ArrayList<ArrayList<Integer>>) playerScoreMoves.get(2);
-
-        ArrayList<Integer> qL = new ArrayList<>();
-        ArrayList<Integer> qC = new ArrayList<>();
-        ArrayList<Integer> qN = new ArrayList<>();
-        ArrayList<Integer> aR = new ArrayList<>();
-        List<List<Object>>  children = new ArrayList<>();
-
-        ArrayList<ArrayList<Integer>> queenList = g.queenList(p);
-        System.out.println("queens list:\n "+queenList);
-        qL.add(-2);
-        qL.add(-2);
-        List<Boolean> oneTwoThree = new ArrayList<>();
-
-        for (ArrayList<Integer> queen : queenList) {
-            System.out.println("qC "+queen);
-            try {
-
-                int x = queen.get(0);
-                int y = queen.get(1);
-                if(g.getMyBOARD()[x][y] != p ) {
-                    continue;
-                }
-                qC = queen;
-
-            }
-            catch (IndexOutOfBoundsException e) {
-                System.out.println("qC out of bounds");
-                System.out.println(e );
-            }
-
-            try {
-                qN = g.getQueenN(qC);
-                System.out.println("qN "+qN);
-                int xn = qN.get(0);
-                int yn = qN.get(1);
-
-                if(g.getMyBOARD()[xn][yn] != 0 ) {
-                    continue;
-                }
-
-            }
-            catch (IndexOutOfBoundsException e) {
-                System.out.println("qN out of bounds");
-                System.out.println(e);
-                continue;
-            }
-
-            try {
-                aR = g.getArrowN(qN);
-                int arx = aR.get(0);
-                int ary = aR.get(1);
-                if(g.getMyBOARD()[arx][ary] != 0 || g.getMyBOARD()[arx][ary] == -1 || g.getMyBOARD()[arx][ary] == 2 || g.getMyBOARD()[arx][ary] == 1 ||aR == qN) {
-                    System.out.println("bad arrow");
-                    continue;
-                }
-                List<Boolean> v = g.validateMove(qC,qN,aR);
-                if(v.get(0) & v.get(1) &v.get(2)) {
-                    optimal_qC_qN.add(qC);
-                    optimal_qC_qN.add(qN);
-                    optimal_qC_qN.add(aR);
-                    System.out.println("valid node generated");
-                    //System.out.println("child board:" );
-                    //System.out.println(childBoard.boardString());
-                    childBoard.updateBoard(false, p, queen, qN, aR);
-                    Node child = new Node(p, g);
-                    current.addChild(child, qC, qN, aR);
-                    System.out.println(optimal_qC_qN);
-                    System.out.println(oneTwoThree);
-                    System.out.println(qC+" "+qN+" "+aR);
-
-
-                }
-
-            }
-            catch (IndexOutOfBoundsException e) {
-                System.out.println(aR);
-                System.out.println("aR out of bounds");
-                System.out.println(e);
-                continue;
-            }
-
-
-
+//        ArrayList<Integer> qL = new ArrayList<>();
+//        ArrayList<Integer> qC = new ArrayList<>();
+//        ArrayList<Integer> qN = new ArrayList<>();
+//        ArrayList<Integer> aR = new ArrayList<>();
+//        List<List<Object>>  children = new ArrayList<>();
+//
+//        ArrayList<ArrayList<Integer>> queenList = g.queenList(p);
+//        System.out.println("queens list:\n "+queenList);
+//        qL.add(-2);
+//        qL.add(-2);
+//        List<Boolean> oneTwoThree = new ArrayList<>();
+//
+//        for (ArrayList<Integer> queen : queenList) {
+//            System.out.println("qC "+queen);
+//            try {
+//
+//                int x = queen.get(0);
+//                int y = queen.get(1);
+//                if(g.getMyBOARD()[x][y] != p ) {
+//                    System.out.println("qC out of bounds");
+//                    continue;
+//                }
+//                qC = queen;
+//
+//            }
+//            catch (IndexOutOfBoundsException e) {
+//                System.out.println("qN out of bounds");
+//                System.out.println(e );
+//            }
+//
+//            try {
+////                qN = g.getQueenN(qC);
+////                System.out.println("qN "+qN);
+////                int xn = qN.get(0);
+////                int yn = qN.get(1);
+////
+////                if(g.getMyBOARD()[xn][yn] != 0 ) {
+////                    System.out.println("qN out of bounds");
+////                    continue;
+////                }
+////                else {
+////
+////                }
+////
+//
+//            }
+//            catch (IndexOutOfBoundsException e) {
+//                System.out.println("qN out of bounds");
+//                System.out.println(e);
+//                continue;
+//            }
+//
+//            try {
+//                aR = g.getArrowN(qN);
+//                int arx = aR.get(0);
+//                int ary = aR.get(1);
+//                if(g.getMyBOARD()[arx][ary] != 0 || g.getMyBOARD()[arx][ary] == -1 || g.getMyBOARD()[arx][ary] == 2 || g.getMyBOARD()[arx][ary] == 1 ||aR == qN) {
+//                    System.out.println("aR out of bounds");
+//                    continue;
+//                }
+//                List<Boolean> v = g.validateMove(qC,qN,aR);
+//                System.out.println(v);
+//                if(v.get(0) & v.get(1) &v.get(2)) {
+//                    System.out.println("valid node generated");
+//                    optimal_qC_qN.add(qC);
+//                    optimal_qC_qN.add(qN);
+//                    optimal_qC_qN.add(aR);
+//
+//                    //System.out.println("child board:" );
+//                    //System.out.println(childBoard.boardString());
+//                    childBoard.updateBoard(false, p, queen, qN, aR);
+//                    Node child = new Node(p, g);
+//                    current.addChild(child, qC, qN, aR);
+//                    System.out.println(optimal_qC_qN);
+//                    System.out.println(oneTwoThree);
+//                    System.out.println(qC+" "+qN+" "+aR);
+//                    System.out.println("breakkkkkk-----");
+//                    break;
+//
+//                }
+//
+//            }
+//            catch (IndexOutOfBoundsException e) {
+//                System.out.println(aR);
+//                System.out.println("aR out of bounds "+aR);
+//                System.out.println(e);
+//                continue;
+//            }
+//
+//
+//
 //            oneTwoThree = g.validateMove(qC, qN, aR);
 //            System.out.println(oneTwoThree);
 //            if (oneTwoThree.get(0) && oneTwoThree.get(1) && oneTwoThree.get(2)) {
@@ -114,16 +324,8 @@ public class MinMax {
 //                //System.out.println(":(node failed");
 //                //System.out.println(oneTwoThree);
 //            }
-        }
-
-
-
 //                qL.add(qN.get(0));
 //                qL.add(qN.get(1));
-
-
-
-
 //        Map.Entry<Integer, List<Object>>  entry = current.getMaxKey();
 //        if(entry != null) {
 //            System.out.println("entry valid");
@@ -140,9 +342,6 @@ public class MinMax {
 //
 //
 //        }
-
-
-
 //        for (List<Object> childData: current.getChildren()) {
 //            int s = childData.get(0).getScore();
 //            System.out.println("score = " + s + " "+childData.toString());
@@ -254,9 +453,3 @@ public class MinMax {
 //        optimal_qC_qN.add(qN);
 //        optimal_qC_qN.add(aR);
 //        System.out.println("optimal q,q,a " +optimal_qC_qN);
-        System.out.println(optimal_qC_qN.size());
-        return optimal_qC_qN;
-    }
-
-
-}

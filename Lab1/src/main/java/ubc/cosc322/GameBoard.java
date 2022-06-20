@@ -155,76 +155,105 @@ public class GameBoard {
         //System.out.println("player" + c);
 
     }
-    public List<Boolean> validateMove(ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
 
+    public List<Boolean> validateMove(ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
+        List<Boolean> v = new ArrayList<>();
         boolean validQC = true;
         boolean validQN = true;
         boolean validAR = true;
-        if(qC.size() >1) {
-            if(checkInBounds(qC.get(0))&& checkInBounds(qC.get(1))) {
-                validQC = true;
-            }
-            else {
-                validQC = false;
-            }
 
-        }
-        else {
+        int qcY = qC.get(0);
+        int qcX = qC.get(1);
+        int qnY = qN.get(0);
+        int qnX = qN.get(1);
+        int arY = aR.get(0);
+        int arX = aR.get(1);
+
+        String directionQ = "";
+        String directionAr = "";
+        System.out.println(qcX+" " +qcY+ " "+qnX+" " +qnY+ " "+arX+" " +arY);
+
+        if(!checkInBounds(qcX) || !checkInBounds(qcY)) {
             validQC = false;
         }
-        if(qN.size()>1) {
-            if(checkInBounds(qN.get(0))&& checkInBounds(qN.get(1)) ) {
-
-                    validQN = true;
-
-            }
-            else {
-                validQN = false;
-            }
-        }
-        else {
+        if(!checkInBounds(qnX) || !checkInBounds(qnY)) {
             validQN = false;
         }
-        if(aR.size() > 1) {
-            if(checkInBounds(aR.get(0))&& checkInBounds(aR.get(1))) {
-                validAR = true;
-            }
-            else {
-                validAR = false;
-            }
+        if(!checkInBounds(arX) || !checkInBounds(arY)) {
+            validAR = false;
         }
-        else {
-            validAR =  false;
-        }
-        try {
-            int av =  this.MyBOARD[aR.get(0)][aR.get(1)];
-            int qn =  this.MyBOARD[qN.get(0)][qN.get(1)];
-             if(av == 1 || av == 2 || av == -1) {
-                 validAR = false;
-             }
-            if(qn == 1 || qn == 2 || qn == -1) {
-                validQN = false;
-            }
-        }
-        catch(IndexOutOfBoundsException e) {
-            System.out.println(e + "\n" );
+        if(qnX == arX && qnY == arY) {
+            validAR = false;
         }
 
+        v.add(validQC);
+        v.add(validQN);
+        v.add(validAR);
+//        if(qC.size() >1) {
+//            if(checkInBounds(qC.get(0))&& checkInBounds(qC.get(1))) {
+//                validQC = true;
+//            }
+//            else {
+//                validQC = false;
+//            }
+//
+//        }
+//        else {
+//            validQC = false;
+//        }
+//        if(qN.size()>1) {
+//            if(checkInBounds(qN.get(0))&& checkInBounds(qN.get(1)) ) {
+//
+//                    validQN = true;
+//
+//            }
+//            else {
+//                validQN = false;
+//            }
+//        }
+//        else {
+//            validQN = false;
+//        }
+//        if(aR.size() > 1) {
+//            if(checkInBounds(aR.get(0))&& checkInBounds(aR.get(1))) {
+//                validAR = true;
+//            }
+//            else {
+//                validAR = false;
+//            }
+//        }
+//        else {
+//            validAR =  false;
+//        }
+//        try {
+//            int av =  this.MyBOARD[aR.get(0)][aR.get(1)];
+//            int qn =  this.MyBOARD[qN.get(0)][qN.get(1)];
+//             if(av == 1 || av == 2 || av == -1) {
+//                 validAR = false;
+//             }
+//            if(qn == 1 || qn == 2 || qn == -1) {
+//                validQN = false;
+//            }
+//        }
+//        catch(IndexOutOfBoundsException e) {
+//            System.out.println(e + "\n" );
+//        }
 
-        return Arrays.asList(validQC,validQN,validAR);
+
+        return v;
     }
-    public void updateArrow(char c, ArrayList<Integer> aR) {
-        System.out.println("update arrow"+c);
-
-        int arrowX = aR.get(0);
-        int arrowY = aR.get(1);
-        if (c == 'b') {
-            MyBOARD[arrowX][arrowY] = -1;
-        } else {
-            MyBOARD[arrowX][arrowY] = -1;
-        }
-
-    }
+//    public void updateArrow(char c, ArrayList<Integer> aR) {
+//        System.out.println("update arrow"+c);
+//
+//        int arrowX = aR.get(0);
+//        int arrowY = aR.get(1);
+//        if (c == 'b') {
+//            MyBOARD[arrowX][arrowY] = -1;
+//        } else {
+//            MyBOARD[arrowX][arrowY] = -1;
+//        }
+//
+//    }
 
     //transform AMAZONGAME BOARD POSITION X,Y to GameBoard x,y
     public ArrayList<Integer> getXY(ArrayList<Integer> xy) {
@@ -250,7 +279,7 @@ public class GameBoard {
         return inBounds;
     }
 
-    public ArrayList<Integer> getArrowN(ArrayList<Integer> qn) {
+    public List<ArrayList<Integer>> getArrowN(ArrayList<Integer> qn) {
 
         ArrayList<Integer> arrow = new ArrayList<>();
         int index = 0;
@@ -275,6 +304,8 @@ public class GameBoard {
         boolean leftDownS = true;
         int max = 0;
         int possible = 8;
+        List<ArrayList<Integer>> arrows = new ArrayList<>();
+
         do {
 
             //up
@@ -284,6 +315,7 @@ public class GameBoard {
                 arrow.clear();
                 arrow.add(row-index);
                 arrow.add(col);
+                arrows.add(arrow);
 
             } else {
                 upS = false;
@@ -296,6 +328,7 @@ public class GameBoard {
                 arrow.clear();
                 arrow.add(row+index);
                 arrow.add(col);
+                arrows.add(arrow);
             }
             else {
                 downS = false;
@@ -309,6 +342,7 @@ public class GameBoard {
                 arrow.clear();
                 arrow.add(row);
                 arrow.add(col+index);
+                arrows.add(arrow);
             }
             else {
                 rightS = false;
@@ -322,6 +356,7 @@ public class GameBoard {
                 arrow.clear();
                 arrow.add(row);
                 arrow.add(col-index);
+                arrows.add(arrow);
 
             }
             else {
@@ -336,6 +371,7 @@ public class GameBoard {
                 arrow.clear();
                 arrow.add(row-index);
                 arrow.add(col+index);
+                arrows.add(arrow);
             }
             else {
                 rightUpS = false;
@@ -348,6 +384,7 @@ public class GameBoard {
                 arrow.clear();
                 arrow.add(row-index);
                 arrow.add(col-index);
+                arrows.add(arrow);
             }
             else {
                 leftUpS = false;
@@ -360,6 +397,7 @@ public class GameBoard {
                 arrow.clear();
                 arrow.add(row+index);
                 arrow.add(col+index);
+                arrows.add(arrow);
             }
             else {
                 rightDownS = false;
@@ -372,6 +410,7 @@ public class GameBoard {
                 arrow.clear();
                 arrow.add(row+index);
                 arrow.add(col-index);
+                arrows.add(arrow);
             }
             else {
                 leftDownS = false;
@@ -385,7 +424,7 @@ public class GameBoard {
             }
         }while(index <8);
         System.out.println("arrow: "+arrow);
-        return  arrow;
+        return  arrows;
     }
 
     public ArrayList<Integer> getQueenN(ArrayList<Integer> qC) {
@@ -417,8 +456,8 @@ public class GameBoard {
         int qNX = qCX;
         int qnY = qCY;
         do {
-            System.out.println("do while qn method");
-            System.out.println(row + " " + col + " " + index );
+//            System.out.println("do while qn method");
+//            System.out.println(row + " " + col + " " + index );
             upS = checkInBounds(row-index);
             downS = checkInBounds(row + index);
             rightS = checkInBounds(col + index);
@@ -431,8 +470,8 @@ public class GameBoard {
 
 
             //up
-            if ( upS && checkInBounds(row-index) && row+index <9 && MyBOARD[row - index][col] == 0) {
-                System.out.println("up index: \n" + index);
+            if ( upS && checkInBounds(row-index) && row-index >=0 && MyBOARD[row - index][col] == 0) {
+                //System.out.println("up index: \n" + index);
                 //continue
                 up++;
                 qN.clear();
@@ -445,8 +484,9 @@ public class GameBoard {
             }
 
 
-            if (downS && checkInBounds(row + index) && row+index < 9 && MyBOARD[row + index][col] == 0) {
-                    System.out.println("down index: \n" +index);
+            //down row+index <= 9 &&
+            if (downS && checkInBounds(row + index) && row+index <= 9 && MyBOARD[row + index][col] == 0) {
+                    //System.out.println("down index: \n" +index);
                     //continue
                     down++;
                     qN.clear();
@@ -458,9 +498,10 @@ public class GameBoard {
                 downS = false;
 
             }
+
             //right
-            if (rightS && checkInBounds(row) && checkInBounds(col + index) && MyBOARD[row][col+ index] == 0 ) {
-                System.out.println("right index: \n" +index);
+            if (rightS && checkInBounds(row) && checkInBounds(col + index) && col+index <= 9 && MyBOARD[row][col+ index] == 0 ) {
+                //System.out.println("right index: \n" +index);
                 //continue
                 right++;
                 qN.clear();
@@ -474,9 +515,13 @@ public class GameBoard {
                 rightS = false;
 
             }
+                //up row-index >=0 &&
+                //down row+index <= 9 &&
+                //right col+index <= 9 &&
+                //left col - index >= 0 &&
             //left
-            if (leftS && checkInBounds(row) && checkInBounds(col - index) && MyBOARD[row][col - index] == 0 ) {
-                System.out.println("right index: \n" +index);
+            if (leftS && checkInBounds(col - index) && col - index >= 0 && col-index >= 0 && MyBOARD[row][col - index] == 0 ) {
+                //System.out.println("right index: \n" +index);
                 //continue
                 left++;
                 qN.clear();
@@ -490,7 +535,8 @@ public class GameBoard {
             }
             //up/right
             if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && MyBOARD[row - index][col+ index] == 0 ) {
-                System.out.println("right index: \n" +index);
+                //System.out.println("right index: \n" +index);
+
                 //continue
                 rightup++;
                 qN.clear();
@@ -503,7 +549,7 @@ public class GameBoard {
             }
             //up/left
             if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && MyBOARD[row - index][col - index] == 0 ) {
-                System.out.println("right index: \n" +index);
+                //System.out.println("right index: \n" +index);
                 //continue
                 leftup++;
                 qN.clear();
@@ -516,7 +562,7 @@ public class GameBoard {
             }
             //down/right
             if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && MyBOARD[row + index][col+ index] == 0 ) {
-                System.out.println("right index: \n" +index);
+                //System.out.println("right index: \n" +index);
 
                 //continue
                 rightdown++;
@@ -530,7 +576,7 @@ public class GameBoard {
             }
             //down/left
             if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && MyBOARD[row + index][col - index] == 0 ) {
-                System.out.println("right index: \n" +index);
+                //System.out.println("right index: \n" +index);
 
                 //continue
                 leftdown++;
@@ -545,6 +591,7 @@ public class GameBoard {
             }
             }
             catch (IndexOutOfBoundsException e) {
+                System.out.println(qN );
                 System.out.println(e);
             }
 
@@ -824,6 +871,7 @@ public class GameBoard {
                     boolean leftDownS = true;
                     int queenScore = 0;
                     int index = 1;
+                    List<Integer> available = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0);
                     while (index < 9 && upS||downS||rightS||leftS) {
                         //up
                         if (upS && checkInBounds(row - index) && this.MyBOARD[row - index][col] == 0) {
@@ -832,6 +880,8 @@ public class GameBoard {
                             queenScore++;
                             score++;
                         } else {
+                            if(available.get(0)==0)
+                            available.set(0,up);
                             upS = false;
 
                         }
@@ -842,6 +892,8 @@ public class GameBoard {
                             down++;
                         }
                         else {
+                            if(available.get(1)==0)
+                            available.set(1,down);
                             downS = false;
                         }
                         //right
@@ -852,6 +904,8 @@ public class GameBoard {
                             right++;
                         }
                         else {
+                            if(available.get(2)==0)
+                            available.set(2,right);
                             rightS = false;
                         }
                         //left
@@ -862,6 +916,8 @@ public class GameBoard {
                             left++;
                         }
                         else {
+                            if(available.get(3)==0)
+                            available.set(3,right);
                             leftS = false;
                         }
                         //up/right
@@ -872,6 +928,8 @@ public class GameBoard {
                             rightup++;
                         }
                         else {
+                            if(available.get(4)==0)
+                            available.set(4,right);
                             rightUpS = false;
                         }
                         //up/left
@@ -882,6 +940,8 @@ public class GameBoard {
                             leftup++;
                         }
                         else {
+                            if(available.get(4)==0)
+                            available.set(4,right);
 //                            System.out.println(rightup + " rightup");
                             leftUpS = false;
                         }
@@ -893,6 +953,8 @@ public class GameBoard {
                             rightdown++;
                         }
                         else {
+                            if(available.get(4)==0)
+                            available.set(4,rightdown);
 //                            System.out.println(rightup + " rightup");
                             rightDownS = false;
                         }
@@ -904,6 +966,10 @@ public class GameBoard {
                             leftdown++;
                         }
                         else {
+                            if(available.get(5)==0) {
+                                available.set(5,leftdown);
+                            }
+
 //                            System.out.println(rightup + " rightup");
                             leftDownS = false;
                         }
@@ -919,6 +985,7 @@ public class GameBoard {
                     pos.add(leftdown);
                     pos.add(queenScore);
                     positions.add(pos);
+                    System.out.println("queen " + queen +" available " +available);
                 }
             }
         }
@@ -926,5 +993,415 @@ public class GameBoard {
         List<Object> temp = Arrays.asList(player,score, positions);
         //System.out.println("MinMax.Optimal: "+ temp );
         return temp;
+    }
+
+    public List<Object> getQueenMoves(int player) {
+        List<ArrayList<Integer>> queens = queenList(player);
+        ArrayList<List<Object>> dirMoves = new ArrayList<>();
+        int score = 0;
+        ArrayList<ArrayList<Integer>> positions = new ArrayList<>();
+        HashMap<String, ArrayList<Integer>> scoreTable = new HashMap<>();
+        int queen = 0;
+//        System.out.println("my board");
+//        System.out.println(this.boardString());
+        List<Object> moves = new ArrayList<>();
+        List<Object> queenPairs;
+
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                if (this.MyBOARD[row][col] == player) {
+
+                    List<Object> thisQueen = new ArrayList<>();
+
+                    Map<String,Object> tq = new LinkedHashMap<>();
+                    ArrayList<Integer> pos = new ArrayList<>();
+                    pos.add(row);
+                    pos.add(col);
+
+
+                    tq.put("qC", pos);
+
+                    thisQueen.add(queens.get(queen));
+
+
+                    int up = 0;
+                    int down = 0;
+                    int left = 0;
+                    int right = 0;
+                    int upright = 0;
+                    int downright = 0;
+                    int upleft = 0;
+                    int downleft = 0;
+                    boolean upS = true;
+                    boolean downS = true;
+                    boolean rightS = true;
+                    boolean leftS = true;
+                    boolean upRightS = true;
+                    boolean upLeftS = true;
+                    boolean downRightS = true;
+                    boolean downLeftS = true;
+                    int queenScore = 0;
+                    int index = 1;
+                    List<Integer> available = Arrays.asList(-1,-1,-1,-1,-1,-1,-1,-1);
+
+                    while (index < 9 && upS||downS||rightS||leftS) {
+                        //up
+                        if (upS && checkInBounds(row - index) && this.MyBOARD[row - index][col] == 0) {
+                            //continue
+                            up++;
+                            queenScore++;
+                            score++;
+                        } else {
+                            if(available.get(0)==-1) {
+                                thisQueen.add("up");
+                                tq.put("up",up);
+                                thisQueen.add(up);
+                                available.set(0, up);
+                            }
+                            upS = false;
+
+                        }
+                        //down
+                        if (downS && checkInBounds(row + index) && this.MyBOARD[row + index][col] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            down++;
+                        }
+                        else {
+                            if(available.get(1)==-1) {
+                                thisQueen.add("down");
+                                thisQueen.add(down);
+                                tq.put("down", down);
+                                available.set(1, down);
+                            }
+                            downS = false;
+                        }
+                        //right
+                        if (rightS && checkInBounds(row) && checkInBounds(col + index) && this.MyBOARD[row][col+ index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            right++;
+                        }
+                        else {
+                            if(available.get(2)==-1) {
+                                thisQueen.add("right");
+                                thisQueen.add(right);
+                                tq.put("right", right);
+                                available.set(2, right);
+                            }
+                            rightS = false;
+                        }
+                        //left
+                        if (leftS && checkInBounds(row) && checkInBounds(col - index) && this.MyBOARD[row][col - index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            left++;
+                        }
+                        else {
+                            if(available.get(3)==-1) {
+                                thisQueen.add("left");
+                                thisQueen.add(left);
+                                tq.put("left", left);
+                                available.set(3, right);
+                            }
+                            leftS = false;
+                        }
+                        //up/right
+                        if (upRightS && checkInBounds(row - index) && checkInBounds(col + index) && this.MyBOARD[row - index][col+ index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            upright++;
+                        }
+                        else {
+                            if(available.get(4)==-1) {
+                                thisQueen.add("up/right");
+                                thisQueen.add(upright);
+                                tq.put("up/right",upright);
+                                available.set(4, upright);
+                            }
+                            upRightS = false;
+                        }
+                        //up/left
+                        if (upLeftS && checkInBounds(row - index) && checkInBounds(col - index) && this.MyBOARD[row - index][col - index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            upleft++;
+                        }
+                        else {
+                            if(available.get(4)==-1) {
+                                thisQueen.add("up/left");
+                                thisQueen.add(upleft);
+                                available.set(4, upleft);
+                            }
+//                            System.out.println(rightup + " rightup");
+                            upLeftS = false;
+                        }
+                        //down/right
+                        if (downRightS && checkInBounds(row + index) && checkInBounds(col + index) && this.MyBOARD[row + index][col+ index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            downright++;
+                        }
+                        else {
+                            if(available.get(4)==-1) {
+                                thisQueen.add("down/right");
+                                thisQueen.add(downright);
+                                available.set(4, downright);
+                            }
+//                            System.out.println(rightup + " rightup");
+                            downRightS = false;
+                        }
+                        //down/left
+                        if (downLeftS && checkInBounds(row + index) && checkInBounds(col - index) && this.MyBOARD[row + index][col - index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            downleft++;
+                        }
+                        else {
+                            if(available.get(5)==-1) {
+                                thisQueen.add("down/left");
+                                thisQueen.add(downleft);
+                                available.set(5,downleft);
+                            }
+
+//                            System.out.println(rightup + " rightup");
+                            downLeftS = false;
+                        }
+                        index++;
+
+                    }
+//                    pos.add(up);
+//                    pos.add(down);
+//                    pos.add(left);
+//                    pos.add(right);
+//                    pos.add(rightup);
+//                    pos.add(leftup);
+//                    pos.add(rightdown);
+//                    pos.add(leftdown);
+//                    pos.add(queenScore);
+//                    positions.add(pos);
+//                    System.out.println("tq \n");
+//                    System.out.println(tq);
+//                    System.out.println(queen +"queen " +"pos "+pos+" available " +available);
+                    thisQueen.add(pos);
+                    dirMoves.add(thisQueen);
+                    queen++;
+                    moves.add(tq);
+                }
+            }
+        }
+
+        List<Object> temp = Arrays.asList(player,score, positions);
+
+        return moves;
+    }
+
+    public List<Object> getArrowMoves(int player, ArrayList<Integer> qn) {
+
+        ArrayList<List<Object>> dirMoves = new ArrayList<>();
+        int score = 0;
+        ArrayList<ArrayList<Integer>> positions = new ArrayList<>();
+        HashMap<String, ArrayList<Integer>> scoreTable = new HashMap<>();
+        int queen = 0;
+//        System.out.println("my board");
+//        System.out.println(this.boardString());
+        List<Object> moves = new ArrayList<>();
+        List<Object> queenPairs;
+
+        int qRow = qn.get(0);
+        int qCol = qn.get(1);
+
+
+
+
+        List<Object> thisQueen = new ArrayList<>();
+
+        Map<String,Object> tq = new LinkedHashMap<>();
+        ArrayList<Integer> pos = new ArrayList<>();
+        tq.put("qC", pos);
+
+
+
+
+        int up = 0;
+        int down = 0;
+        int left = 0;
+        int right = 0;
+        int upright = 0;
+        int downright = 0;
+        int upleft = 0;
+        int downleft = 0;
+        boolean upS = true;
+        boolean downS = true;
+        boolean rightS = true;
+        boolean leftS = true;
+        boolean upRightS = true;
+        boolean upLeftS = true;
+        boolean downRightS = true;
+        boolean downLeftS = true;
+        int queenScore = 0;
+        int index = 1;
+        List<Integer> available = Arrays.asList(-1,-1,-1,-1,-1,-1,-1,-1);
+
+        while (index < 9 && upS||downS||rightS||leftS) {
+            //up
+            if (upS && checkInBounds(qRow - index) && this.MyBOARD[qRow - index][qRow] == 0) {
+                //continue
+                up++;
+                queenScore++;
+                score++;
+            } else {
+                if(available.get(0)==-1) {
+                    thisQueen.add("up");
+                    tq.put("up",up);
+                    thisQueen.add(up);
+                    available.set(0, up);
+                }
+                upS = false;
+
+            }
+            //down
+            if (downS && checkInBounds(qRow + index) && this.MyBOARD[qRow + index][qCol] == 0 ) {
+                //continue
+                queenScore++;
+                score++;
+                down++;
+            }
+            else {
+                if(available.get(1)==-1) {
+                    thisQueen.add("down");
+                    thisQueen.add(down);
+                    tq.put("down", down);
+                    available.set(1, down);
+                }
+                downS = false;
+            }
+            //right
+            if (rightS && checkInBounds(qRow) && checkInBounds(qCol + index) && this.MyBOARD[qRow][qCol+ index] == 0 ) {
+                //continue
+                queenScore++;
+                score++;
+                right++;
+            }
+            else {
+                if(available.get(2)==-1) {
+                    thisQueen.add("right");
+                    thisQueen.add(right);
+                    tq.put("right", right);
+                    available.set(2, right);
+                }
+                rightS = false;
+            }
+            //left
+            if (leftS && checkInBounds(qRow) && checkInBounds(qCol - index) && this.MyBOARD[qRow][qCol - index] == 0 ) {
+                //continue
+                queenScore++;
+                score++;
+                left++;
+            }
+            else {
+                if(available.get(3)==-1) {
+                    thisQueen.add("left");
+                    thisQueen.add(left);
+                    tq.put("left", left);
+                    available.set(3, right);
+                }
+                leftS = false;
+            }
+            //up/right
+            if (upRightS && checkInBounds(qRow - index) && checkInBounds(qCol + index) && this.MyBOARD[qRow - index][qCol+ index] == 0 ) {
+                //continue
+                queenScore++;
+                score++;
+                upright++;
+            }
+            else {
+                if(available.get(4)==-1) {
+                    thisQueen.add("up/right");
+                    thisQueen.add(upright);
+                    tq.put("up/right",upright);
+                    available.set(4, upright);
+                }
+                upRightS = false;
+            }
+            //up/left
+            if (upLeftS && checkInBounds(qRow - index) && checkInBounds(qCol - index) && this.MyBOARD[qRow - index][qCol - index] == 0 ) {
+                //continue
+                queenScore++;
+                score++;
+                upleft++;
+            }
+            else {
+                if(available.get(4)==-1) {
+                    thisQueen.add("up/left");
+                    thisQueen.add(upleft);
+                    available.set(4, upleft);
+                }
+//                            System.out.println(rightup + " rightup");
+                upLeftS = false;
+            }
+            //down/right
+            if (downRightS && checkInBounds(qRow + index) && checkInBounds(qCol + index) && this.MyBOARD[qRow + index][qCol+ index] == 0 ) {
+                //continue
+                queenScore++;
+                score++;
+                downright++;
+            }
+            else {
+                if(available.get(4)==-1) {
+                    thisQueen.add("down/right");
+                    thisQueen.add(downright);
+                    available.set(4, downright);
+                }
+//                            System.out.println(rightup + " rightup");
+                downRightS = false;
+            }
+            //down/left
+            if (downLeftS && checkInBounds(qRow + index) && checkInBounds(qCol - index) && this.MyBOARD[qRow + index][qCol - index] == 0 ) {
+                //continue
+                queenScore++;
+                score++;
+                downleft++;
+            }
+            else {
+                if(available.get(5)==-1) {
+                    thisQueen.add("down/left");
+                    thisQueen.add(downleft);
+                    available.set(5,downleft);
+                }
+
+//                            System.out.println(rightup + " rightup");
+                downLeftS = false;
+            }
+            index++;
+
+        }
+//                    pos.add(up);
+//                    pos.add(down);
+//                    pos.add(left);
+//                    pos.add(right);
+//                    pos.add(rightup);
+//                    pos.add(leftup);
+//                    pos.add(rightdown);
+//                    pos.add(leftdown);
+//                    pos.add(queenScore);
+//                    positions.add(pos);
+//                    System.out.println("tq \n");
+//                    System.out.println(tq);
+//                    System.out.println(queen +"queen " +"pos "+pos+" available " +available);
+        thisQueen.add(pos);
+        dirMoves.add(thisQueen);
+        queen++;
+        moves.add(tq);
+        List<Object> temp = Arrays.asList(player,score, positions);
+        System.out.println(thisQueen);
+        return thisQueen;
     }
 }
