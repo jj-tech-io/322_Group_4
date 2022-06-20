@@ -37,10 +37,15 @@ public class MinMax {
                     qc = (ArrayList<Integer>) entry.getValue();
                     System.out.println("qc ----" + qc + "------------------------------------------");
                     System.out.println(entry);
-                } else {
+                } else  {
+
                     Integer o = (Integer) entry.getValue();
                     ArrayList<Integer> move = new ArrayList<>();
                     qCqNPair.clear();
+                    if(o == 0) {
+                        continue;
+                    }
+                    else {
                     switch (entry.getKey()) {
                         case "up":
                             qn.add(qc.get(0) - o);
@@ -86,7 +91,7 @@ public class MinMax {
                                     qCqNPair.add(qn);
                                     qCqNPair.add(ar);
                                     qCqN.add(qCqNPair);
-                                    System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
+                                    System.out.println(key + "pair----\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
                                 }
                             }
@@ -174,17 +179,12 @@ public class MinMax {
                                     qCqNPair.add(ar);
 
                                     qCqN.add(qCqNPair);
-
+                                    System.out.println(index);
                                     System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
-
                                 }
-
-
                             }
-
-
-                    }
+                    }}
                 }
 
 
@@ -193,15 +193,16 @@ public class MinMax {
             List<ArrayList<Integer>> r = new ArrayList<>();
             List<Boolean> v;
             boolean val = false;
-            index = 0;
+            index = qCqN.size();
             while (!val) {
                 r = qCqN.get(index);
                 System.out.println(r.get(0) + " " + r.get(1) + " " + r.get(2));
                 v = g.validateMove(r.get(0), r.get(1), r.get(2));
-                if (v.get(0) && v.get(1) && v.get(2)) {
+
+                if (v.get(0) && v.get(1) && v.get(2) && index <10 ) {
                     val = true;
                 }
-                index++;
+                index--;
             }
             System.out.println(r + "----r");
             return r;
