@@ -21,13 +21,30 @@ public class GameBoard {
     }
 
 
-    public int[][] setMyBOARD(int player, int xF, int yF, int xT, int yT) {
-        MyBOARD[xF][yF] = 0;
-        MyBOARD[xT][yT] = player;
-        return MyBOARD;
+    private int[][] setMyBOARD(int player, int xF, int yF, int xT, int yT,int aX,int aY) {
+        int [][]myBoard = this.getMyBOARD();
+
+        myBoard[xF][yF] = 0;
+        myBoard[xT][yT] = player;
+        this.MyBOARD = myBoard;
+        return this.MyBOARD;
     }
 
-    private int[][] MyBOARD = new int[][]{
+
+    public int[][] MyBOARD = new int[][]{
+        {0, 0, 0, 2, 0, 0, 2, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {2, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 1, 0, 0, 1, 0, 0, 0},
+
+};
+    public int[][] startingBoard = new int[][]{
             {0, 0, 0, 2, 0, 0, 2, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -43,13 +60,23 @@ public class GameBoard {
 
 
     public GameBoard() {
-
+        this.MyBOARD = startingBoard;
     }
     public GameBoard(int[][] cur) {
         this.MyBOARD = cur;
     }
 
+    public  GameBoard(ArrayList<Integer> cur) {
 
+        int index = 0;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                this.MyBOARD[i][j] = cur.get(index);
+            }
+
+        }
+
+    }
     public String boardString() {
         String b = "---------------------------------";
         for (int i = 0; i < 10; i++) {
@@ -64,11 +91,27 @@ public class GameBoard {
         return b;
 
     }
+    public GameBoard generateChildBoard(boolean op, int p,GameBoard parentBoard,  ArrayList<Integer> qc,  ArrayList<Integer> qn,  ArrayList<Integer> ar)  {
+        int [][] parent = parentBoard.getMyBOARD();
 
+        int [][] child = parent.clone();
+        GameBoard c = new GameBoard(child);
+        c.updateBoard(op,p,qc,qn,ar);
+
+
+        return c;
+    }
 
 
     public boolean updateBoard(boolean op, int player, ArrayList<Integer> qC, ArrayList<Integer> qN, ArrayList<Integer> aR) {
-        System.out.println("update"+ player+" opponent = "+ op +" move = "+qC+qN+aR );
+        String update = "";
+        if(op) {
+            update += "opponent move";
+        }
+        else {
+            update+= "our move";
+        }
+
         ArrayList<Integer> qCT = new ArrayList<>();
         ArrayList<Integer> qNT = new ArrayList<>();
         ArrayList<Integer> aRT = new ArrayList<>();
@@ -82,12 +125,9 @@ public class GameBoard {
 
         if(op) {
             qCT = getXY(qC);
-            System.out.println(qC + " qC /tr" + qCT);
             qNT = getXY(qN);
-            System.out.println(qN + " qN /tr" + qNT);
             aRT = getXY(aR);
-            System.out.println(aR + " aR/ tr" + aRT);
-
+            update += qC + " " + qN + " " + " " + aR;
             xFrom = qCT.get(0);
             yFrom = qCT.get(1);
             xTo = qNT.get(0);
@@ -96,18 +136,29 @@ public class GameBoard {
             arrowY = aRT.get(1);
             valid = this.validateMove(qCT,qNT,aRT);
             if (!valid.get(0) ) {
-                System.out.println("Opponent invalid qC");
-                return false;
+                update += "Opponent invalid qC";
+                //return false;
 
             }
             if (!valid.get(1) || xTo !=0 || yTo != 0) {
-                System.out.println("Opponent invalid qN");
-                return false;
+                update += "Opponent invalid qN";
+                //return false;
             }
             if (!valid.get(2)  || arrowX !=0 || arrowY != 0) {
-                System.out.println("Opponent invalid aR");
-                return false;
+                update += "Opponent invalid aR";
+                //return false;
             }
+//            try {
+//                setMyBOARD(player,xFrom,yFrom,xTo,yTo,arrowX,arrowY);
+//                MyBOARD[xFrom][yFrom] = 0;
+//                MyBOARD[xTo][yTo] = player;
+//                MyBOARD[arrowX][arrowY] = -1;
+//            }
+//            catch (IndexOutOfBoundsException e) {
+//                System.out.println("Opponent Invalid Move!"+"\n" +update);
+//                return false;
+//            }
+
         }
         else {
             xFrom = qC.get(0);
@@ -123,10 +174,10 @@ public class GameBoard {
             System.out.println("player: "+player+ " made and invalid move: \n" +valid);
             return false;
         }
-
-        MyBOARD[xFrom][yFrom] = 0;
-        MyBOARD[xTo][yTo] = player;
-        MyBOARD[arrowX][arrowY] = -1;
+//        int[][] ints = setMyBOARD(player, xFrom, yFrom, xTo, yTo, arrowX, arrowY);
+        this.MyBOARD[xFrom][yFrom] = 0;
+        this.MyBOARD[xTo][yTo] = player;
+        this.MyBOARD[arrowX][arrowY] = -1;
         return true;
 
     }
@@ -615,11 +666,12 @@ public class GameBoard {
         return  qN;
     }
 
-    public ArrayList<ArrayList<Integer>> queenList(int p) {
+    private ArrayList<ArrayList<Integer>> queenList(int p) {
         ArrayList<ArrayList<Integer>> queenList = new ArrayList<>();
+        int [][] myBoard = this.MyBOARD;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                if (this.MyBOARD[i][j] == p) {
+                if (myBoard[i][j] == p) {
                     ArrayList<Integer> q = new ArrayList<>();
                     q.add(i);
                     q.add(j);
@@ -841,6 +893,160 @@ public class GameBoard {
         return qq;
     }
 
+    public int nodeScore(int player) {
+
+        int score = 0;
+        ArrayList<ArrayList<Integer>> positions = new ArrayList<>();
+        HashMap<String, ArrayList<Integer>> scoreTable = new HashMap<>();
+        int queen = 0;
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                if (this.MyBOARD[row][col] == player) {
+                    ArrayList<Integer> pos = new ArrayList<>();
+                    pos.add(row);
+                    pos.add(col);
+                    int up = 0;
+                    int down = 0;
+                    int left = 0;
+                    int right = 0;
+                    int rightup = 0;
+                    int rightdown = 0;
+                    int leftup = 0;
+                    int leftdown = 0;
+                    boolean upS = true;
+                    boolean downS = true;
+                    boolean rightS = true;
+                    boolean leftS = true;
+                    boolean rightUpS = true;
+                    boolean leftUpS = true;
+                    boolean rightDownS = true;
+                    boolean leftDownS = true;
+                    int queenScore = 0;
+                    int index = 1;
+                    List<Integer> available = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0);
+                    while (index < 9 && upS||downS||rightS||leftS) {
+                        //up
+                        if (upS && checkInBounds(row - index) && this.MyBOARD[row - index][col] == 0) {
+                            //continue
+                            up++;
+                            queenScore++;
+                            score++;
+                        } else {
+                            if(available.get(0)==0)
+                                available.set(0,up);
+                            upS = false;
+
+                        }
+                        if (downS && checkInBounds(row + index) && this.MyBOARD[row + index][col] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            down++;
+                        }
+                        else {
+                            if(available.get(1)==0)
+                                available.set(1,down);
+                            downS = false;
+                        }
+                        //right
+                        if (rightS && checkInBounds(row) && checkInBounds(col + index) && this.MyBOARD[row][col+ index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            right++;
+                        }
+                        else {
+                            if(available.get(2)==0)
+                                available.set(2,right);
+                            rightS = false;
+                        }
+                        //left
+                        if (leftS && checkInBounds(row) && checkInBounds(col - index) && this.MyBOARD[row][col - index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            left++;
+                        }
+                        else {
+                            if(available.get(3)==0)
+                                available.set(3,right);
+                            leftS = false;
+                        }
+                        //up/right
+                        if (rightUpS && checkInBounds(row - index) && checkInBounds(col + index) && this.MyBOARD[row - index][col+ index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            rightup++;
+                        }
+                        else {
+                            if(available.get(4)==0)
+                                available.set(4,right);
+                            rightUpS = false;
+                        }
+                        //up/left
+                        if (leftUpS && checkInBounds(row - index) && checkInBounds(col - index) && this.MyBOARD[row - index][col - index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            leftup++;
+                        }
+                        else {
+                            if(available.get(4)==0)
+                                available.set(4,right);
+//                            System.out.println(rightup + " rightup");
+                            leftUpS = false;
+                        }
+                        //down/right
+                        if (rightDownS && checkInBounds(row + index) && checkInBounds(col + index) && this.MyBOARD[row + index][col+ index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            rightdown++;
+                        }
+                        else {
+                            if(available.get(4)==0)
+                                available.set(4,rightdown);
+//                            System.out.println(rightup + " rightup");
+                            rightDownS = false;
+                        }
+                        //down/left
+                        if (leftDownS && checkInBounds(row + index) && checkInBounds(col - index) && this.MyBOARD[row + index][col - index] == 0 ) {
+                            //continue
+                            queenScore++;
+                            score++;
+                            leftdown++;
+                        }
+                        else {
+                            if(available.get(5)==0) {
+                                available.set(5,leftdown);
+                            }
+
+//                            System.out.println(rightup + " rightup");
+                            leftDownS = false;
+                        }
+                        index++;
+                    }
+                    pos.add(up);
+                    pos.add(down);
+                    pos.add(left);
+                    pos.add(right);
+                    pos.add(rightup);
+                    pos.add(leftup);
+                    pos.add(rightdown);
+                    pos.add(leftdown);
+                    pos.add(queenScore);
+                    positions.add(pos);
+                    //System.out.println("queen " + queen +" available " +available);
+                }
+            }
+        }
+        //System.out.println("[player:score:[[row,col,up,down,left,right,rightUp,leftUp,rightDown,leftDown],[],[],[]]");
+        List<Object> temp = Arrays.asList(player,score, positions);
+        //System.out.println("MinMax.Optimal: "+ temp );
+        return score;
+    }
+
     public List<Object> getScore(int player) {
 
         int score = 0;
@@ -991,7 +1197,7 @@ public class GameBoard {
         }
         //System.out.println("[player:score:[[row,col,up,down,left,right,rightUp,leftUp,rightDown,leftDown],[],[],[]]");
         List<Object> temp = Arrays.asList(player,score, positions);
-        //System.out.println("MinMax.Optimal: "+ temp );
+        System.out.println("MinMax.Optimal: "+ temp );
         return temp;
     }
 
@@ -1043,7 +1249,8 @@ public class GameBoard {
                     int queenScore = 0;
                     int index = 1;
                     List<Integer> available = Arrays.asList(-1,-1,-1,-1,-1,-1,-1,-1);
-
+                    int max = 0;
+                    int min = 8;
                     while (index < 9 && upS||downS||rightS||leftS) {
                         //up
                         if (upS && checkInBounds(row - index) && this.MyBOARD[row - index][col] == 0) {
@@ -1190,14 +1397,15 @@ public class GameBoard {
 //                    System.out.println("tq \n");
 //                    System.out.println(tq);
 //                    System.out.println(queen +"queen " +"pos "+pos+" available " +available);
-                    thisQueen.add(pos);
+//                    thisQueen.add(pos);
+                    System.out.println("-----tq:"+thisQueen);
                     dirMoves.add(thisQueen);
                     queen++;
                     moves.add(tq);
                 }
             }
         }
-
+        System.out.println("dir moves: "+dirMoves);
         List<Object> temp = Arrays.asList(player,score, positions);
 
         return moves;

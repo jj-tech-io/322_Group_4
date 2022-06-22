@@ -9,7 +9,7 @@ import java.util.Map;
 public class MinMax {
     public List<Object> searchTree = new ArrayList<>();
 
-    public static List<ArrayList<Integer>> getOptimal(int p, Node current, GameBoard g) {
+    public static List<ArrayList<Integer>> getOptimal(int p, Node current, GameBoard g, boolean MIN, boolean MAX) {
         System.out.println(g.boardString());
         ArrayList<ArrayList<Integer>> optimal_qC_qN = new ArrayList<>();
 //        GameBoard childBoard = g;
@@ -20,6 +20,7 @@ public class MinMax {
         List<List<ArrayList<Integer>>> qCqN = new ArrayList<>();
         List<ArrayList<Integer>> qCqNPair = new ArrayList<>();
         ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
+        List<Node> nextLevel = new ArrayList<>();
 
         for (int q = 0; q < myMoves.size(); q++) {
             Map<String, Object> qMap = (Map<String, Object>) myMoves.get(q);//get queen 0;
@@ -57,6 +58,8 @@ public class MinMax {
                                     qCqNPair.add(qn);
                                     qCqNPair.add(ar);
                                     qCqN.add(qCqNPair);
+                                    Node c = new Node(p, g, qCqNPair);
+                                    current.addChild(c);
                                     System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
 
@@ -74,6 +77,8 @@ public class MinMax {
                                     qCqNPair.add(qn);
                                     qCqNPair.add(ar);
                                     qCqN.add(qCqNPair);
+                                    Node c = new Node(p, g, qCqNPair);
+                                    current.addChild(c);
                                     System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
                                 }
@@ -91,6 +96,8 @@ public class MinMax {
                                     qCqNPair.add(qn);
                                     qCqNPair.add(ar);
                                     qCqN.add(qCqNPair);
+                                    Node c = new Node(p, g, qCqNPair);
+                                    current.addChild(c);
                                     System.out.println(key + "pair----\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
                                 }
@@ -108,6 +115,8 @@ public class MinMax {
                                     qCqNPair.add(qn);
                                     qCqNPair.add(ar);
                                     qCqN.add(qCqNPair);
+                                    Node c = new Node(p, g, qCqNPair);
+                                    current.addChild(c);
                                     System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
                                 }
@@ -125,6 +134,8 @@ public class MinMax {
                                     qCqNPair.add(qn);
                                     qCqNPair.add(ar);
                                     qCqN.add(qCqNPair);
+                                    Node c = new Node(p, g, qCqNPair);
+                                    current.addChild(c);
                                     System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
                                 }
@@ -141,6 +152,8 @@ public class MinMax {
                                     qCqNPair.add(qn);
                                     qCqNPair.add(ar);
                                     qCqN.add(qCqNPair);
+                                    Node c = new Node(p, g, qCqNPair);
+                                    current.addChild(c);
                                     System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
                                 }
@@ -158,6 +171,8 @@ public class MinMax {
                                     qCqNPair.add(qn);
                                     qCqNPair.add(ar);
                                     qCqN.add(qCqNPair);
+                                    Node c = new Node(p, g, qCqNPair);
+                                    current.addChild(c);
                                     System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
 
@@ -180,6 +195,8 @@ public class MinMax {
 
                                     qCqN.add(qCqNPair);
                                     System.out.println(index);
+                                    Node c = new Node(p, g, qCqNPair);
+                                    current.addChild(c);
                                     System.out.println(key + "pair--------\n" + qc + " " + qn + " " + ar);
                                     return qCqNPair;
                                 }
@@ -190,6 +207,7 @@ public class MinMax {
 
             }
         }
+        System.out.println(current.childNodes);
             List<ArrayList<Integer>> r = new ArrayList<>();
             List<Boolean> v;
             boolean val = false;
@@ -210,7 +228,277 @@ public class MinMax {
 
         }
 
+    public static List<Node> getNextLevel(int p, Node current, GameBoard g, boolean MIN, boolean MAX)  {
+        System.out.println(g.boardString());
+        ArrayList<ArrayList<Integer>> optimal_qC_qN = new ArrayList<>();
+//        GameBoard childBoard = g;
+        List<Object> myMoves = g.getQueenMoves(p);
+        System.out.println(myMoves);
+        // using for-each loop for iteration over Map.entrySet()
+        int index = 0;
+        List<List<ArrayList<Integer>>> qCqN = new ArrayList<>();
+        List<ArrayList<Integer>> qCqNPair = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
+        List<Node> nextLevel = new ArrayList<>();
+        System.out.println(myMoves);
+        for (int q = 0; q < myMoves.size(); q++) {
+            Map<String, Object> qMap = (Map<String, Object>) myMoves.get(q);//get queen 0;
+            int last = 0;
+            int max = 0;
+            ArrayList<Integer> qc = new ArrayList<>();
+            for (Map.Entry<String, Object> entry : qMap.entrySet()) {
 
+                ArrayList<Integer> qn = new ArrayList<>();
+                ArrayList<Integer> ar = new ArrayList<>();
+
+                String key = entry.getKey();
+
+                if (key == "qC") {
+                    try {
+                        qc = (ArrayList<Integer>) entry.getValue();
+                    }
+                    catch (TypeNotPresentException e) {
+                        System.out.println("type qC err");
+
+                    }
+
+                    //System.out.println("qc ----" + qc + "------------------------------------------");
+                    //System.out.println(entry);
+                } else  {
+
+                    Integer o = (Integer) entry.getValue();
+                    ArrayList<Integer> move = new ArrayList<>();
+                    if(o == 0) {
+                        continue;
+                    }
+                    else {
+                        switch (entry.getKey()) {
+                            case "up":
+                                qn.add(qc.get(0) - o);
+                                qn.add(qc.get(1));
+                                arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                                for (ArrayList<Integer> a : arrows) {
+                                    if (qn != qc && a != qn && !a.isEmpty()) {
+                                        System.out.println(key + "--before\n" + qCqNPair);
+                                        qCqNPair.clear();
+                                        qCqNPair.add(qc);
+                                        qCqNPair.add(qn);
+                                        qCqNPair.add(a);
+                                        qCqN.add(qCqNPair);
+                                        GameBoard s = g.generateChildBoard(MAX, p, g, qc, qn, a);
+                                        Node c = new Node(p, s, qCqNPair);
+                                        current.addChild(c);
+                                        nextLevel.add(c);
+                                        System.out.println(key + "after--\n" + qCqNPair);
+
+                                    }
+                                }
+                                continue;
+                            case "down":
+                                qn.add(qc.get(0) + o);
+                                qn.add(qc.get(1));
+                                arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+//                                ar = (ArrayList<Integer>) g.getArrowMoves(p,qn).get(0);
+                                qCqNPair.clear();
+                                for (ArrayList<Integer> a : arrows) {
+                                    if (qn != qc && a != qn && !a.isEmpty()) {
+                                        System.out.println(key + "--before\n" + qCqNPair);
+                                        qCqNPair.clear();
+                                        qCqNPair.add(qc);
+                                        qCqNPair.add(qn);
+                                        qCqNPair.add(a);
+                                        qCqN.add(qCqNPair);
+                                        GameBoard s = g.generateChildBoard(MAX, p, g, qc, qn, a);
+                                        Node c = new Node(p, s, qCqNPair);
+                                        current.addChild(c);
+                                        nextLevel.add(c);
+                                        System.out.println(key + "after--\n" + qCqNPair);
+
+                                    }
+                                }
+                                continue;
+                            case "left":
+                                qn.add(qc.get(0));
+                                qn.add(qc.get(1) - o);
+                                arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+//                                ar = (ArrayList<Integer>) g.getArrowMoves(p,qn).get(0);
+                                qCqNPair.clear();
+                                for (ArrayList<Integer> a : arrows) {
+                                    if (qn != qc && a != qn && a.size() == 2) {
+                                        System.out.println(key + "--before\n" + qCqNPair);
+                                        qCqNPair.clear();
+                                        qCqNPair.add(qc);
+                                        qCqNPair.add(qn);
+                                        qCqNPair.add(a);
+                                        qCqN.add(qCqNPair);
+                                        GameBoard s = g.generateChildBoard(MAX, p, g, qc, qn, a);
+                                        Node c = new Node(p, s, qCqNPair);
+                                        current.addChild(c);
+                                        nextLevel.add(c);
+                                        System.out.println(key + "after--\n" + qCqNPair);
+
+                                    }
+                                }
+                                continue;
+                            case "right":
+                                qn.add(qc.get(0));
+                                qn.add(qc.get(1) + o);
+                                arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+//                                ar = (ArrayList<Integer>) g.getArrowMoves(p,qn).get(0);
+
+                                for (ArrayList<Integer> a : arrows) {
+                                    if (qn != qc && a != qn && a.size() == 2) {
+                                        System.out.println(key + "--before\n" + qCqNPair);
+                                        qCqNPair.clear();
+                                        qCqNPair.add(qc);
+                                        qCqNPair.add(qn);
+                                        qCqNPair.add(a);
+                                        qCqN.add(qCqNPair);
+                                        GameBoard s = g.generateChildBoard(MAX, p, g, qc, qn, a);
+                                        Node c = new Node(p, s, qCqNPair);
+                                        current.addChild(c);
+                                        nextLevel.add(c);
+                                        System.out.println(key + "after--\n" + qCqNPair);
+
+                                    }
+                                }
+                                continue;
+                            case "up/right": //right
+                                qn.add(qc.get(0) - o);
+                                qn.add(qc.get(1) + o);
+
+                                arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                                for (ArrayList<Integer> a : arrows) {
+                                    if (qn != qc && a != qn && a.size() == 2) {
+                                        System.out.println(key + "--before\n" + qCqNPair);
+                                        qCqNPair.clear();
+                                        qCqNPair.add(qc);
+                                        qCqNPair.add(qn);
+                                        qCqNPair.add(a);
+                                        qCqN.add(qCqNPair);
+                                        GameBoard s = g.generateChildBoard(MAX, p, g, qc, qn, a);
+                                        Node c = new Node(p, s, qCqNPair);
+                                        current.addChild(c);
+                                        nextLevel.add(c);
+                                        System.out.println(key + "after--\n" + qCqNPair);
+
+                                    }
+                                }
+                                continue;
+                            case "down/right": // rightUp
+                                qn.add(qc.get(0) + o);
+                                qn.add(qc.get(1) + o);
+                                arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                                for (ArrayList<Integer> a : arrows) {
+                                    if (qn != qc && a != qn && a.size() == 2) {
+                                        System.out.println(key + "--before\n" + qCqNPair);
+                                        qCqNPair.clear();
+                                        qCqNPair.add(qc);
+                                        qCqNPair.add(qn);
+                                        qCqNPair.add(a);
+                                        qCqN.add(qCqNPair);
+                                        GameBoard s = g.generateChildBoard(MAX, p, g, qc, qn, a);
+                                        Node c = new Node(p, s, qCqNPair);
+                                        current.addChild(c);
+                                        nextLevel.add(c);
+                                        System.out.println(key + "after--\n" + qCqNPair);
+
+                                    }
+                                }
+                                continue;
+                            case "up/left": //
+                                qn.add(qc.get(0) - 1);
+                                qn.add(qc.get(1) - 1);
+                                //ar = g.getArrowN(qn);
+                                arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                                for (ArrayList<Integer> a : arrows) {
+                                    if (qn != qc && a != qn && a.size() == 2) {
+                                        System.out.println(key + "--before\n" + qCqNPair);
+                                        qCqNPair.clear();
+                                        qCqNPair.add(qc);
+                                        qCqNPair.add(qn);
+                                        qCqNPair.add(a);
+                                        qCqN.add(qCqNPair);
+                                        GameBoard s = g.generateChildBoard(MAX, p, g, qc, qn, a);
+                                        Node c = new Node(p, s, qCqNPair);
+                                        current.addChild(c);
+                                        nextLevel.add(c);
+                                        System.out.println(key + "after--\n" + qCqNPair);
+
+                                    }
+                                }
+                                continue;
+                            case "down/left":
+                                qn.add(qc.get(0) + o);
+                                qn.add(qc.get(1) - o);
+                                //ar = g.getArrowN(qn);
+                                arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
+                                for (ArrayList<Integer> a : arrows) {
+                                    ar = a;
+                                    if (qn != qc && ar != qn && ar.size() == 2) {
+                                        qCqNPair.clear();
+                                        qCqNPair.add(qc);
+                                        qCqNPair.add(qn);
+                                        qCqNPair.add(a);
+                                        qCqN.add(qCqNPair);
+                                        GameBoard s = g.generateChildBoard(MAX,p,g,qc,qn,ar);
+                                        Node c = new Node(p, s, qCqNPair);
+                                        current.addChild(c);
+                                        System.out.println(c.toString());
+
+                                    }
+                                }
+                        }}
+                }
+
+
+            }
+        }
+//        int nodeMax = -100;
+//        int nodeMin = 100;
+//        Node candidate = null;
+//        if(MAX) {
+//            for(Node newN : nextLevel) {
+//                if(newN.nodeScore >nodeMax) {
+//                    nodeMax = newN.nodeScore;
+//                    candidate = newN;
+//                    System.out.println(nodeMax);
+//                }
+//
+//            }
+//        }
+//        else {
+//            for(Node newN : nextLevel) {
+//                if(newN.nodeScore < nodeMin) {
+//                    nodeMin = newN.nodeScore;
+//                    candidate = newN;
+//                    System.out.println(nodeMin);
+//                }
+//
+//            }
+//
+//        }
+
+        //System.out.println(current.childNodes);
+//        List<ArrayList<Integer>> r = new ArrayList<>();
+//        List<Boolean> v;
+//        boolean val = false;
+//        index = qCqN.size();
+//        while (!val) {
+//            r = qCqN.get(index);
+//            System.out.println(r.get(0) + " " + r.get(1) + " " + r.get(2));
+//            v = g.validateMove(r.get(0), r.get(1), r.get(2));
+//
+//            if (v.get(0) && v.get(1) && v.get(2) && index <10 ) {
+//                val = true;
+//            }
+//            index--;
+//        }
+//        System.out.println(r + "----r");
+        return nextLevel;
+
+
+    }
     }
 
 

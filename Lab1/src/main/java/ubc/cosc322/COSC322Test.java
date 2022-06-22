@@ -31,7 +31,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
     public static ArrayList<Integer> gameBoardCurrent1D = new ArrayList<>();
     public ArrayList<ArrayList<Integer>> gameBoardCurrent2D = new ArrayList<>();
 
-    public static GameBoard gB = new GameBoard();
+    private static GameBoard gB = new GameBoard();
     public String gameMsg;
     public Map<String,Object> gameStateBoard = new HashMap<>();
 
@@ -159,7 +159,7 @@ public class COSC322Test<Rooms> extends GamePlayer {
                 else {
 
                     gB.updateBoard(true,theirs,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
-                    currentNode = new Node(ours,gB);
+                    this.currentNode = new Node(ours,gB);
                     binPlayer = ours;
                     makeMove();
                     binPlayer = theirs;
@@ -229,27 +229,53 @@ public class COSC322Test<Rooms> extends GamePlayer {
     int tries = 0;
 
     public void makeMove() {
-        System.out.println("makeMove(): ");
-        System.out.println(gB.boardString());
         boolean done = false;
+        System.out.println("makeMove(): ");
+
+        try {
+
         ArrayList<Integer> qC;
         ArrayList<Integer> qN;
         ArrayList<Integer> aR;
-        ArrayList<ArrayList<Integer>> qc_qn_ar;
-        List<Boolean> valid = new ArrayList<>();
-        List<ArrayList<Integer>> m = getOptimal(ours, currentNode, gB);
 
-        qC = m.get(0);
-        qN = m.get(1);
-        aR = m.get(2);
-        System.out.println(qC+ " " +qN+ " " +aR);
+        List<Node> nextLevel = MinMax.getNextLevel(1,this.currentNode, gB, false, true);
+        List<ArrayList<Integer>> moves= new ArrayList<>();
+        boolean MAX = true;
+        boolean MIN = false;
+        int nodeMax = -100;
+        int nodeMin = 100;
+        Node candidate = null;
+        if(MAX) {
+            for(Node newN : nextLevel) {
+                if(newN.nodeScore >nodeMax) {
+                    nodeMax = newN.nodeScore;
+                    moves = newN.moveFromParentNode;
+                    candidate = newN;
+                    System.out.println(nodeMax);
+                }
 
+            }
+        }
+        else {
+            for(Node newN : nextLevel) {
+                if(newN.nodeScore < nodeMin) {
+                    nodeMin = newN.nodeScore;
+                    candidate = newN;
+                    System.out.println(nodeMin);
+                }
 
-        valid = gB.validateMove(qC, qN, aR);
-        if (valid.get(0) && valid.get(1) && valid.get(2)) {
-            done = true;
-            System.out.println(qC + " "+ qN + " " +aR);
-            gB.updateBoard(false, ours, qC, qN, aR);
+            }
+
+        }
+//        List<ArrayList<Integer>> moves = candidate.moveFromParentNode;
+
+        qC = moves.get(0);
+        qN = moves.get(1);
+        aR = moves.get(2);
+
+        System.out.println(qC + " "+ qN + " " +aR);
+        done = gB.updateBoard(false, ours, qC, qN, aR);
+        if (done) {
             System.out.println(gB.boardString());
             qN = gB.undoXY(qN);
             qC = gB.undoXY(qC);
@@ -258,6 +284,39 @@ public class COSC322Test<Rooms> extends GamePlayer {
             this.gamegui.updateGameState(qC, qN, aR);
             this.gameClient.sendMoveMessage(qC, qN, aR);
             return;
+        }
+
+        }
+        catch (IndexOutOfBoundsException e) {
+            tries++;
+            System.out.println(e);
+            makeMove();
+
+        }
+
+//        ArrayList<ArrayList<Integer>> qc_qn_ar;
+//        List<Boolean> valid = new ArrayList<>();
+//        List<ArrayList<Integer>> m = getOptimal(ours, currentNode, gB, false, true);
+//
+//        qC = m.get(0);
+//        qN = m.get(1);
+//        aR = m.get(2);
+//        System.out.println(qC+ " " +qN+ " " +aR);
+//
+//
+//        valid = gB.validateMove(qC, qN, aR);
+//        if (valid.get(0) && valid.get(1) && valid.get(2)) {
+//            done = true;
+//            System.out.println(qC + " "+ qN + " " +aR);
+//            gB.updateBoard(false, ours, qC, qN, aR);
+//            System.out.println(gB.boardString());
+//            qN = gB.undoXY(qN);
+//            qC = gB.undoXY(qC);
+//            aR = gB.undoXY(aR);
+//            System.out.println(qC + " " + qN + " " + aR + " \n" + gB.boardString());
+//            this.gamegui.updateGameState(qC, qN, aR);
+//            this.gameClient.sendMoveMessage(qC, qN, aR);
+//            return;
         }
 
 
@@ -293,9 +352,9 @@ public class COSC322Test<Rooms> extends GamePlayer {
 //
 //
 //        }
-
-
-
-    }
+//
+//
+//
+//    }
 
 }
