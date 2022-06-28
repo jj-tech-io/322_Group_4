@@ -1,9 +1,18 @@
 package ubc.cosc322;
 
-public class NodeSearchTree {
+import java.io.*;
+
+class GFG {
+
+    // Initial values of
+// Alpha and Beta
     static int MAX = 1000;
     static int MIN = -1000;
-    public static int minimax(int depth, int nodeIndex,
+
+    // Returns optimal value for
+// current player (Initially called
+// for root and maximizer)
+    static int minimax(int depth, int nodeIndex,
                        Boolean maximizingPlayer,
                        int values[], int alpha,
                        int beta)
@@ -52,5 +61,15 @@ public class NodeSearchTree {
             }
             return nodeIndex;
         }
+    }
+
+    // Driver Code
+    public static void main (String[] args)
+    {
+
+//        int values[] = {3, 5, 6, 9, 1, 2, 0, -1,3,3,3,4,5,6,7,8};
+//        System.out.println("The optimal value is : " +
+//                minimax(2, 0, false, values, MIN, MAX));
+
     }
 }

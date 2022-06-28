@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static ubc.cosc322.GFG.minimax;
+
 public class MinMax {
     public List<Object> searchTree = new ArrayList<>();
 
@@ -228,44 +230,36 @@ public class MinMax {
 
         }
 
-    public static List<Node> getNextLevel(int p, Node current, GameBoard g, boolean MIN, boolean MAX) throws CloneNotSupportedException {
+    public static Node getNextLevel(int p, Node current, GameBoard g, boolean MIN, boolean MAX) throws CloneNotSupportedException {
         System.out.println(g.boardString());
         ArrayList<ArrayList<Integer>> optimal_qC_qN = new ArrayList<>();
-//        GameBoard childBoard = g;
         List<Object> myMoves = g.getQueenMoves(p);
         System.out.println(myMoves);
         // using for-each loop for iteration over Map.entrySet()
         int index = 0;
+
         List<List<ArrayList<Integer>>> qCqN = new ArrayList<>();
         List<ArrayList<Integer>> qCqNPair = new ArrayList<>();
         ArrayList<ArrayList<Integer>> arrows = new ArrayList<>();
         List<Node> nextLevel = new ArrayList<>();
-        System.out.println(myMoves);
+
         for (int q = 0; q < myMoves.size(); q++) {
             Map<String, Object> qMap = (Map<String, Object>) myMoves.get(q);//get queen 0;
             int last = 0;
             int max = 0;
             ArrayList<Integer> qc = new ArrayList<>();
             for (Map.Entry<String, Object> entry : qMap.entrySet()) {
-
                 ArrayList<Integer> qn = new ArrayList<>();
                 ArrayList<Integer> ar = new ArrayList<>();
-
                 String key = entry.getKey();
-
                 if (key == "qC") {
                     try {
                         qc = (ArrayList<Integer>) entry.getValue();
                     }
                     catch (TypeNotPresentException e) {
                         System.out.println("type qC err");
-
                     }
-
-                    //System.out.println("qc ----" + qc + "------------------------------------------");
-                    //System.out.println(entry);
                 } else  {
-
                     Integer o = (Integer) entry.getValue();
                     ArrayList<Integer> move = new ArrayList<>();
                     if(o == 0) {
@@ -298,7 +292,6 @@ public class MinMax {
                                 qn.add(qc.get(0) + o);
                                 qn.add(qc.get(1));
                                 arrows = (ArrayList<ArrayList<Integer>>) g.getArrowN(qn);
-//                                ar = (ArrayList<Integer>) g.getArrowMoves(p,qn).get(0);
                                 qCqNPair.clear();
                                 for (ArrayList<Integer> a : arrows) {
                                     if (qn != qc && a != qn && !a.isEmpty()) {
@@ -495,10 +488,40 @@ public class MinMax {
 //            index--;
 //        }
 //        System.out.println(r + "----r");
-        return nextLevel;
+        int values[] = new int[current.childNodes.size()];
+        int idx = 0;
+        for(Node i : current.childNodes) {
+            values[idx] = i.nodeScore;
+            index++;
 
+        }
+
+        System.out.println("The optimal value is : " +
+                NodeSearchTree.minimax(2, 0, false, values, 100, -100));
+        return current.childNodes.get(minimax(2, 0, false, values, 100, -100));
+    }
+
+    public static List<List<Node>> getSearchTree(int depth, Node current, int p) throws CloneNotSupportedException {
+        int values[] = new int[current.childNodes.size()];
+        int index = 0;
+        List<List<Node>> searchTree = new ArrayList<>();
+        List<Node> curDepth = new ArrayList<>();
+        boolean min = true;
+        boolean max = false;
+        for(Node i : current.childNodes) {
+            curDepth.clear();
+            for(int d = 0; d < depth; d++) {
+                curDepth.add(getNextLevel(p,i, (GameBoard) current.current.clone(),!min, !max));
+            }
+            values[index] = i.nodeScore;
+            index++;
+            searchTree.add(curDepth);
+        }
+        return searchTree;
 
     }
+
+
     }
 
 

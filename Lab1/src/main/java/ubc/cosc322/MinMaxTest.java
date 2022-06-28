@@ -4,6 +4,7 @@ package ubc.cosc322;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ubc.cosc322.GFG.minimax;
 import static ubc.cosc322.MinMax.getOptimal;
 
 public class MinMaxTest {
@@ -33,13 +34,27 @@ public class MinMaxTest {
         aR.add(1);
         aR.add(2);
         g.updateBoard(false,1,qC,qN,aR);
-        GameBoard copy = new GameBoard(g.getMyBOARD());
-        List<Node> optimal =  MinMax.getNextLevel(1,n, copy, false, true);
-        System.out.println(optimal);
-        for(Node i : optimal) {
-            System.out.println("Score /// Moves");
-            System.out.println(i.score + " " +i.moveFromParentNode);
-        }
+        List<List<Node>> tree = MinMax.getSearchTree(2,n, 1);
+        System.out.println(tree.get(0));
+
+
+        //        GameBoard copy = new GameBoard(g.getMyBOARD());
+//        Node optimal =  MinMax.getNextLevel(1,n, copy, false, true);
+//        System.out.println(optimal);
+//        int values[] = new int[optimal.size()];
+//        int index = 0;
+//        for(Node i : optimal) {
+//
+//            values[index] = i.nodeScore;
+//            index++;
+//            //System.out.println("Score /// Moves");
+//            //System.out.println(i.score + " " +i.moveFromParentNode);
+//        }
+//
+//        System.out.println("The optimal value is : " +
+//         minimax(2, 0, false, values, 100, -100));
+//
+
 //        System.out.println(g.boardString());
 //        System.out.println(copy.boardString());
 

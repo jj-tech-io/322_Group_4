@@ -143,20 +143,11 @@ public class COSC322Test<Rooms> extends GamePlayer {
                 break;
             case (GameMessage.GAME_ACTION_MOVE):
                 this.gamegui.updateGameState(msgDetails);
-
-                //this.gameBoardCurrent1D = (ArrayList<Integer>)msgDetails.get(AmazonsGameMessage.GAME_STATE);
-               // System.out.println((ArrayList<Integer>)msgDetails.get(AmazonsGameMessage.GAME_STATE));
-                //System.out.println("msgDetails: game state board" +msgDetails.get(AmazonsGameMessage.GAME_STATE_BOARD));
                 this.QUEEN_CURRENT = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);
                 this.QUEEN_NEXT = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_NEXT);
                 this.ARROW_NEXT = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.ARROW_POS);
-                //System.out.println(this.QUEEN_CURRENT +" "+this.QUEEN_NEXT+" "+this.ARROW_NEXT);
-                //
-                if(this.ARROW_NEXT == null) {
-                    //gB.updateBoard(otherAmazon,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_CURRENT);
 
-                }
-                else {
+                if(this.ARROW_NEXT != null) {
 
                     gB.updateBoard(true,theirs,this.QUEEN_CURRENT,this.QUEEN_NEXT,this.ARROW_NEXT);
                     this.currentNode = new Node(ours,gB);
@@ -230,49 +221,45 @@ public class COSC322Test<Rooms> extends GamePlayer {
 
     public void makeMove() {
         boolean done = false;
-        System.out.println("makeMove(): ");
-
         try {
-
+//        boolean MAX = true;
+//        boolean MIN = false;
+//        int nodeMax = -100;
+//        int nodeMin = 100;
+//        Node candidate = null;
+//        if(MAX) {
+//            for(Node newN : nextLevel) {
+//                if(newN.nodeScore >nodeMax) {
+//                    nodeMax = newN.nodeScore;
+//                    moves = newN.moveFromParentNode;
+//                    candidate = newN;
+//                    System.out.println(nodeMax);
+//                }
+//
+//            }
+//        }
+//        else {
+//            for(Node newN : nextLevel) {
+//                if(newN.nodeScore < nodeMin) {
+//                    nodeMin = newN.nodeScore;
+//                    candidate = newN;
+//                    System.out.println(nodeMin);
+//                }
+//
+//            }
+//
+//        }
+//        List<ArrayList<Integer>> moves = candidate.moveFromParentNode;
         ArrayList<Integer> qC;
         ArrayList<Integer> qN;
         ArrayList<Integer> aR;
 
-        List<Node> nextLevel = MinMax.getNextLevel(1,this.currentNode, gB, false, true);
-        List<ArrayList<Integer>> moves= new ArrayList<>();
-        boolean MAX = true;
-        boolean MIN = false;
-        int nodeMax = -100;
-        int nodeMin = 100;
-        Node candidate = null;
-        if(MAX) {
-            for(Node newN : nextLevel) {
-                if(newN.nodeScore >nodeMax) {
-                    nodeMax = newN.nodeScore;
-                    moves = newN.moveFromParentNode;
-                    candidate = newN;
-                    System.out.println(nodeMax);
-                }
+        currentNode = MinMax.getNextLevel(1,this.currentNode, gB, false, true);
 
-            }
-        }
-        else {
-            for(Node newN : nextLevel) {
-                if(newN.nodeScore < nodeMin) {
-                    nodeMin = newN.nodeScore;
-                    candidate = newN;
-                    System.out.println(nodeMin);
-                }
-
-            }
-
-        }
-//        List<ArrayList<Integer>> moves = candidate.moveFromParentNode;
-
+        List<ArrayList<Integer>> moves= currentNode.moveFromParentNode;
         qC = moves.get(0);
         qN = moves.get(1);
         aR = moves.get(2);
-
         System.out.println(qC + " "+ qN + " " +aR);
         done = gB.updateBoard(false, ours, qC, qN, aR);
         if (done) {

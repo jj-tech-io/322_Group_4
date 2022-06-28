@@ -3,29 +3,14 @@ package ubc.cosc322;
 import java.util.*;
 
 public class Node {
-    public Map<Integer, List<Object>> scoreMovesState = new HashMap<>();
     public List<List<Object>> children = new ArrayList<>();
-    public List<GameBoard> childStates;
     public List<Node> childNodes = new ArrayList<>();
     public int nodeScore;
-    public int maxChildScore = 0;
     public List<ArrayList<Integer>> moveFromParentNode;
     public static int numberOfNodes;
-
     public GameBoard current;
     public int score;
     public GameBoard copy;
-    @Override
-    public String toString() {
-        String nToStr ="node to string--------\n" +
-                 this.nodeScore + "\n"+
-                this.moveFromParentNode +  "\n" +
-                this.current.boardString() + "\n" +
-                "------------";
-        return nToStr;
-    }
-
-
 //    private int us;
 //    private int them;
 //    private boolean y;
@@ -39,17 +24,12 @@ public class Node {
         int other = 1;
         if(player==1) {
             other = 2;
-
         }
         int us =  current.nodeScore(player);
         int them = current.nodeScore(other);
         this.nodeScore = us - them;
         this.current = current;
         System.out.println("num nodes: "+ numberOfNodes+ " nodeScore: " + nodeScore);
-
-
-
-
     }
     public Node(int player,GameBoard current) {
         numberOfNodes++;
@@ -63,12 +43,7 @@ public class Node {
 
         this.nodeScore = us - them;
         this.current = current;
-
-
     }
-
-
-
     public boolean addChild(Node c ) {
         boolean addedChild = false;
         int size = this.childNodes.size();
@@ -76,16 +51,20 @@ public class Node {
         if(this.childNodes.size() >size) {
             addedChild = true;
         }
-
         return addedChild;
 
     }
-
-
     public List<List<Object>>  getChildren() {
-
         return this.children;
-
+    }
+    @Override
+    public String toString() {
+        String nToStr ="node to string--------\n" +
+                this.nodeScore + "\n"+
+                this.moveFromParentNode +  "\n" +
+                this.current.boardString() + "\n" +
+                "------------";
+        return nToStr;
     }
 //    public String printChildren() {
 //        String out = "-----print children -------\n";

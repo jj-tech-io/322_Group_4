@@ -215,14 +215,12 @@ public class GameBoard implements Cloneable{
         boolean validQC = true;
         boolean validQN = true;
         boolean validAR = true;
-
         int qcY = qC.get(0);
         int qcX = qC.get(1);
         int qnY = qN.get(0);
         int qnX = qN.get(1);
         int arY = aR.get(0);
         int arX = aR.get(1);
-
         String directionQ = "";
         String directionAr = "";
         System.out.println(qcX+" " +qcY+ " "+qnX+" " +qnY+ " "+arX+" " +arY);
@@ -292,8 +290,6 @@ public class GameBoard implements Cloneable{
 //        catch(IndexOutOfBoundsException e) {
 //            System.out.println(e + "\n" );
 //        }
-
-
         return v;
     }
 //    public void updateArrow(char c, ArrayList<Integer> aR) {
@@ -309,7 +305,7 @@ public class GameBoard implements Cloneable{
 //
 //    }
 
-    //transform AMAZONGAME BOARD POSITION X,Y to GameBoard x,y
+    //transform AMAZON GAME BOARD POSITION X,Y to GameBoard x,y
     public ArrayList<Integer> getXY(ArrayList<Integer> xy) {
         ArrayList<Integer> trans = new ArrayList<>();
         if (!xy.isEmpty())
@@ -319,7 +315,7 @@ public class GameBoard implements Cloneable{
         return trans;
     }
 
-    //transform GameBoard x,y  to  AMAZONGAME BOARD POSITION X,Y
+    //transform GameBoard x,y  to  AMAZON GAME BOARD POSITION X,Y
     public ArrayList<Integer> undoXY(ArrayList<Integer> trans) {
         ArrayList<Integer> XY = new ArrayList<>();
         XY.add(10 - trans.get(0));
