@@ -7,73 +7,83 @@ public class Node {
     public List<List<Object>> children = new ArrayList<>();
     public List<GameBoard> childStates;
     public List<Node> childNodes = new ArrayList<>();
+    public int nodeScore;
+    public int maxChildScore = 0;
+    public List<ArrayList<Integer>> moveFromParentNode;
+    public static int numberOfNodes;
 
-    @Override
-    public String toString() {
-        return "Node[{]" +
-                "score: " +score + "\n"+
-                ", board state: \n" +this.current.boardString();
-    }
-    public Map.Entry<Integer, List<Object>> getMaxKey() {
-        // using iterators
-        Iterator<Map.Entry<Integer, List<Object>>> itr = scoreMovesState.entrySet().iterator();
-        int max = -10000;
-        Map.Entry<Integer, List<Object>> maxScoreNode = null;
-        while(itr.hasNext())
-        {
-            Map.Entry<Integer, List<Object>> entry = itr.next();
-            if(entry.getKey()>max) {
-                max = entry.getKey();
-                maxScoreNode = entry;
-            }
-//            System.out.println("Key = " + entry.getKey() +
-//                    ", Value = " + entry.getValue());
-        }
-        return maxScoreNode;
-    }
-    protected GameBoard current;
+    public GameBoard current;
     public int score;
     public GameBoard copy;
+    @Override
+    public String toString() {
+        String nToStr ="node to string--------\n" +
+                 this.nodeScore + "\n"+
+                this.moveFromParentNode +  "\n" +
+                this.current.boardString() + "\n" +
+                "------------";
+        return nToStr;
+    }
+
+
 //    private int us;
 //    private int them;
 //    private boolean y;
 //    public TreeMap<Integer,int [][]> map= new TreeMap<>();
 //    public ArrayList<ArrayList<ArrayList<Integer>>> moves;
 //    public ArrayList<ArrayList<ArrayList<Integer>>> arrows;
-    public Node(int player,GameBoard current) {
+    public Node(int player,GameBoard current, List<ArrayList<Integer>> moveFromParentNode) {
+        numberOfNodes++;
+        this.moveFromParentNode = moveFromParentNode;
+
         int other = 1;
         if(player==1) {
             other = 2;
-        }
-        int us = (int) current.getScore(player).get(1);
-        int them =(int) current.getScore(other).get(1);
 
-        this.score = us - them;
+        }
+        int us =  current.nodeScore(player);
+        int them = current.nodeScore(other);
+        this.nodeScore = us - them;
         this.current = current;
-        this.copy = current;
+        System.out.println("num nodes: "+ numberOfNodes+ " nodeScore: " + nodeScore);
+
+
+
 
     }
-
-
-
-
-    public void addChild(Node c, ArrayList<Integer> qc, ArrayList<Integer> qn, ArrayList<Integer> ar ) {
-        boolean addedChild = false;
-        if(c != null) {
-            this.childNodes.add(c);
-            List<Object> scoremovestate = new ArrayList<>();
-
-            scoremovestate.add(qc); //0
-            scoremovestate.add(qn); //1
-            scoremovestate.add(ar); //2
-            scoremovestate.add(c);
-            this.scoreMovesState.put(c.score,scoremovestate);
-
+    public Node(int player,GameBoard current) {
+        numberOfNodes++;
+        int other = 1;
+        if(player==1) {
+            other = 2;
 
         }
+        int us =  current.nodeScore(player);
+        int them = current.nodeScore(other);
+
+        this.nodeScore = us - them;
+        this.current = current;
+
 
     }
+
+
+
+    public boolean addChild(Node c ) {
+        boolean addedChild = false;
+        int size = this.childNodes.size();
+        this.childNodes.add(c);
+        if(this.childNodes.size() >size) {
+            addedChild = true;
+        }
+
+        return addedChild;
+
+    }
+
+
     public List<List<Object>>  getChildren() {
+
         return this.children;
 
     }
@@ -88,17 +98,25 @@ public class Node {
 //        return out;
 //    }
 
-    public GameBoard getCurrent() {
-        return current;
-    }
 
-    public int getScore() {
-        return score;
-    }
 
-    public GameBoard getCopy() {
-        return copy;
-    }
+//    public Map.Entry<Integer, List<Object>> getMaxKey() {
+//        // using iterators
+//        Iterator<Map.Entry<Integer, List<Object>>> itr = scoreMovesState.entrySet().iterator();
+//        int max = -10000;
+//        Map.Entry<Integer, List<Object>> maxScoreNode = null;
+//        while(itr.hasNext())
+//        {
+//            Map.Entry<Integer, List<Object>> entry = itr.next();
+//            if(entry.getKey()>max) {
+//                max = entry.getKey();
+//                maxScoreNode = entry;
+//            }
+////            System.out.println("Key = " + entry.getKey() +
+////                    ", Value = " + entry.getValue());
+//        }
+//        return maxScoreNode;
+//    }
 
 
 
